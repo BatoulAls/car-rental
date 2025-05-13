@@ -1,0 +1,88 @@
+Plan:
+
+Overview:
+
+Name: Auto Lounge - Auto Elite - Gold Car - Drivey - speedy
+Batoul name: syriacar - gosyria -
+
+
+سيارتي - درايفي
+
+Logo:
+
+
+DB:
+
+Template:
+
+Homepage:
+
+الصفحة الرئيسيه رح يكون فيها
+الشعار
+سلايدر للعروض
+شريط البحث
+  — تحتو تلت اقسام سيارات مميزه  - حديثه
+قسم كل السيارات
+كيف تشتغل الخدمه
+قسم للمكاتب للعرض
+Footer
+
+  -  صفحه كل السيارات. مع فلتره متقدمه
+(المدينه - نوع السياره - الفئه - التصنيف الاقتصادي - السعر باليوم - السنه - موديل - القياس - التقييم - عدد الركاب)
+Reviews + صفحه تفاصيل السياره
+صفحه تفاصيل المكتب مع تقييمه وشو عندو سيارات مع فلتره
+صفحه الحجز
+صفحه البروفايل
+صفحه الطلبات تبعي
+———
+مكتب تاجير السيارات: نفس الموقع بس كحساب شركه
+صفحه سياراته ،اضافه سياره
+صفحه طلباته
+عنا بروسيس الطلب
+————————-
+الادمن:
+كل السيارات
+كل الطلبات
+كل الزباين
+كل الشركات
+—————
+Next step
+Clean the template and setup with react then upload it to GitHub
+  - done - Create db and upload db to same git
+Write the pages - flow
+
+Home page:
+GET /api/homepage-lite
+{head section}
+Search
+      [featuredCars],
+      [newCars],
+      [allCars - limit 3 or 4],
+       [vendors limit 3 or 4],
+      [regions],
+      [howItWorks],
+
+GET /api/cars/search?query=sedan&region_id=2&min_price=100&max_price=300&date=2025-05-10
+GET /api/cars?page=1&limit=12
+GET /api/vendors?featured=true
+
+Cars Page:
+
+
+Car details page:
+
+Vendors Page: + vendor details page
+Profile:
+———————
+Batoul side: create home page + cars page + car details page + vendor page + profile page
+Dima side: implement project + add db to git + (Done)
+ start apis
+
+Later
+Make Order Page: _ process order pages _ then orders and management to all sections
+Continue…
+
+
+—————————
+
+
