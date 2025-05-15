@@ -1,66 +1,259 @@
-/* AllCar Section */
+
 .pickcar1-section {
-    padding: 40px 20px;
-    background-color: #f7f7f7;
-    min-height: 100vh;
-  }
-  
-  .pickcar1-container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding-top: 60px;
-  }
-  
+  padding: 40px 20px;
+  background-color: #f7f7f7;
+  min-height: 100vh;
+}
+
+.pickcar1-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding-top: 60px;
+}
+
+.text-center {
+  text-align: center;
+  margin-bottom: 3.5rem;
+}
+
+.pickcar1-subtitle {
+  font-size: 2.4rem;
+  font-family: "Rubik", sans-serif;
+  font-weight: 500;
+}
+
+.pickcar1-title {
+  font-size: 4.2rem;
+  font-family: "Poppins", sans-serif;
+  margin: 1.3rem 0 3rem 0;
+}
+
+.pickcar1-description {
+  font-size: 1.6rem;
+  font-family: "Rubik", sans-serif;
+  color: #706f7b;
+  line-height: 1.43;
+}
+
+.car-search-container {
+  display: flex;
+  gap: 30px;
+  flex-direction: row-reverse;
+}
+
+.car1-grid {
+  flex: 3;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 30px;
+  margin-top: 30px;
+  align-items: start;
+}
+
+.car1-card {
+  background-color: white;
+  border-radius: 8px;
+  padding: 15px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Pagination */
+.pagination-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.brand-filter {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 30px;
+}
+
+.brand-btn {
+  background-color: #e0e0e0;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 20px;
+  font-size: 1.4rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.brand-btn:hover {
+  background-color: #d4d4d4;
+}
+
+.brand-btn.active {
+  background-color: #007bff;
+  color: white;
+}
+
+
+/* Responsive Design */
+@media (max-width: 1024px) {
   .pickcar1-title {
-    font-size: 2.5rem;
-    font-weight: bold;
-    margin-bottom: 10px;
+    font-size: 3rem;
   }
-  
+
   .pickcar1-subtitle {
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: #666;
-    margin-bottom: 20px;
+    font-size: 2rem;
   }
-  
+
   .pickcar1-description {
-    font-size: 1.1rem;
-    color: #444;
-    max-width: 800px;
-    margin: 0 auto;
-    line-height: 1.6;
+    font-size: 1.4rem;
   }
-  
+
   .car-search-container {
-    display: flex;
-    gap: 30px;
-    flex-direction: row-reverse;
+    flex-direction: column;
   }
+}
+
+@media (max-width: 768px) {
+  .pickcar1-title {
+    font-size: 2.4rem;
+  }
+
+  .pickcar1-subtitle {
+    font-size: 1.6rem;
+  }
+
+  .pickcar1-description {
+    font-size: 1.3rem;
+  }
+
+  .car1-grid {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+  }
+
+  .pickcar1-container {
+    padding-top: 40px;
+  }
+}
+
+@media (max-width: 480px) {
+  .pickcar1-title {
+    font-size: 2rem;
+  }
+
+  .pickcar1-subtitle {
+    font-size: 1.4rem;
+  }
+
+  .pickcar1-description {
+    font-size: 1.2rem;
+  }
+
+  .car1-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .brand-btn {
+    font-size: 1.2rem;
+    padding: 8px 12px;
+  }
+}
+.sort-by-container {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  margin: 20px 0;
+  gap: 10px;
+}
+
+.sort-label {
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+}
+
+.sort-select {
   
+  padding: 8px 12px;
+  font-size: 14px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  background-color: #fff;
+  cursor: pointer;
+  transition: border-color 0.3s ease;
+}
+
+.sort-select:focus {
+  outline: none;
+  border-color: wheat;
+}
+
+
+
+.advanced-search {
+  padding: 15px;
+ 
+}
+
+
+.car-search-container {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+}
+
+/* Layout for large screens */
+@media screen and (min-width: 769px) {
+  .car-search-container {
+    flex-direction: row;
+  }
+
+  .advanced-search {
+    flex: 1;
+    max-width: 300px;
+  }
+
   .car1-grid {
     flex: 3;
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 30px;
-    margin-top: 30px;
+    gap: 20px;
   }
-  
-  /* Example style for car card - if needed */
-  .car1-card {
-    background-color: white;
-    border-radius: 8px;
+}
+
+/* Layout for small screens */
+@media screen and (max-width: 768px) {
+  .car-search-container {
+    flex-direction: column;
+  }
+
+  .advanced-search {
+    width: 100%;
     padding: 15px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  }
-/*pagination */  
-.pagination-wrapper {
-    display: flex;
-    justify-content: center;
-    margin-top: 20px;
+    border-radius: 8px;
+    background-color: #f1f1f1;
+    margin-bottom: 20px;
   }
 
+  .car1-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
 
-  
+  .toggle-search-btn {
+    background-color: #ff4d30;
+    color: #fff;
+    border: none;
+    padding: 10px 14px;
+    border-radius: 5px;
+    font-size: 14px;
+    cursor: pointer;
+    margin: 10px 0;
+  }
 
-  
+  .toggle-search-btn:hover {
+    background-color: #ff4d30;
+  }
+
+}
+

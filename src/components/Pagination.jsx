@@ -2,29 +2,28 @@ import React from 'react';
 import '../styles/Pagination.css';
 
 const Pagination = ({ currentPage, totalPages, onPageChange }) => {
-  // Generate page numbers array
+  
   const getPageNumbersToDisplay = () => {
-    // If we have 7 or fewer pages, show all pages
+   
     if (totalPages <= 7) {
       return Array.from({ length: totalPages }, (_, i) => i + 1);
     }
     
-    // Always include first and last page
-    // For middle pages, show current +/- 1 and ellipsis
+  
     const pageNumbers = [];
     
-    // Always add page 1
+    
     pageNumbers.push(1);
     
-    // Handle different scenarios
+  
     if (currentPage <= 3) {
-      // Near start: show 1, 2, 3, 4, 5, ..., totalPages
+      
       pageNumbers.push(2, 3, 4, 5, 'ellipsis', totalPages);
     } else if (currentPage >= totalPages - 2) {
-      // Near end: show 1, ..., totalPages-4, totalPages-3, totalPages-2, totalPages-1, totalPages
+     
       pageNumbers.push('ellipsis', totalPages - 4, totalPages - 3, totalPages - 2, totalPages - 1, totalPages);
     } else {
-      // Middle: show 1, ..., currentPage-1, currentPage, currentPage+1, ..., totalPages
+     
       pageNumbers.push('ellipsis', currentPage - 1, currentPage, currentPage + 1, 'ellipsis', totalPages);
     }
     

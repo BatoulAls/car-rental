@@ -1,291 +1,175 @@
 .pickcar-section {
-    padding: 6rem 0;
-    background: linear-gradient(to bottom, #f9fafb, #fff);
-    overflow: hidden;
+  padding: 6rem 0;
+  background: linear-gradient(to bottom, #f9fafb, #fff);
+  overflow: hidden;
+}
+
+.pickcar-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.text-center {
+  text-align: center;
+  margin-bottom: 3.5rem;
+}
+
+.pickcar-subtitle {
+  font-size: 2.4rem;
+  font-family: "Rubik", sans-serif;
+  font-weight: 500;
+}
+
+.pickcar-title {
+  font-size: 4.2rem;
+  font-family: "Poppins", sans-serif;
+  margin: 1.3rem 0 3rem 0;
+}
+
+.pickcar-description {
+  font-size: 1.6rem;
+  font-family: "Rubik", sans-serif;
+  color: #706f7b;
+  line-height: 1.43;
+}
+
+
+.car-row {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  gap: 1.5rem;
+  width: 100%;
+  overflow-x: auto;
+  padding-bottom: 1rem; 
+  scroll-behavior: smooth;
+}
+
+.car-column {
+  flex: 0 0 calc(25% - 1.125rem); 
+  min-width: 270px;
+}
+
+
+.car-row .car-card {
+  max-width: 100%; 
+  margin: 0;
+  height: 100%; 
+}
+
+.spinner-container {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.spinner {
+  width: 2rem;
+  height: 2rem;
+  border: 4px solid #f97316;
+  border-top: 4px solid transparent;
+  border-radius: 9999px;
+  animation: spin 1s linear infinite;
+}
+
+.pickcar-content {
+  display: flex;
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.search-advanced-wrapper {
+  width: 300px;
+  flex-shrink: 0;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+/**/
+.view-all-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-top: 3rem;
+}
+
+.view-all-button {
+  background-color: #ff4d30;
+  color: white;
+  font-size: 1.125rem;
+  font-weight: 600;
+  padding: 1.25rem 3rem;
+  border: none;
+  border-radius: 9999px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 12px 20px rgba(255, 77, 48, 0.2);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.view-all-button:hover {
+  background-color: #ff3c1f;
+  box-shadow: 0 15px 20px rgba(255, 77, 48, 0.25);
+  transform: translateY(-2px);
+}
+
+.view-all-button:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(255, 77, 48, 0.3);
+}
+
+.view-all-button:active {
+  transform: translateY(1px);
+}
+
+
+
+
+
+@media (max-width: 1200px) {
+  .car-row {
+    padding-left: 1rem;
+    padding-right: 1rem;
   }
   
-  .pickcar-container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 1rem;
+  .car-column {
+    flex: 0 0 calc(33.333% - 1rem);
+  }
+}
+
+@media (max-width: 992px) {
+  .car-column {
+    flex: 0 0 calc(50% - 0.75rem);
+  }
+}
+
+@media (max-width: 576px) {
+  .car-row {
+    flex-wrap: nowrap; 
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    padding-left: 0;
+    padding-right: 0;
   }
   
-  .text-center {
-    text-align: center;
-    margin-bottom: 3.5rem;
-  }
-  
-  .pickcar-subtitle {
-    color: #f97316;
-    text-transform: uppercase;
-    font-weight: 500;
-    font-size: 1.25rem;
-    margin-bottom: 0.5rem;
+  .car-column {
+    flex: 0 0 85%;
+    scroll-snap-align: center;
   }
   
   .pickcar-title {
     font-size: 3rem;
-    font-weight: 500;
-    margin-bottom: 1.25rem;
   }
   
-  .pickcar-description {
-    color: #4b5563;
-    max-width: 600px;
-    margin: 0 auto;
-    font-size: 1.125rem;
+  .pickcar-subtitle {
+    font-size: 2rem;
   }
-  
-  .car-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 2rem;
-  }
-  
-  .car-card {
-    background: white;
-    border-radius: 1rem;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-    transition: all 0.3s ease;
-    overflow: hidden;
-    cursor: pointer;
-  }
-  
-  .car-card.hovered {
-    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-  }
-  
-  .car-image-container {
-    position: relative;
-    height: 16rem;
-    background: #f3f4f6;
-    overflow: hidden;
-  }
-  
-  .car-image {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform 0.7s, opacity 0.3s;
-    opacity: 1;
-  }
-  
-  .car-image.zoomed {
-    transform: scale(1.1);
-    filter: brightness(1.05);
-  }
-  
-  .car-image.hidden {
-    opacity: 0;
-  }
-  
-  .spinner-container {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  
-  .spinner {
-    width: 2rem;
-    height: 2rem;
-    border: 4px solid #f97316;
-    border-top: 4px solid transparent;
-    border-radius: 9999px;
-    animation: spin 1s linear infinite;
-  }
-  .pickcar-content {
-    display: flex;
-    gap: 2rem;
-    margin-top: 2rem;
-  }
-  
-  .car-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 1.5rem;
-    flex: 1;
-  }
-  
-  .search-advanced-wrapper {
-    width: 300px;
-    flex-shrink: 0;
-  }
-  
-  @keyframes spin {
-    to { transform: rotate(360deg); }
-  }
-  
-  .price-tag {
-    position: absolute;
-    top: 1.25rem;
-    right: 1.25rem;
-    background: rgba(255,255,255,0.9);
-    backdrop-filter: blur(4px);
-    padding: 0.5rem 1rem;
-    border-radius: 0.5rem;
-    display: flex;
-    align-items: center;
-    font-weight: bold;
-    color: #f97316;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-  }
-  
-  .price {
-    font-size: 1.125rem;
-  }
-  
-  .price-unit {
-    font-size: 0.875rem;
-    color: #6b7280;
-    margin-left: 0.25rem;
-  }
-  
-  .car-overlay {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    padding: 1rem;
-    background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);
-    color: white;
-    opacity: 0;
-    transition: opacity 0.3s;
-  }
-  
-  .car-overlay.show {
-    opacity: 1;
-  }
-  
-  .car-overlay-content {
-    display: flex;
-    justify-content: space-between;
-  }
-  
-  .car-details {
-    padding: 1.5rem;
-    font-size: 1rem; /* تم إضافة هذا السطر لتكبير النص بشكل عام */
-  }
-  
-  .car-name-rating {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 0.75rem;
-  }
-  
-  .car-name-rating h3 {
-    font-size: 1.5rem; /* كان 1.25rem */
-    font-weight: bold;
-    color: #1f2937;
-  }
-  
-  .rating-stars span {
-    color: #facc15;
-    font-size: 1.25rem; /* كان 1rem */
-  }
-  
-  .specs-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1rem 0;
-    margin-bottom: 1.5rem;
-  }
-  
-  .spec {
-    display: flex;
-    flex-direction: column;
-    font-size: 1rem; /* تم إضافته لتكبير قيمة المواصفات */
-  }
-  
-  .label {
-    font-size: 0.875rem; /* كان 0.75rem */
-    color: #6b7280;
-  }
-  
-  .card-footer {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding-top: 1rem;
-    border-top: 1px solid #f3f4f6;
-  }
-  
-  .availability {
-    display: flex;
-    align-items: center;
-    font-size: 1rem; /* كان 0.875rem */
-    color: #6b7280;
-  }
-  
-  .status-dot {
-    width: 0.75rem;
-    height: 0.75rem;
-    border-radius: 9999px;
-    margin-right: 0.5rem;
-  }
-  
-  .status-dot.available {
-    background-color: #10b981;
-  }
-  
-  .status-dot.pending {
-    background-color: #ff4d30;
-  }
-  
-  .book-btn {
-    background: #ff4d30;
-    color: #fff;
-    padding: 0.75rem 1.5rem;
-    border-radius: 0.75rem;
-    font-weight: 600;
-    font-size: 1.125rem; /* كان 1rem */
-    letter-spacing: 0.5px;
-    text-transform: uppercase;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    transition: all 0.3s ease;
-    text-decoration: none;
-    display: inline-block;
-    cursor: pointer;
-  }
-  
-  .book-btn:hover {
-    background: #ff4d30;
-    transform: translateY(-2px);
-    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
-  }
-  
-  .view-all-wrapper {
-    display: flex;
-    justify-content: center;
-    margin-top: 4rem;
-  }
-  
-  .view-all-button {
-    background: #333;
-    color: white;
-    padding: 0.85rem 2.5rem;
-    border-radius: 1rem;
-    font-weight: 600;
-    font-size: 1rem;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    transition: background 0.3s, transform 0.3s ease, box-shadow 0.3s ease;
-    text-decoration: none;
-    display: inline-block;
-    cursor: pointer;
-  }
-  
-  .view-all-button:hover {
-    background: #1f2937;
-    transform: translateY(-3px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  }
-  
-  .view-all-button:active {
-    transform: translateY(1px);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    background: #1a202c;
-  }
-  
+}
