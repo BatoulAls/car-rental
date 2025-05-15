@@ -4,13 +4,13 @@ import { Link } from "react-router-dom";
 import CarCard from "./CarCard";
 import "../styles/PickCar.css";
 
-function PickCar() {
+function Luxurycars() {
   const [carLoading, setCarLoading] = useState({});
-  const [activeTab] = useState(0);
+  const [activeTab] = useState(0); 
   const [hoveredIndex, setHoveredIndex] = useState(null);
 
-  const displayedCarsData = CAR_DATA.flat().slice(0, 4);
-  
+  const displayedCarsData = CAR_DATA.flat().slice(0, 4); 
+
   const handleImageLoad = (carId) => {
     setCarLoading(prev => ({
       ...prev,
@@ -29,15 +29,13 @@ function PickCar() {
     <section className="pickcar-section">
       <div className="pickcar-container">
         <div className="text-center">
-          <h3 className="pickcar-subtitle">Premium Selection</h3>
-          <h2 className="pickcar-title">Explore Our Cars</h2>
+          <h3 className="pickcar-subtitle">Luxury Cars</h3>
+          <h2 className="pickcar-title">Explore Our Luxury Cars</h2>
           <p className="pickcar-description">
-            Discover our handpicked collection of premium Cars, combining luxury, performance,
-            and reliability for your next adventure.
+          Drive in style! Make your first car rental a great experience with luxury supercar rentals from top brands such as Rolls Royce, Mercedes Benz, Lamborghini and more.
           </p>
         </div>
 
-        {/* Single row car display */}
         <div className="car-row">
           {displayedCarsData.map((car, index) => {
             const carId = `car-${index}`;
@@ -60,14 +58,10 @@ function PickCar() {
           })}
         </div>
 
-        <div className="view-all-wrapper">
-          <Link to="/all-cars" className="view-all-button">View All Cars</Link>
-        </div>
-
-        
+       
       </div>
     </section>
   );
 }
 
-export default PickCar;
+export default Luxurycars;

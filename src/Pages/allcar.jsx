@@ -9,15 +9,23 @@ function AllCar() {
   const [carLoading, setCarLoading] = useState({});
   const [hoveredIndex, setHoveredIndex] = useState(null);
   const [searchParams, setSearchParams] = useState({
-    model: "",
+    make: "",
+    Location:"",
     minPrice: "",
     maxPrice: "",
     transmission: "",
-    fuelType: ""
+    fuelType: "",
+    color: "",
+    year: "",
+    seats:"",
+    review:"",
   });
   const [currentPage, setCurrentPage] = useState(1);
   const [showSearch, setShowSearch] = useState(false);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const [sortBy, setSortBy] = useState("");
+
+ 
 
   const carsPerPage = 5;
 
@@ -32,32 +40,60 @@ function AllCar() {
     const { name, value } = e.target;
     setSearchParams((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
+    setCurrentPage(1);
+  };
+
+  const handleResetSearch = () => {
+    setSearchParams({
+      make: "",
+      Location:"",
+      minPrice: "",
+      maxPrice: "",
+      transmission: "",
+      fuelType: "",
+      color: "",
+      year: "",
+      seats:"",
+      review:"",
+    });
     setCurrentPage(1);
   };
 
   const filterCars = () => {
     return CAR_DATA.flat().filter((car) => {
-      const matchMake = !searchParams.make || 
-        car.make.toLowerCase().includes(searchParams.make.toLowerCase());
-      const matchModel = !searchParams.model || 
-        car.model.toLowerCase().includes(searchParams.model.toLowerCase());
-      const matchMinPrice = !searchParams.minPrice || 
-        car.price >= parseFloat(searchParams.minPrice);
-      const matchMaxPrice = !searchParams.maxPrice || 
-        car.price <= parseFloat(searchParams.maxPrice);
-      const matchTransmission = !searchParams.transmission || 
-        car.transmission === searchParams.transmission;
-      const matchFuelType = !searchParams.fuelType || 
-        car.fuelType === searchParams.fuelType;
+      const matchMake = !searchParams.make || (car.make && car.make.toLowerCase().includes(searchParams.make.toLowerCase()));
+      const matchLocation = !searchParams.Location || (car.Location && car.Location.toLowerCase().includes(searchParams.Location.toLowerCase()));
 
-      return matchMake && matchModel && matchMinPrice &&
-             matchMaxPrice && matchTransmission && matchFuelType;
+      const matchMinPrice = !searchParams.minPrice || car.price >= parseFloat(searchParams.minPrice);
+      const matchMaxPrice = !searchParams.maxPrice || car.price <= parseFloat(searchParams.maxPrice);
+      const matchTransmission = !searchParams.transmission || car.transmission === searchParams.transmission;
+      const matchFuelType = !searchParams.fuelType || car.fuelType === searchParams.fuelType;
+      const matchColor = !searchParams.color || car.color === searchParams.color;
+      const matchYear = !searchParams.year || car.year === parseInt(searchParams.year);
+      const matchseats = !searchParams.seats || car.seats === parseInt(searchParams.seats);
+      const matchreview = !searchParams.review || car.review === parseInt(searchParams.review);
+      
+      
+
+      return matchMake && matchLocation  && matchMinPrice && matchMaxPrice &&
+        matchTransmission && matchFuelType && matchColor && matchYear&&matchseats && matchreview;
     });
   };
 
-  const filteredCars = filterCars();
+  let filteredCars = filterCars();
+
+
+  if (sortBy === "priceLowToHigh") {
+    filteredCars.sort((a, b) => a.price - b.price);
+  } else if (sortBy === "priceHighToLow") {
+    filteredCars.sort((a, b) => b.price - a.price);
+  } else if (sortBy === "yearNewest") {
+    filteredCars.sort((a, b) => b.year - a.year);
+  } else if (sortBy === "yearOldest") {
+    filteredCars.sort((a, b) => a.year - b.year);
+  }
 
   const indexOfLastCar = currentPage * carsPerPage;
   const indexOfFirstCar = indexOfLastCar - carsPerPage;
@@ -69,10 +105,13 @@ function AllCar() {
   };
 
   useEffect(() => {
-    CAR_DATA.flat().slice(0, 6).forEach((car) => {
-      const img = new Image();
-      img.src = car.img;
-    });
+    const preloadImages = () => {
+      CAR_DATA.flat().slice(0, 6).forEach((car) => {
+        const img = new Image();
+        img.src = car.img;
+      });
+    };
+    preloadImages();
   }, []);
 
   useEffect(() => {
@@ -81,9 +120,7 @@ function AllCar() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // This effect ensures search visibility is properly set when window size changes
   useEffect(() => {
-    // Always show search on large screens
     if (windowWidth > 768) {
       setShowSearch(true);
     }
@@ -94,14 +131,29 @@ function AllCar() {
       <div className="pickcar1-container">
         <div className="text-center">
           <h3 className="pickcar1-subtitle">Premium Selection</h3>
-          <h2 className="pickcar1-title">Explore Our Luxury Fleet</h2>
+          <h2 className="pickcar1-title">Explore Our Cars</h2>
           <p className="pickcar1-description">
-            Discover our handpicked collection of premium vehicles, combining
+            Discover our handpicked collection of premium Cars, combining
             luxury, performance, and reliability for your next adventure.
           </p>
         </div>
 
-        {/* Only show toggle button on small screens */}
+        <div className="sort-by-container">
+          <label htmlFor="sortBy" className="sort-label">Sort by:</label>
+          <select
+            id="sortBy"
+            value={sortBy}
+            onChange={(e) => setSortBy(e.target.value)}
+            className="sort-select"
+          >
+            <option value="">Default</option>
+            <option value="priceLowToHigh">Price: Low to High</option>
+            <option value="priceHighToLow">Price: High to Low</option>
+            <option value="yearNewest">Year: Newest First</option>
+            <option value="yearOldest">Year: Oldest First</option>
+          </select>
+        </div>
+
         {windowWidth <= 768 && (
           <div className="toggle-search-container">
             <button
@@ -114,6 +166,16 @@ function AllCar() {
         )}
 
         <div className="car-search-container">
+          {showSearch && (
+            <div className="advanced-search">
+              <AdvancedSearch
+                searchParams={searchParams}
+                onSearchChange={handleSearchParamChange}
+                onReset={handleResetSearch}
+              />
+            </div>
+          )}
+
           <div className="car1-grid">
             {currentCars.map((car, index) => {
               const carId = `car-${index}`;
@@ -133,14 +195,6 @@ function AllCar() {
                 />
               );
             })}
-          </div>
-
-          {/* For large screens, always show. For small screens, add 'hidden' class when not showing */}
-          <div className={`advanced-search ${windowWidth <= 768 && !showSearch ? 'hidden' : ''}`}>
-            <AdvancedSearch
-              searchParams={searchParams}
-              onSearchParamChange={handleSearchParamChange}
-            />
           </div>
         </div>
 

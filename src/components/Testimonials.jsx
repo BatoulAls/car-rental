@@ -8,7 +8,7 @@ function Testimonials() {
         <div className="container">
           <div className="testimonials-content">
             <div className="testimonials-content__title">
-              <h4>Reviewed by People</h4>
+              <h4>What Our Customers Say</h4>
               <h2>Client's Testimonials</h2>
               <p>
                 Discover the positive impact we've made on the our clients by

@@ -1,0 +1,222 @@
+
+
+.brands-section {
+  padding: 5rem 2rem;
+  background-color: #ffffff;
+  max-width: 1400px;
+  margin: 0 auto;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+.brands-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2.5rem;
+}
+
+.brands-text {
+  max-width: 800px;
+}
+
+.pickcar-title {
+  font-size: 4.2rem;
+  font-family: "Poppins", sans-serif;
+  margin: 1.3rem 0 3rem 0;
+}
+
+.pickcar-subtitle {
+  font-size: 2.4rem;
+  font-family: "Rubik", sans-serif;
+  font-weight: 500;
+}
+
+.pickcar-description {
+  font-size: 1.6rem;
+  font-family: "Rubik", sans-serif;
+  color: #706f7b;
+  line-height: 1.43;
+}
+
+.brands-container {
+  background-color: #f9fafb;
+  border-radius: 1.5rem;
+  padding: 3.5rem;
+  border: 1px solid #f1f5f9;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.05);
+}
+
+.brands-logos {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 2rem;
+  margin-bottom: 3rem;
+}
+
+.brand-name {
+  text-align: center;
+  margin-top: 1rem;
+  font-size: 1.125rem;
+  font-weight: 500;
+  color: #334155;
+}
+
+.brand-logo-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  background-color: white;
+  border-radius: 1rem;
+  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.06);
+  transition: all 0.3s ease;
+  border: 1px solid rgba(0, 0, 0, 0.03);
+}
+
+.brand-logo-wrapper:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.08);
+}
+
+.brand-logo {
+  height: 55px;
+  width: auto;
+  filter: grayscale(100%);
+  opacity: 0.75;
+  transition: all 0.4s ease;
+}
+
+.brand-logo-wrapper:hover .brand-logo {
+  filter: grayscale(0%);
+  opacity: 1;
+}
+
+.brands-action {
+  display: flex;
+  justify-content: center;
+  margin-top: 3rem;
+}
+
+.brands-button {
+  background-color: #ff4d30;
+  color: white;
+  font-size: 1.125rem;
+  font-weight: 600;
+  padding: 1.25rem 3rem;
+  border: none;
+  border-radius: 9999px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 12px 20px rgba(255, 77, 48, 0.2);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.brands-button:hover {
+  background-color: #ff3c1f;
+  box-shadow: 0 15px 20px rgba(255, 77, 48, 0.25);
+  transform: translateY(-2px);
+}
+
+.brands-button:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(255, 77, 48, 0.3);
+}
+
+.brands-button:active {
+  transform: translateY(1px);
+}
+
+
+@media (max-width: 992px) {
+  .brands-logos {
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 1.5rem;
+  }
+  
+  .brands-container {
+    padding: 2.5rem;
+  }
+  
+  .brand-logo {
+    height: 50px;
+  }
+}
+
+@media (max-width: 768px) {
+  .brands-section {
+    padding: 4rem 1.25rem;
+  }
+  
+  .pickcar-title {
+    font-size: 2.5rem;
+  }
+  
+  .pickcar-subtitle {
+    font-size: 1.25rem;
+  }
+  
+  .brands-logos {
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 1.25rem;
+  }
+  
+  .brand-logo-wrapper {
+    padding: 1.75rem;
+  }
+  
+  .brand-logo {
+    height: 45px;
+  }
+  
+  .brands-button {
+    padding: 1rem 2.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .brands-section {
+    padding: 3rem 1rem;
+  }
+  
+  .pickcar-title {
+    font-size: 2rem;
+  }
+  
+  .pickcar-subtitle {
+    font-size: 1.125rem;
+  }
+  
+  .pickcar-description {
+    font-size: 1rem;
+  }
+  
+  .brands-logos {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.25rem;
+  }
+  
+  .brand-logo-wrapper {
+    padding: 1.5rem;
+  }
+  
+  .brand-logo {
+    height: 40px;
+  }
+  
+  .brands-container {
+    padding: 2rem;
+    border-radius: 1rem;
+  }
+  
+  .brands-button {
+    width: 100%;
+    padding: 1rem 2rem;
+    font-size: 1rem;
+  }
+}

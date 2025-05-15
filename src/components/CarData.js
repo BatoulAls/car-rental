@@ -9,11 +9,11 @@ export const CAR_DATA = [
   [
     {
       name: "VW Golf 6",
-      price: "37",
+      price: 37,
       img: Golf6,
       model: "Golf 6",
       company: "Comp",
-      year: "2008",
+      year: 2008,
       doors: "4/5",
       air: "Yes",
       transmission: "Manual",
@@ -23,11 +23,11 @@ export const CAR_DATA = [
   [
     {
       name: "Audi A1 S-Line",
-      price: "45",
+      price: 45,
       img: AudiA1,
       model: "Audi",
       company: "Comp0",
-      year: "2012",
+      year: 2012,
       doors: "4/5",
       air: "Yes",
       transmission: "Manual",
@@ -37,11 +37,11 @@ export const CAR_DATA = [
   [
     {
       name: "Toyota Camry",
-      price: "30",
+      price: 30,
       img: Toyota,
       model: "Camry",
       company: "Comp1",
-      year: "2006",
+      year: 2006,
       doors: "4/5",
       air: "Yes",
       transmission: "Automatic",
@@ -51,11 +51,11 @@ export const CAR_DATA = [
   [
     {
       name: "BMW 320 ModernLine",
-      price: "35",
+      price: 35,
       img: Bmw320,
       model: "320",
       company: "Comp2",
-      year: "2012",
+      year: 2012,
       doors: "4/5",
       air: "Yes",
       transmission: "Manual",
@@ -65,11 +65,11 @@ export const CAR_DATA = [
   [
     {
       name: "Mercedes-Benz GLK",
-      price: "50",
+      price: 50,
       img: Benz,
       model: "Benz GLK",
       company: "Comp3",
-      year: "2006",
+      year: 2006,
       doors: "4/5",
       air: "Yes",
       transmission: "Manual",
@@ -79,11 +79,11 @@ export const CAR_DATA = [
   [
     {
       name: "VW Passat CC",
-      price: "25",
+      price: 25,
       img: Passat,
       model: "Passat CC",
       company: "Comp4",
-      year: "2008",
+      year: 2008,
       doors: "4/5",
       air: "Yes",
       transmission: "Automatic",
