@@ -46,11 +46,6 @@ Reviews + صفحه تفاصيل السياره
 كل الزباين
 كل الشركات
 —————
-Next step
-Clean the template and setup with react then upload it to GitHub
-  - done - Create db and upload db to same git
-Write the pages - flow
-
 Home page:
 GET /api/homepage-lite
 {head section}
@@ -58,7 +53,7 @@ Search
       [featuredCars],
       [newCars],
       [allCars - limit 3 or 4],
-       [vendors limit 3 or 4],
+      [vendors limit 3 or 4],
       [regions],
       [howItWorks],
 
