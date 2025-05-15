@@ -1,0 +1,171 @@
+Db digram statment:
+
+// Use DBML to define your database structure
+// Docs: https://dbml.dbdiagram.io/docs
+
+Table users {
+  id integer [primary key]
+  username varchar
+  email varchar
+  phone varchar
+  photo text
+  password text
+  role varchar // 'customer', 'vendor', 'admin'
+  created_at timestamp
+}
+
+Table vendors {
+  id integer [primary key]
+  user_id integer
+  name varchar
+  phone varchar
+  region_id integer
+  photo text
+  verified boolean
+  active integer
+  created_at timestamp
+}
+
+Table cars {
+  id integer [primary key]
+  vendor_id integer
+  region_id integer
+  name varchar
+  brand varchar
+  model varchar
+  year integer
+  price_per_day double
+  description text
+  location text
+  availability_status varchar // 'available', 'booked', 'maintenance'
+  photo text
+  created_at timestamp
+}
+
+Table car_features {
+  id integer [primary key]
+  name varchar
+}
+
+Table car_feature_mapping {
+  id integer [primary key]
+  car_id integer
+  feature_id integer
+}
+
+Table bookings {
+  id integer [primary key]
+  car_id integer
+  customer_id integer
+  start_date timestamp
+  end_date timestamp
+  total_price double
+  status varchar // 'pending', 'confirmed', 'cancelled', 'completed'
+  created_at timestamp
+}
+
+Table payments {
+  id integer [primary key]
+  booking_id integer
+  payment_method varchar
+  amount double
+  payment_status varchar // 'pending', 'paid', 'failed'
+  paid_at timestamp
+}
+
+Table seasonal_pricing {
+  id integer [primary key]
+  car_id integer
+  start_date date
+  end_date date
+  price_per_day double
+  created_at timestamp
+}
+
+Table coupons {
+  id integer [primary key]
+  code varchar
+  description text
+  discount_type varchar // 'percentage', 'fixed'
+  discount_value double
+  vendor_id integer // NULL means global
+  valid_from date
+  valid_to date
+  usage_limit integer
+  usage_count integer
+  is_active boolean
+  created_at timestamp
+}
+
+Table coupon_usage {
+  id integer [primary key]
+  coupon_id integer
+  user_id integer
+  booking_id integer
+  redeemed_at timestamp
+}
+
+
+
+Table reviews {
+  id integer [primary key]
+  booking_id integer
+  customer_id integer
+  car_id integer
+  rating integer
+  comment text
+  created_at timestamp
+}
+
+Table countries {
+  id integer [primary key]
+  name_ar varchar
+  name_en varchar
+  created_at timestamp
+}
+
+Table cities {
+  id integer [primary key]
+  country_id integer
+  name_ar varchar
+  name_en varchar
+  created_at timestamp
+}
+
+Table regions {
+  id integer [primary key]
+  city_id integer
+  name_ar varchar
+  name_en varchar
+  created_at timestamp
+}
+
+Table booking_status_logs {
+  id integer [primary key]
+  booking_id integer
+  status varchar
+  note text
+  changed_by integer // user_id
+  changed_at timestamp
+}
+
+Ref: vendors.user_id > users.id
+Ref: cars.vendor_id > vendors.id
+Ref: car_feature_mapping.car_id > cars.id
+Ref: car_feature_mapping.feature_id > car_features.id
+Ref: bookings.car_id > cars.id
+Ref: bookings.customer_id > users.id
+Ref: payments.booking_id > bookings.id
+Ref: seasonal_pricing.car_id > cars.id
+Ref: coupons.vendor_id > vendors.id
+Ref: coupon_usage.coupon_id > coupons.id
+Ref: coupon_usage.user_id > users.id
+Ref: coupon_usage.booking_id > bookings.id
+Ref: reviews.booking_id > bookings.id
+Ref: reviews.customer_id > users.id
+Ref: reviews.car_id > cars.id
+Ref: cars.region_id > regions.id
+Ref: cities.country_id > countries.id
+Ref: regions.city_id > cities.id
+Ref: bookings.id > booking_status_logs.booking_id
+
