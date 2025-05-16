@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: May 11, 2025 at 12:11 AM
+-- Generation Time: May 16, 2025 at 07:16 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -80,14 +80,23 @@ INSERT INTO `booking_status_logs` (`id`, `booking_id`, `status`, `note`, `change
 
 CREATE TABLE `cars` (
   `id` int(11) NOT NULL,
-  `vendor_id` int(11) DEFAULT NULL,
-  `region_id` int(11) DEFAULT NULL,
+  `vendor_id` int(11) NOT NULL,
+  `region_id` int(11) NOT NULL,
+  `category_id` int(11) NOT NULL,
   `name` varchar(255) DEFAULT NULL,
   `brand` varchar(100) DEFAULT NULL,
   `model` varchar(100) DEFAULT NULL,
   `year` int(11) DEFAULT NULL,
   `price_per_day` double DEFAULT NULL,
+  `seats` int(11) DEFAULT NULL,
+  `no_of_doors` int(11) DEFAULT NULL,
+  `bags` int(11) DEFAULT NULL,
+  `transmission` varchar(100) DEFAULT NULL,
+  `engine_capacity` varchar(200) DEFAULT NULL,
+  `regional_spec` varchar(100) DEFAULT NULL COMMENT 'Gcc',
+  `fuel_type` varchar(50) NOT NULL,
   `description` text DEFAULT NULL,
+  `color` varchar(255) DEFAULT NULL,
   `location` text DEFAULT NULL,
   `availability_status` varchar(50) DEFAULT NULL,
   `photo` text DEFAULT NULL,
@@ -100,9 +109,33 @@ CREATE TABLE `cars` (
 -- Dumping data for table `cars`
 --
 
-INSERT INTO `cars` (`id`, `vendor_id`, `region_id`, `name`, `brand`, `model`, `year`, `price_per_day`, `description`, `location`, `availability_status`, `photo`, `created_at`, `updated_at`, `deleted_at`) VALUES
-(1, 1, 1, 'Luxury Sedan', 'BMW', '5 Series', 2022, 350, 'Comfortable and elegant.', 'Satwa', 'available', '', '2025-05-05 22:46:52', '2025-05-05 22:46:52', NULL),
-(2, 1, 1, 'Compact Car', 'Toyota', 'Yaris', 2021, 150, 'Affordable and efficient.', 'Satwa', 'available', '', '2025-05-05 22:46:52', '2025-05-05 22:46:52', NULL);
+INSERT INTO `cars` (`id`, `vendor_id`, `region_id`, `category_id`, `name`, `brand`, `model`, `year`, `price_per_day`, `seats`, `no_of_doors`, `bags`, `transmission`, `engine_capacity`, `regional_spec`, `fuel_type`, `description`, `color`, `location`, `availability_status`, `photo`, `created_at`, `updated_at`, `deleted_at`) VALUES
+(1, 1, 1, 1, 'Luxury Sedan', 'BMW', '5 Series', 2022, 1010, 3, NULL, NULL, 'manual', NULL, NULL, 'disel', 'Comfortable and elegant.', NULL, 'Satwa', 'available', '', '2025-05-05 22:46:52', '2025-05-05 22:46:52', NULL),
+(2, 2, 1, 2, 'Compact Car', 'Toyota', 'Yaris', 2021, 150, 7, NULL, NULL, 'auto', NULL, NULL, 'petrol', 'Affordable and efficient.', NULL, 'Satwa', 'available', '', '2025-05-05 22:46:52', '2025-05-05 22:46:52', NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `car_categories`
+--
+
+CREATE TABLE `car_categories` (
+  `id` int(11) NOT NULL,
+  `name` varchar(100) NOT NULL,
+  `description` text DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `deleted_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `car_categories`
+--
+
+INSERT INTO `car_categories` (`id`, `name`, `description`, `created_at`, `updated_at`, `deleted_at`) VALUES
+(1, 'SVU', NULL, '2025-05-13 23:37:19', NULL, NULL),
+(2, 'Sedan', NULL, '2025-05-13 23:37:19', NULL, NULL),
+(3, 'Mini', NULL, '2025-05-13 23:37:29', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -151,6 +184,37 @@ INSERT INTO `car_feature_mapping` (`id`, `car_id`, `feature_id`, `created_at`, `
 (2, 1, 2, '2025-05-05 22:50:00', '2025-05-05 22:50:00', NULL),
 (3, 2, 1, '2025-05-05 22:50:00', '2025-05-05 22:50:00', NULL),
 (4, 2, 3, '2025-05-05 22:50:00', '2025-05-05 22:50:00', NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `car_images`
+--
+
+CREATE TABLE `car_images` (
+  `id` int(11) NOT NULL,
+  `car_id` int(11) NOT NULL,
+  `image_url` text NOT NULL,
+  `is_main` tinyint(1) DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `car_tags`
+--
+
+CREATE TABLE `car_tags` (
+  `car_id` int(11) NOT NULL,
+  `tag_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `car_tags`
+--
+
+INSERT INTO `car_tags` (`car_id`, `tag_id`) VALUES
+(1, 1);
 
 -- --------------------------------------------------------
 
@@ -344,6 +408,30 @@ CREATE TABLE `seasonal_pricing` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `tags`
+--
+
+CREATE TABLE `tags` (
+  `id` int(11) NOT NULL,
+  `name` varchar(50) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `deleted_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `tags`
+--
+
+INSERT INTO `tags` (`id`, `name`, `created_at`, `updated_at`, `deleted_at`) VALUES
+(1, 'luxury', '2025-05-13 23:35:45', NULL, NULL),
+(2, 'budget', '2025-05-13 23:35:45', NULL, NULL),
+(3, 'sports', '2025-05-13 23:35:45', NULL, NULL),
+(4, 'new-arrival', '2025-05-13 23:35:45', NULL, NULL);
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `users`
 --
 
@@ -394,7 +482,8 @@ CREATE TABLE `vendors` (
 --
 
 INSERT INTO `vendors` (`id`, `user_id`, `name`, `phone`, `region_id`, `photo`, `verified`, `active`, `created_at`, `updated_at`, `deleted_at`) VALUES
-(1, 2, 'Speedy Rentals', '0987654321', 1, '', 1, 1, '2025-05-05 22:46:52', NULL, NULL);
+(1, 2, 'Speedy Rentals', '0987654321', 1, '', 1, 1, '2025-05-05 22:46:52', NULL, NULL),
+(2, 2, 'Speedy Rentals2', '0987654321', 1, '', 1, 1, '2025-05-05 22:46:52', NULL, NULL);
 
 --
 -- Indexes for dumped tables
@@ -425,6 +514,12 @@ ALTER TABLE `cars`
   ADD KEY `region_id` (`region_id`);
 
 --
+-- Indexes for table `car_categories`
+--
+ALTER TABLE `car_categories`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `car_features`
 --
 ALTER TABLE `car_features`
@@ -437,6 +532,20 @@ ALTER TABLE `car_feature_mapping`
   ADD PRIMARY KEY (`id`),
   ADD KEY `car_id` (`car_id`),
   ADD KEY `feature_id` (`feature_id`);
+
+--
+-- Indexes for table `car_images`
+--
+ALTER TABLE `car_images`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `car_id` (`car_id`);
+
+--
+-- Indexes for table `car_tags`
+--
+ALTER TABLE `car_tags`
+  ADD PRIMARY KEY (`car_id`,`tag_id`),
+  ADD KEY `tag_id` (`tag_id`);
 
 --
 -- Indexes for table `cities`
@@ -498,6 +607,13 @@ ALTER TABLE `seasonal_pricing`
   ADD KEY `car_id` (`car_id`);
 
 --
+-- Indexes for table `tags`
+--
+ALTER TABLE `tags`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `name` (`name`);
+
+--
 -- Indexes for table `users`
 --
 ALTER TABLE `users`
@@ -534,6 +650,12 @@ ALTER TABLE `cars`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
+-- AUTO_INCREMENT for table `car_categories`
+--
+ALTER TABLE `car_categories`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
 -- AUTO_INCREMENT for table `car_features`
 --
 ALTER TABLE `car_features`
@@ -544,6 +666,12 @@ ALTER TABLE `car_features`
 --
 ALTER TABLE `car_feature_mapping`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT for table `car_images`
+--
+ALTER TABLE `car_images`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `cities`
@@ -594,6 +722,12 @@ ALTER TABLE `seasonal_pricing`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT for table `tags`
+--
+ALTER TABLE `tags`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
@@ -603,7 +737,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `vendors`
 --
 ALTER TABLE `vendors`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- Constraints for dumped tables
@@ -636,6 +770,19 @@ ALTER TABLE `cars`
 ALTER TABLE `car_feature_mapping`
   ADD CONSTRAINT `car_feature_mapping_ibfk_1` FOREIGN KEY (`car_id`) REFERENCES `cars` (`id`),
   ADD CONSTRAINT `car_feature_mapping_ibfk_2` FOREIGN KEY (`feature_id`) REFERENCES `car_features` (`id`);
+
+--
+-- Constraints for table `car_images`
+--
+ALTER TABLE `car_images`
+  ADD CONSTRAINT `car_images_ibfk_1` FOREIGN KEY (`car_id`) REFERENCES `cars` (`id`);
+
+--
+-- Constraints for table `car_tags`
+--
+ALTER TABLE `car_tags`
+  ADD CONSTRAINT `car_tags_ibfk_1` FOREIGN KEY (`car_id`) REFERENCES `cars` (`id`),
+  ADD CONSTRAINT `car_tags_ibfk_2` FOREIGN KEY (`tag_id`) REFERENCES `tags` (`id`);
 
 --
 -- Constraints for table `cities`
