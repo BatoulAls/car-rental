@@ -6,8 +6,14 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Routes
-// const helloRoutes = require('./routes/hello');
-// app.use('/api/hello', helloRoutes);
+app.get('/', (req, res) => {
+    res.send('API is working ✅');
+});
 
+// Routes
+const homeRoutes = require('./routes/home');
+app.use('/api/home', homeRoutes);
+
+const carRoutes = require('./routes/car');
+app.use('/api/cars', carRoutes);
 module.exports = app;
