@@ -58,7 +58,10 @@ function Affordablecar() {
           })}
         </div>
 
-       
+        <div className="view-all-wrapper">
+          <Link to="/all-cars" className="view-all-button">View All Affordable Cars</Link>
+        </div>
+
       </div>
     </section>
   );

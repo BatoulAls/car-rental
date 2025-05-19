@@ -5,7 +5,7 @@
 }
 
 .pickcar-container {
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 0 auto;
   padding: 0 1rem;
 }
@@ -47,7 +47,7 @@
 }
 
 .car-column {
-  flex: 0 0 calc(25% - 1.125rem); 
+  flex: 0 0 calc(25% - 1.125rem);
   min-width: 270px;
 }
 

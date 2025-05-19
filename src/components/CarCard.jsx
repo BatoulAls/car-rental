@@ -1,5 +1,5 @@
-import React from "react"; 
-import "../styles/CarCard.css";  
+import React, { useState } from "react";
+import "../styles/CarCard.css";
 
 function CarCard({
   car,
@@ -11,6 +11,9 @@ function CarCard({
   onClick,
   onImageLoad 
 }) {
+  const [isBookingFocused, setIsBookingFocused] = useState(false);
+  const [isWhatsAppFocused, setIsWhatsAppFocused] = useState(false);
+
   return (
     <div
       className={`car-card ${isHovered ? "hovered" : ""}`}
@@ -32,7 +35,6 @@ function CarCard({
           onLoad={onImageLoad}
         />
          
-        {/* Price tag moved from the image container to be larger and more visible */}
         <div className={`car-overlay ${isHovered ? "show" : ""}`}>
           <div className="car-overlay-content">
             <div><span>{car.year}</span></div>
@@ -41,7 +43,6 @@ function CarCard({
         </div>
       </div>
        
-      {/* New prominent price banner */}
       <div className="price-banner">
         <span className="price-amount">${car.price}</span>
         <span className="price-period">/day</span>
@@ -59,37 +60,35 @@ function CarCard({
          
         <div className="specs-grid">
           <div className="spec">
-            <span className="spec-icon">🚗</span>
             <span className="label">Model</span>
-            <span>{car.model}</span>
+            <span className="value">{car.model}</span>
           </div>
           <div className="spec">
-            <span className="spec-icon">🏢</span>
             <span className="label">Company</span>
-            <span>{car.company}</span>
+            <span className="value">{car.company}</span>
           </div>
           <div className="spec">
-            <span className="spec-icon">⚙️</span>
             <span className="label">Transmission</span>
-            <span>{car.transmission}</span>
+            <span className="value">{car.transmission}</span>
           </div>
           <div className="spec">
-            <span className="spec-icon">👥</span>
             <span className="label">Capacity</span>
-            <span>{car.capacity || "5 People"}</span>
+            <span className="value">{car.capacity || "5 People"}</span>
           </div>
         </div>
          
-        {/* WhatsApp button now takes full width with updated color */}
-        <div className="contact-options single-contact">
+        <div className="contact-options">
           <a 
             href={`https://wa.me/${car.whatsapp || "+1234567890"}`}
-            className="contact-btn whatsapp-btn"
+            className={`contact-btn whatsapp-btn ${isWhatsAppFocused ? "focused" : ""}`}
             onClick={(e) => e.stopPropagation()}
+            onMouseEnter={() => setIsWhatsAppFocused(true)}
+            onMouseLeave={() => setIsWhatsAppFocused(false)}
+            onFocus={() => setIsWhatsAppFocused(true)}
+            onBlur={() => setIsWhatsAppFocused(false)}
             target="_blank"
             rel="noopener noreferrer"
           >
-            <i className="whatsapp-icon">📱</i>
             <span>Contact via WhatsApp</span>
           </a>
         </div>
@@ -101,8 +100,12 @@ function CarCard({
           </div>
           <a
             href="#booking-section"
-            className="book-btn"
+            className={`book-btn ${isBookingFocused ? "focused" : ""}`}
             onClick={(e) => e.stopPropagation()}
+            onMouseEnter={() => setIsBookingFocused(true)}
+            onMouseLeave={() => setIsBookingFocused(false)}
+            onFocus={() => setIsBookingFocused(true)}
+            onBlur={() => setIsBookingFocused(false)}
           >
             Book Now
           </a>

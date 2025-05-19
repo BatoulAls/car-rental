@@ -58,7 +58,9 @@ function Luxurycars() {
           })}
         </div>
 
-       
+        <div className="view-all-wrapper">
+          <Link to="/all-cars" className="view-all-button">View All Luxury Cars</Link>
+        </div>
       </div>
     </section>
   );

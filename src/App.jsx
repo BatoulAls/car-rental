@@ -7,7 +7,7 @@ import Team from "./Pages/Team";
 import Models from "./Pages/Models";
 import { Route, Routes } from "react-router-dom";
 import Reviews from "./Pages/Reviews";
-import AllCar from "./Pages/allcar";
+import AllCars from "./Pages/allcars";
 
 function App() {
   return (
@@ -20,7 +20,7 @@ function App() {
         <Route path="/team" element={<Team/>}/>
         <Route path="/models" element={<Models/>}/>
         <Route path="/reviews" element={<Reviews/>}/>
-        <Route path="all-cars" element={<AllCar/>}/>
+        <Route path="all-cars" element={<AllCars/>}/>
       </Routes>
    
     </>

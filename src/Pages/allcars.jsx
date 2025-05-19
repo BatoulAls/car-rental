@@ -4,8 +4,9 @@ import CarCard from "../components/CarCard";
 import AdvancedSearch from "../components/AdvancedSearch";
 import Pagination from "../components/Pagination";
 import "../styles/AllCar.css";
+import "../styles/CarCard.css"
 
-function AllCar() {
+function AllCars() {
   const [carLoading, setCarLoading] = useState({});
   const [hoveredIndex, setHoveredIndex] = useState(null);
   const [searchParams, setSearchParams] = useState({
@@ -27,7 +28,7 @@ function AllCar() {
 
  
 
-  const carsPerPage = 5;
+  const carsPerPage = 4;
 
   const handleImageLoad = (carId) => {
     setCarLoading((prev) => ({
@@ -210,4 +211,4 @@ function AllCar() {
   );
 }
 
-export default AllCar;
+export default AllCars;
