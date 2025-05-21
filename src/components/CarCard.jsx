@@ -10,12 +10,12 @@ function CarCard({
   onHoverLeave,
   onClick,
   onImageLoad,
-  rating = 0, // Default rating is 0
+  rating = 0,
 }) {
   const [isBookingFocused, setIsBookingFocused] = useState(false);
   const [isWhatsAppFocused, setIsWhatsAppFocused] = useState(false);
 
-  // Convert rating to number to ensure proper comparison and add debugging
+
   const numRating = Number(rating);
   console.log(`CarCard ${carId} received rating: ${rating}, converted to numRating: ${numRating}`);
 
