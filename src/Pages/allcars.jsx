@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
+import { useLocation } from "react-router-dom";
 import CarCard from "../components/CarCard";
 import AdvancedSearch from "../components/AdvancedSearch";
 import Pagination from "../components/Pagination";
@@ -7,16 +8,19 @@ import "../styles/AllCar.css";
 import "../styles/CarCard.css";
 
 const fetchCars = async (page, limit) => {
-
-  let url = `http://localhost:5050/api/cars?page=${page}&limit=${limit}`
-
+  let url = `http://localhost:5050/api/cars?page=${page}&limit=${limit}`;
   const res = await fetch(url);
-  if (!res.ok) throw new Error("Failed to fetch cars");
+  if (!res.ok) throw new Error("Failed to load the cars");
   const data = await res.json();
   return data;
 };
 
 function AllCars() {
+  const location = useLocation();
+
+
+  const searchedResultData = location.state?.resultData || null;
+
   const [carLoading, setCarLoading] = useState({});
   const [hoveredIndex, setHoveredIndex] = useState(null);
   const [searchParams, setSearchParams] = useState({
@@ -37,13 +41,12 @@ function AllCars() {
   const [sortBy, setSortBy] = useState("");
   const carsPerPage = 10;
 
-
   const { data, isLoading, error } = useQuery({
     queryKey: ["cars", currentPage],
     queryFn: () => fetchCars(currentPage, carsPerPage),
     keepPreviousData: true,
+    enabled: !searchedResultData,
   });
-
 
   const handleImageLoad = (carId) => {
     setCarLoading((prev) => ({
@@ -94,12 +97,9 @@ function AllCars() {
     }
   }, [windowWidth]);
 
-  if (isLoading) return <p>Loading cars...</p>;
-  if (error) return <p>Error loading cars: {error.message}</p>;
 
-  // بيانات السيارات من API
-  const fetchedCars = data?.data || [];
-  const totalPages = data?.totalPages || 1;
+  const fetchedCars = searchedResultData ? searchedResultData.data : data?.data || [];
+  const totalPages = searchedResultData ? searchedResultData.totalPages : data?.totalPages || 1;
 
   return (
     <section className="pickcar1-section">
@@ -108,8 +108,9 @@ function AllCars() {
           <h3 className="pickcar1-subtitle">Premium Selection</h3>
           <h2 className="pickcar1-title">Explore Our Cars</h2>
           <p className="pickcar1-description">
-            Discover our handpicked collection of premium Cars, combining
-            luxury, performance, and reliability for your next adventure.
+            {searchedResultData
+              ? "The search results were displayed according to the information you provided."
+              : "Explore our curated collection of new luxury cars."}
           </p>
         </div>
 
@@ -173,13 +174,15 @@ function AllCars() {
           </div>
         </div>
 
-        <div className="pagination-wrapper">
-          <Pagination
-            currentPage={currentPage}
-            totalPages={totalPages}
-            onPageChange={handlePageChange}
-          />
-        </div>
+        {!searchedResultData && (
+          <div className="pagination-wrapper">
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={handlePageChange}
+            />
+          </div>
+        )}
       </div>
     </section>
   );
