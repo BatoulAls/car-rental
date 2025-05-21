@@ -9,8 +9,13 @@ import { Route, Routes } from "react-router-dom";
 import Reviews from "./Pages/Reviews";
 import AllCars from "./Pages/allcars";
 
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+
+const queryClient = new QueryClient();
+
 function App() {
   return (
+        <QueryClientProvider client={queryClient}>
     <>
       <Navbar />
       <Routes>
@@ -24,6 +29,7 @@ function App() {
       </Routes>
    
     </>
+      </QueryClientProvider>
   );
 }
 

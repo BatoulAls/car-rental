@@ -5,6 +5,19 @@
   grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
   gap: 2rem;
 }
+.rating-stars {
+  font-size: 16px;
+  color: #ccc;
+}
+
+.filled-star {
+  color: gold;
+}
+
+.empty-star {
+  color: #ccc;
+}
+
 
 .car-card {
   background: white;
@@ -16,7 +29,7 @@
   width: 100%;
   max-width: 450px;
   margin: 0 auto;
-  position: relative; 
+  position: relative;
 }
 
 .car-card.hovered {
@@ -157,11 +170,7 @@
   border-radius: 2px;
 }
 
-.rating-stars span {
-  color: #facc15;
-  font-size: 1.25rem;
-  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
-}
+
 
 .specs-grid {
   display: grid;
@@ -230,7 +239,7 @@
   z-index: 1;
 }
 
-.contact-btn:hover::before, 
+.contact-btn:hover::before,
 .contact-btn.focused::before {
   transform: scaleX(1);
   transform-origin: left;
@@ -249,7 +258,7 @@
   font-size: 0.95rem;
 }
 
-.whatsapp-btn:hover, 
+.whatsapp-btn:hover,
 .whatsapp-btn.focused {
   background: linear-gradient(135deg, #252525, #1a1a1a);
   transform: translateY(-3px);
@@ -373,31 +382,31 @@
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
     gap: 1.5rem;
   }
-  
+
   .car-card {
     max-width: 100%;
   }
-  
+
   .car-image-container {
     height: 14rem;
   }
-  
+
   .price-amount {
     font-size: 1.25rem;
   }
-  
+
   .car-details {
     padding: 1.25rem;
   }
-  
+
   .car-name-rating h3 {
     font-size: 1.25rem;
   }
-  
+
   .specs-grid {
     gap: 0.75rem 0;
   }
-  
+
   .book-btn {
     padding: 0.5rem 1rem;
     font-size: 0.875rem;
@@ -409,45 +418,45 @@
     grid-template-columns: 1fr;
     gap: 1rem;
   }
-  
+
   .car-image-container {
     height: 12rem;
   }
-  
+
   .price-banner {
     padding: 0.5rem 0.75rem;
   }
-  
+
   .price-amount {
     font-size: 1.125rem;
   }
-  
+
   .car-details {
     padding: 1rem;
   }
-  
+
   .car-name-rating {
     flex-direction: column;
     align-items: flex-start;
     gap: 0.5rem;
   }
-  
+
   .specs-grid {
     grid-template-columns: 1fr;
     gap: 0.5rem;
   }
-  
+
   .contact-options {
     flex-direction: column;
     gap: 0.5rem;
   }
-  
+
   .card-footer {
     flex-direction: column;
     gap: 0.75rem;
     align-items: flex-start;
   }
-  
+
   .book-btn {
     width: 100%;
     text-align: center;
@@ -460,75 +469,75 @@
     gap: 1.5rem;
     padding: 0 0.5rem;
   }
-  
+
   .car-card {
     max-width: 100%;
     margin: 0 auto 1.5rem;
     border-radius: 1.2rem;
     box-shadow: 0 8px 20px rgba(0,0,0,0.08);
   }
-  
+
   .car-image-container {
     height: 16rem;
   }
-  
+
   .price-banner {
     padding: 0.75rem 1.5rem;
   }
-  
+
   .price-amount {
     font-size: 1.5rem;
     letter-spacing: 0.5px;
   }
-  
+
   .price-period {
     font-size: 1.125rem;
   }
-  
+
   .car-details {
     padding: 1.5rem;
   }
-  
+
   .car-name-rating {
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 1.25rem;
   }
-  
+
   .car-name-rating h3 {
     font-size: 1.35rem;
   }
-  
+
   .specs-grid {
     grid-template-columns: 1fr 1fr;
     gap: 1.25rem 1rem;
     margin-bottom: 1.75rem;
   }
-  
+
   .spec-icon {
     font-size: 18px;
   }
-  
+
   .contact-options {
     flex-direction: row;
     gap: 1.25rem;
     margin-bottom: 1.5rem;
   }
-  
+
   .contact-btn {
     padding: 0.875rem;
     border-radius: 0.75rem;
     font-size: 1rem;
   }
-  
+
   .card-footer {
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
     padding-top: 1.25rem;
   }
-  
+
   .book-btn {
     padding: 0.875rem 1.5rem;
     border-radius: 0.75rem;
@@ -542,7 +551,7 @@
     padding-left: max(1.5rem, env(safe-area-inset-left));
     padding-right: max(1.5rem, env(safe-area-inset-right));
   }
-  
+
   .price-banner {
     padding-left: max(1.5rem, env(safe-area-inset-left));
     padding-right: max(1.5rem, env(safe-area-inset-right));
@@ -554,19 +563,19 @@
     grid-template-columns: repeat(2, 1fr);
     padding: 0 1rem;
   }
-  
+
   .car-image-container {
     height: 12rem;
   }
-  
+
   .specs-grid {
     margin-bottom: 1rem;
   }
-  
+
   .car-details {
     padding: 1rem;
   }
-  
+
   .contact-options {
     margin-bottom: 1rem;
   }

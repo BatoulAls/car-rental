@@ -1,34 +1,49 @@
 import { useState, useEffect } from "react";
-import { CAR_DATA } from "../components/CarData";
+import { useQuery } from "@tanstack/react-query";
 import CarCard from "../components/CarCard";
 import AdvancedSearch from "../components/AdvancedSearch";
 import Pagination from "../components/Pagination";
 import "../styles/AllCar.css";
-import "../styles/CarCard.css"
+import "../styles/CarCard.css";
+
+const fetchCars = async (page, limit) => {
+
+  let url = `http://localhost:5050/api/cars?page=${page}&limit=${limit}`
+
+  const res = await fetch(url);
+  if (!res.ok) throw new Error("Failed to fetch cars");
+  const data = await res.json();
+  return data;
+};
 
 function AllCars() {
   const [carLoading, setCarLoading] = useState({});
   const [hoveredIndex, setHoveredIndex] = useState(null);
   const [searchParams, setSearchParams] = useState({
     make: "",
-    Location:"",
+    Location: "",
     minPrice: "",
     maxPrice: "",
     transmission: "",
     fuelType: "",
     color: "",
     year: "",
-    seats:"",
-    review:"",
+    seats: "",
+    review: "",
   });
   const [currentPage, setCurrentPage] = useState(1);
   const [showSearch, setShowSearch] = useState(false);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [sortBy, setSortBy] = useState("");
+  const carsPerPage = 10;
 
- 
 
-  const carsPerPage = 4;
+  const { data, isLoading, error } = useQuery({
+    queryKey: ["cars", currentPage],
+    queryFn: () => fetchCars(currentPage, carsPerPage),
+    keepPreviousData: true,
+  });
+
 
   const handleImageLoad = (carId) => {
     setCarLoading((prev) => ({
@@ -49,71 +64,23 @@ function AllCars() {
   const handleResetSearch = () => {
     setSearchParams({
       make: "",
-      Location:"",
+      Location: "",
       minPrice: "",
       maxPrice: "",
       transmission: "",
       fuelType: "",
       color: "",
       year: "",
-      seats:"",
-      review:"",
+      seats: "",
+      review: "",
     });
     setCurrentPage(1);
   };
-
-  const filterCars = () => {
-    return CAR_DATA.flat().filter((car) => {
-      const matchMake = !searchParams.make || (car.make && car.make.toLowerCase().includes(searchParams.make.toLowerCase()));
-      const matchLocation = !searchParams.Location || (car.Location && car.Location.toLowerCase().includes(searchParams.Location.toLowerCase()));
-
-      const matchMinPrice = !searchParams.minPrice || car.price >= parseFloat(searchParams.minPrice);
-      const matchMaxPrice = !searchParams.maxPrice || car.price <= parseFloat(searchParams.maxPrice);
-      const matchTransmission = !searchParams.transmission || car.transmission === searchParams.transmission;
-      const matchFuelType = !searchParams.fuelType || car.fuelType === searchParams.fuelType;
-      const matchColor = !searchParams.color || car.color === searchParams.color;
-      const matchYear = !searchParams.year || car.year === parseInt(searchParams.year);
-      const matchseats = !searchParams.seats || car.seats === parseInt(searchParams.seats);
-      const matchreview = !searchParams.review || car.review === parseInt(searchParams.review);
-      
-      
-
-      return matchMake && matchLocation  && matchMinPrice && matchMaxPrice &&
-        matchTransmission && matchFuelType && matchColor && matchYear&&matchseats && matchreview;
-    });
-  };
-
-  let filteredCars = filterCars();
-
-
-  if (sortBy === "priceLowToHigh") {
-    filteredCars.sort((a, b) => a.price - b.price);
-  } else if (sortBy === "priceHighToLow") {
-    filteredCars.sort((a, b) => b.price - a.price);
-  } else if (sortBy === "yearNewest") {
-    filteredCars.sort((a, b) => b.year - a.year);
-  } else if (sortBy === "yearOldest") {
-    filteredCars.sort((a, b) => a.year - b.year);
-  }
-
-  const indexOfLastCar = currentPage * carsPerPage;
-  const indexOfFirstCar = indexOfLastCar - carsPerPage;
-  const currentCars = filteredCars.slice(indexOfFirstCar, indexOfLastCar);
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
-
-  useEffect(() => {
-    const preloadImages = () => {
-      CAR_DATA.flat().slice(0, 6).forEach((car) => {
-        const img = new Image();
-        img.src = car.img;
-      });
-    };
-    preloadImages();
-  }, []);
 
   useEffect(() => {
     const handleResize = () => setWindowWidth(window.innerWidth);
@@ -126,6 +93,13 @@ function AllCars() {
       setShowSearch(true);
     }
   }, [windowWidth]);
+
+  if (isLoading) return <p>Loading cars...</p>;
+  if (error) return <p>Error loading cars: {error.message}</p>;
+
+  // بيانات السيارات من API
+  const fetchedCars = data?.data || [];
+  const totalPages = data?.totalPages || 1;
 
   return (
     <section className="pickcar1-section">
@@ -178,7 +152,7 @@ function AllCars() {
           )}
 
           <div className="car1-grid">
-            {currentCars.map((car, index) => {
+            {fetchedCars.map((car, index) => {
               const carId = `car-${index}`;
               const isHovered = hoveredIndex === index;
               const isLoading = carLoading[carId] !== false;
@@ -202,7 +176,7 @@ function AllCars() {
         <div className="pagination-wrapper">
           <Pagination
             currentPage={currentPage}
-            totalPages={Math.ceil(filteredCars.length / carsPerPage)}
+            totalPages={totalPages}
             onPageChange={handlePageChange}
           />
         </div>

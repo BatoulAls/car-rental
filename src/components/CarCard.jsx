@@ -9,10 +9,15 @@ function CarCard({
   onHoverEnter,
   onHoverLeave,
   onClick,
-  onImageLoad 
+  onImageLoad,
+  rating = 0, // Default rating is 0
 }) {
   const [isBookingFocused, setIsBookingFocused] = useState(false);
   const [isWhatsAppFocused, setIsWhatsAppFocused] = useState(false);
+
+  // Convert rating to number to ensure proper comparison and add debugging
+  const numRating = Number(rating);
+  console.log(`CarCard ${carId} received rating: ${rating}, converted to numRating: ${numRating}`);
 
   return (
     <div
@@ -29,12 +34,12 @@ function CarCard({
           </div>
         )}
         <img
-          src={car.img}
+          src={car.img || car.photo}
           alt={car.name || `${car.company} ${car.model}`}
           className={`car-image ${isHovered ? "zoomed" : ""} ${isLoading ? "hidden" : "visible"}`}
           onLoad={onImageLoad}
         />
-         
+
         <div className={`car-overlay ${isHovered ? "show" : ""}`}>
           <div className="car-overlay-content">
             <div><span>{car.year}</span></div>
@@ -42,22 +47,28 @@ function CarCard({
           </div>
         </div>
       </div>
-       
+
       <div className="price-banner">
-        <span className="price-amount">${car.price}</span>
+        <span className="price-amount">${car.price_per_day}</span>
         <span className="price-period">/day</span>
       </div>
-       
+
       <div className="car-details">
         <div className="car-name-rating">
           <h3>{car.name || `${car.company} ${car.model}`}</h3>
           <div className="rating-stars">
-            {[1, 2, 3, 4, 5].map(star => (
-              <span key={star}>★</span>
+            {[1, 2, 3, 4, 5].map((star) => (
+              <span
+                key={star}
+                className={star <= numRating ? "filled-star" : "empty-star"}
+              >
+                {console.log(`Star ${star}, numRating ${numRating}, filled: ${star <= numRating}`)}
+                ★
+              </span>
             ))}
           </div>
         </div>
-         
+
         <div className="specs-grid">
           <div className="spec">
             <span className="label">Model</span>
@@ -65,7 +76,7 @@ function CarCard({
           </div>
           <div className="spec">
             <span className="label">Company</span>
-            <span className="value">{car.company}</span>
+            <span className="value">{car.Vendor?.name || "Unknown Vendor"}</span>
           </div>
           <div className="spec">
             <span className="label">Transmission</span>
@@ -73,12 +84,12 @@ function CarCard({
           </div>
           <div className="spec">
             <span className="label">Capacity</span>
-            <span className="value">{car.capacity || "5 People"}</span>
+            <span className="value">{car.seats || "5 People"}</span>
           </div>
         </div>
-         
+
         <div className="contact-options">
-          <a 
+          <a
             href={`https://wa.me/${car.whatsapp || "+1234567890"}`}
             className={`contact-btn whatsapp-btn ${isWhatsAppFocused ? "focused" : ""}`}
             onClick={(e) => e.stopPropagation()}
@@ -92,11 +103,11 @@ function CarCard({
             <span>Contact via WhatsApp</span>
           </a>
         </div>
-         
+
         <div className="card-footer">
           <div className="availability">
-            <div className={`status-dot ${car.availability === "Available" ? "available" : "pending"}`}></div>
-            <span>{car.availability || "Available Now"}</span>
+            <div className={`status-dot ${car.availability_status?.toLowerCase() === "available" ? "available" : "pending"}`}></div>
+            <span>{car.availability_status || "Available Now"}</span>
           </div>
           <a
             href="#booking-section"
