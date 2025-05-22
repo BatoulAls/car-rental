@@ -1,69 +1,72 @@
 import React from 'react';
 import "../styles/CarBrands.css";
 import { Link } from 'react-router-dom';
+import { useQuery } from "@tanstack/react-query";
 
-// Import brand logos
-import BMWLogo from "../images/brands/bmw-7.svg";
-import AudiLogo from "../images/brands/audi-11.svg";
-import MercedesLogo from "../images/brands/mercedes-benz-1.svg";
-import ToyotaLogo from "../images/brands/toyota-1.svg";
-import HondaLogo from "../images/brands/honda-11.svg";
-import TeslaLogo from "../images/brands/tesla-motors.svg";
-import JeepLogo from "../images/brands/jeep-7.svg";
-import NissanLogo from "../images/brands/nissan-6.svg";
-import KiaLogo from "../images/brands/kia.svg";
-import FordLogo from '../images/brands/ford-8.svg'
+const fetchVendors = async () => {
+  const res = await fetch("http://localhost:5050/api/home");
+  if (!res.ok) throw new Error("Failed to fetch");
+  const data = await res.json();
+  return data;
+};
 
-/**
- * CarBrands Component
- * Compact display of trusted car brands with their logos
- */
 const CarBrands = () => {
-  // Complete brand data including all imported logos
-  const brands = [
-    { id: 1, name: "BMW", logo: BMWLogo },
-    { id: 2, name: "Audi", logo: AudiLogo },
-    { id: 3, name: "Mercedes", logo: MercedesLogo },
-    { id: 4, name: "Toyota", logo: ToyotaLogo },
-    { id: 5, name: "Honda", logo: HondaLogo },
-    { id: 6, name: "Tesla", logo: TeslaLogo },
-    { id: 7, name: "Jeep", logo: JeepLogo },
-    { id: 8, name: "Nissan", logo: NissanLogo },
-    { id: 9, name: "Kia", logo: KiaLogo },
-    {id:10, name:"Ford", logo:FordLogo},
+  const {
+    data,
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: ["vendors"],
+    queryFn: fetchVendors,
+  });
+
+  if (isLoading) return <p>Loading cars...</p>;
+  if (error) return <p>Error: {error.message}</p>;
+
+  // Combine all cars from the response
+  const allCars = [
+    ...(data?.affordable_cars || []),
+    ...(data?.luxury_cars || []),
+    ...(data?.recent_cars || []),
   ];
-  
-  // Show only the first 6 brands in the compact view
-  const displayedBrands = brands.slice(0, 10);
-  
+
+  // Extract unique vendors by id
+  const uniqueVendorsMap = new Map();
+  allCars.forEach(car => {
+    if (car.Vendor && !uniqueVendorsMap.has(car.Vendor.id)) {
+      uniqueVendorsMap.set(car.Vendor.id, car.Vendor);
+    }
+  });
+  const uniqueVendors = Array.from(uniqueVendorsMap.values());
+
   return (
     <section className="brands-section">
-      
       <div className="text-center">
-          <h3 className="pickcar-subtitle">Drive in Style and Luxury</h3>
-          <h2 className="pickcar-title">All Brands</h2>
-          <p className="pickcar-description">
+        <h3 className="pickcar-subtitle">Drive in Style and Luxury</h3>
+        <h2 className="pickcar-title">All Brands</h2>
+        <p className="pickcar-description">
           Experience the thrill of the road with our premium car rentals, featuring top-tier brands like BMW, Audi, Porsche, Ferrari, and more — where luxury meets performance.
-          </p>
-        </div>
+        </p>
+      </div>
 
-
-      
       <div className="brands-container">
-      <div className="brands-logos">
-  {displayedBrands.map((brand) => (
-    <div className="brand-logo-wrapper" key={brand.id}>
-      <img 
-        src={brand.logo} 
-        alt={`${brand.name} logo`} 
-        className="brand-logo"
-      />
-      <p className="brand-name">{brand.name}</p> {/* Brand name added here */}
-    </div>
-  ))}
-</div>
-        
-
+        <div className="brands-logos">
+          {uniqueVendors.slice(0, 10).map(vendor => (
+            <div className="brand-logo-wrapper" key={vendor.id}>
+              {vendor.photo ? (
+                <img
+                  src={vendor.photo}
+                  alt={`${vendor.name} logo`}
+                  className="brand-logo"
+                  onError={(e) => e.currentTarget.style.display = 'none'}
+                />
+              ) : (
+                <p className="brand-no-logo">No Logo</p>
+              )}
+              <p className="brand-name">{vendor.name}</p>
+            </div>
+          ))}
+        </div>
 
         <div className="brands-action">
           <Link to="/all-brands" className="brands-button">View All Brands</Link>

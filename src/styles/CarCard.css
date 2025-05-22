@@ -1,9 +1,23 @@
+/* Enhanced CarCard.css with improved button and interactive styles */
 
 .car-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
   gap: 2rem;
 }
+.rating-stars {
+  font-size: 16px;
+  color: #ccc;
+}
+
+.filled-star {
+  color: gold;
+}
+
+.empty-star {
+  color: #ccc;
+}
+
 
 .car-card {
   background: white;
@@ -15,11 +29,12 @@
   width: 100%;
   max-width: 450px;
   margin: 0 auto;
-  position: relative; 
+  position: relative;
 }
 
 .car-card.hovered {
   box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+  transform: translateY(-5px);
 }
 
 .car-image-container {
@@ -50,7 +65,6 @@
   opacity: 1;
 }
 
-
 .spinner-container {
   position: absolute;
   top: 0;
@@ -77,10 +91,9 @@
   100% { transform: rotate(360deg); }
 }
 
-
 .price-banner {
   position: relative;
-  background: #ff4d30;
+  background: linear-gradient(135deg, #ff4d30, #ff2b0d);
   color: white;
   padding: 0.75rem 1rem;
   text-align: center;
@@ -89,12 +102,13 @@
   justify-content: center;
   align-items: center;
   gap: 0.25rem;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 8px rgba(255, 77, 48, 0.25);
   z-index: 10;
 }
 
 .price-amount {
   font-size: 1.5rem;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
 .price-period {
@@ -121,6 +135,8 @@
 .car-overlay-content {
   display: flex;
   justify-content: space-between;
+  font-weight: 500;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
 }
 
 .car-details {
@@ -140,37 +156,53 @@
   font-weight: bold;
   color: #1f2937;
   margin: 0;
+  position: relative;
 }
 
-.rating-stars span {
-  color: #facc15;
-  font-size: 1.25rem;
+.car-name-rating h3::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -6px;
+  width: 40px;
+  height: 3px;
+  background: linear-gradient(90deg, #ff4d30, transparent);
+  border-radius: 2px;
 }
+
+
 
 .specs-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 1rem 0;
-  margin-bottom: 1.5rem;
+  gap: 1.25rem 2rem;
+  margin-bottom: 1.75rem;
+  padding: 0.75rem 0.5rem;
+  background-color: #f9fafb;
+  border-radius: 0.75rem;
 }
 
 .spec {
   display: flex;
   flex-direction: column;
-}
-
-.spec-icon {
-  font-size: 15px;
-  margin-bottom: 0.25rem;
+  margin-bottom: 0.5rem;
 }
 
 .label {
-  font-size: 12px;
+  font-size: 11px;
+  font-weight: 600;
   font-family: "Poppins", sans-serif;
   color: #6b7280;
-  margin-bottom: 0.25rem;
+  margin-bottom: 0.35rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
+.value {
+  font-size: 0.9rem;
+  color: #374151;
+  font-weight: 500;
+}
 
 .contact-options {
   display: flex;
@@ -183,28 +215,54 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0.75rem;
-  border-radius: 0.5rem;
+  padding: 0.95rem;
+  border-radius: 0.75rem;
   font-weight: 600;
   text-decoration: none;
   transition: all 0.2s ease;
-  gap: 0.5rem;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.contact-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.1);
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.3s ease;
+  z-index: 1;
+}
+
+.contact-btn:hover::before,
+.contact-btn.focused::before {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+.contact-btn span {
+  position: relative;
+  z-index: 2;
+  letter-spacing: 0.3px;
 }
 
 .whatsapp-btn {
-  background-color:#2b2b2b;
+  background: linear-gradient(135deg, #333333, #252525);
   color: white;
+  letter-spacing: 0.3px;
+  font-size: 0.95rem;
 }
 
-.whatsapp-btn:hover {
-  background-color: #2b2b2b;
-  transform: translateY(-2px);
-}
-
-
-
-.whatsapp-icon, .phone-icon {
-  font-style: normal;
+.whatsapp-btn:hover,
+.whatsapp-btn.focused {
+  background: linear-gradient(135deg, #252525, #1a1a1a);
+  transform: translateY(-3px);
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
 }
 
 .card-footer {
@@ -220,6 +278,7 @@
   align-items: center;
   font-size: 1rem;
   color: #6b7280;
+  font-weight: 500;
 }
 
 .status-dot {
@@ -227,34 +286,80 @@
   height: 0.75rem;
   border-radius: 9999px;
   margin-right: 0.5rem;
+  position: relative;
 }
 
 .status-dot.available {
-  background-color: #007B00;
+  background-color: #10b981;
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.15);
+}
+
+.status-dot.available::after {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  border-radius: 9999px;
+  background: rgba(16, 185, 129, 0.3);
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1.8);
+    opacity: 0;
+  }
 }
 
 .status-dot.pending {
   background-color: #ff4d30;
+  box-shadow: 0 0 0 3px rgba(255, 77, 48, 0.15);
 }
 
 .book-btn {
-  background: #ff4d30;
+  background: linear-gradient(135deg, #ff4d30, #ff2b0d);
   color: #fff;
-  padding: 0.75rem 1.25rem;
-  border-radius: 0.5rem;
+  padding: 0.85rem 1.5rem;
+  border-radius: 0.75rem;
   font-weight: 600;
   font-size: 1rem;
   text-decoration: none;
   transition: all 0.3s ease;
   box-shadow: 0 2px 8px rgba(255, 77, 48, 0.3);
+  position: relative;
+  overflow: hidden;
+  display: inline-block;
+  text-align: center;
 }
 
-.book-btn:hover {
-  background: #e73c1e;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(255, 77, 48, 0.4);
+.book-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.7s ease;
 }
 
+.book-btn:hover::before,
+.book-btn.focused::before {
+  left: 100%;
+}
+
+.book-btn:hover,
+.book-btn.focused {
+  background: linear-gradient(135deg, #ff2b0d, #e01e00);
+  transform: translateY(-4px);
+  box-shadow: 0 8px 15px rgba(255, 77, 48, 0.4);
+}
 
 @keyframes cardFadeIn {
   from {
@@ -271,94 +376,92 @@
   animation: cardFadeIn 0.5s ease forwards;
 }
 
-
+/* Responsive styles */
 @media (max-width: 768px) {
   .car-grid {
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
     gap: 1.5rem;
   }
-  
+
   .car-card {
     max-width: 100%;
   }
-  
+
   .car-image-container {
     height: 14rem;
   }
-  
+
   .price-amount {
     font-size: 1.25rem;
   }
-  
+
   .car-details {
     padding: 1.25rem;
   }
-  
+
   .car-name-rating h3 {
     font-size: 1.25rem;
   }
-  
+
   .specs-grid {
     gap: 0.75rem 0;
   }
-  
+
   .book-btn {
     padding: 0.5rem 1rem;
     font-size: 0.875rem;
   }
 }
 
-
 @media (max-width: 480px) {
   .car-grid {
     grid-template-columns: 1fr;
     gap: 1rem;
   }
-  
+
   .car-image-container {
     height: 12rem;
   }
-  
+
   .price-banner {
     padding: 0.5rem 0.75rem;
   }
-  
+
   .price-amount {
     font-size: 1.125rem;
   }
-  
+
   .car-details {
     padding: 1rem;
   }
-  
+
   .car-name-rating {
     flex-direction: column;
     align-items: flex-start;
     gap: 0.5rem;
   }
-  
+
   .specs-grid {
     grid-template-columns: 1fr;
     gap: 0.5rem;
   }
-  
+
   .contact-options {
     flex-direction: column;
     gap: 0.5rem;
   }
-  
+
   .card-footer {
     flex-direction: column;
     gap: 0.75rem;
     align-items: flex-start;
   }
-  
+
   .book-btn {
     width: 100%;
     text-align: center;
   }
 }
-
 
 @media only screen and (min-width: 390px) and (max-width: 430px) {
   .car-grid {
@@ -366,75 +469,75 @@
     gap: 1.5rem;
     padding: 0 0.5rem;
   }
-  
+
   .car-card {
     max-width: 100%;
     margin: 0 auto 1.5rem;
     border-radius: 1.2rem;
     box-shadow: 0 8px 20px rgba(0,0,0,0.08);
   }
-  
+
   .car-image-container {
     height: 16rem;
   }
-  
+
   .price-banner {
     padding: 0.75rem 1.5rem;
   }
-  
+
   .price-amount {
     font-size: 1.5rem;
     letter-spacing: 0.5px;
   }
-  
+
   .price-period {
     font-size: 1.125rem;
   }
-  
+
   .car-details {
     padding: 1.5rem;
   }
-  
+
   .car-name-rating {
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 1.25rem;
   }
-  
+
   .car-name-rating h3 {
     font-size: 1.35rem;
   }
-  
+
   .specs-grid {
     grid-template-columns: 1fr 1fr;
     gap: 1.25rem 1rem;
     margin-bottom: 1.75rem;
   }
-  
+
   .spec-icon {
     font-size: 18px;
   }
-  
+
   .contact-options {
     flex-direction: row;
     gap: 1.25rem;
     margin-bottom: 1.5rem;
   }
-  
+
   .contact-btn {
     padding: 0.875rem;
     border-radius: 0.75rem;
     font-size: 1rem;
   }
-  
+
   .card-footer {
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
     padding-top: 1.25rem;
   }
-  
+
   .book-btn {
     padding: 0.875rem 1.5rem;
     border-radius: 0.75rem;
@@ -448,33 +551,61 @@
     padding-left: max(1.5rem, env(safe-area-inset-left));
     padding-right: max(1.5rem, env(safe-area-inset-right));
   }
-  
+
   .price-banner {
     padding-left: max(1.5rem, env(safe-area-inset-left));
     padding-right: max(1.5rem, env(safe-area-inset-right));
   }
 }
 
-
 @media only screen and (min-width: 667px) and (max-width: 926px) and (orientation: landscape) {
   .car-grid {
     grid-template-columns: repeat(2, 1fr);
     padding: 0 1rem;
   }
-  
+
   .car-image-container {
     height: 12rem;
   }
-  
+
   .specs-grid {
     margin-bottom: 1rem;
   }
-  
+
   .car-details {
     padding: 1rem;
   }
-  
+
   .contact-options {
     margin-bottom: 1rem;
   }
+}
+
+/* Accessibility focus styles */
+.contact-btn:focus,
+.book-btn:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(255, 77, 48, 0.4), 0 4px 12px rgba(255, 77, 48, 0.3);
+}
+
+.whatsapp-btn:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(37, 211, 102, 0.4), 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* Input focus animations for better user feedback */
+@keyframes buttonPulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(255, 77, 48, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(255, 77, 48, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(255, 77, 48, 0);
+  }
+}
+
+.book-btn.focused {
+  animation: buttonPulse 1.5s infinite;
 }
