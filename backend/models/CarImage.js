@@ -1,23 +1,27 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/db');
 
-const CarCategory = sequelize.define('CarCategory', {
+const CarImage = sequelize.define('CarImage', {
     id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true
     },
-    name: {
+    car_id: {
+        type: DataTypes.INTEGER,
+        allowNull: false
+    },
+    image_url: {
         type: DataTypes.STRING,
         allowNull: false
     },
-    description: {
-        type: DataTypes.TEXT,
-        allowNull: true
+    is_main: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false
     }
 }, {
-    tableName: 'car_categories',
+    tableName: 'car_images',
     timestamps: false
 });
 
-module.exports = CarCategory;
+module.exports = CarImage;

@@ -16,4 +16,9 @@ app.use('/api/home', homeRoutes);
 
 const carRoutes = require('./routes/car');
 app.use('/api/cars', carRoutes);
+
+const brandRoutes = require('./routes/brand');
+app.use('/api/brands', brandRoutes);
+
+
 module.exports = app;

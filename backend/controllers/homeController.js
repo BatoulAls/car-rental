@@ -4,6 +4,7 @@ const Vendor = require("../models/Vendor");
 const Region = require("../models/Region");
 const Review = require('../models/Review');
 const User = require('../models/User');
+const Booking = require('../models/Booking');
 
 
 exports.getHomeData = async function(req, res){
@@ -27,11 +28,36 @@ exports.getHomeData = async function(req, res){
                 ]})
 
         ]);
+
+        // ✅ Step 1: Combine all car IDs
+        const allCars = [...affordable, ...luxery, ...recent];
+        const allCarIds = [...new Set(allCars.map(car => car.id))];
+
+        // ✅ Step 2: Get active bookings for today
+        const today = new Date().toISOString().split('T')[0];
+        const bookings = await Booking.findAll({
+            where: {
+                car_id: allCarIds,
+                start_date: { [Op.lte]: today },
+                end_date: { [Op.gte]: today },
+                status: 'confirmed'
+            }
+        });
+        const bookedCarIds = new Set(bookings.map(b => b.car_id));
+
+        // ✅ Step 3: Annotate each car with `available: true/false`
+        const markAvailability = carList =>
+            carList.map(car => ({
+                ...car.toJSON(),
+                available: !bookedCarIds.has(car.id)
+            }));
+
+
         res.json({
             regions: regions,
-            affordable_cars: affordable,
-            luxury_cars: luxery,
-            recent_cars: recent,
+            affordable_cars: markAvailability(affordable),
+            luxury_cars: markAvailability(luxery),
+            recent_cars: markAvailability(recent),
             brands: brands.map(b => b.brand),
             reviews: reviews,
         });

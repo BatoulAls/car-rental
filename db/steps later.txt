@@ -1,0 +1,3 @@
+* when create or update review should update table car colume avg_rating + count rating.
+
+* should change affordable rate - luxery rate for cars depend on syria.

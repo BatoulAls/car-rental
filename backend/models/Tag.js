@@ -1,7 +1,7 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/db');
 
-const CarCategory = sequelize.define('CarCategory', {
+const Tag = sequelize.define('Tag', {
     id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
@@ -10,14 +10,18 @@ const CarCategory = sequelize.define('CarCategory', {
     name: {
         type: DataTypes.STRING,
         allowNull: false
-    },
-    description: {
-        type: DataTypes.TEXT,
-        allowNull: true
     }
 }, {
-    tableName: 'car_categories',
+    tableName: 'tags',
     timestamps: false
 });
 
-module.exports = CarCategory;
+
+
+module.exports = Tag;
+
+const Car = require('./Car');
+Tag.belongsToMany(Car, {
+    through: 'car_tags',
+    foreignKey: 'tag_id'
+});
