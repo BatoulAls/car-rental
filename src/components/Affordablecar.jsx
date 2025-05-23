@@ -4,7 +4,6 @@ import { Link } from "react-router-dom";
 import CarCard from "./CarCard";
 import "../styles/PickCar.css";
 
-
 const fetchCarsByType = async (type) => {
    const res = await fetch("http://localhost:5050/api/home");
    if (!res.ok) throw new Error("Failed to fetch");
@@ -22,7 +21,6 @@ function Affordablecar() {
   const [carLoading, setCarLoading] = useState({});
   const [hoveredIndex, setHoveredIndex] = useState(null);
 
-
   const {
       data = { cars: [], reviews: [] },
     isLoading,
@@ -30,12 +28,10 @@ function Affordablecar() {
   } = useQuery({
     queryKey: ["cars", "affordable"],
     queryFn: () => fetchCarsByType("affordable"),
-
   });
-   const carsData = data.cars || [];
-   const reviewsData = data.reviews || [];
 
-
+  const carsData = data.cars || [];
+  const reviewsData = data.reviews || [];
 
   useEffect(() => {
     carsData.slice(0, 6).forEach((car) => {
@@ -50,14 +46,13 @@ function Affordablecar() {
       [carId]: false,
     }));
   };
-    const getRatingForCar = (carId) => {
-      const carReviews = reviewsData.filter((review) => review.car_id === carId);
-      if (carReviews.length === 0) return 0;
-      const total = carReviews.reduce((sum, r) => sum + r.rating, 0);
 
-      return Math.round(total / carReviews.length);
-    };
-
+  const getRatingForCar = (carId) => {
+    const carReviews = reviewsData.filter((review) => review.car_id === carId);
+    if (carReviews.length === 0) return 0;
+    const total = carReviews.reduce((sum, r) => sum + r.rating, 0);
+    return Math.round(total / carReviews.length);
+  };
 
   if (isLoading) return <p>Loading the cars...</p>;
   if (error) return <p>Error: {error.message}</p>;
@@ -74,7 +69,6 @@ function Affordablecar() {
         </div>
 
         <div className="car-row" style={(carsData?.length || 0) < 4 ? { justifyContent: "left" } : {}}>
-
           {carsData.slice(0, 4).map((car, index) => {
             const carId = `car-${index}`;
             const isHovered = hoveredIndex === index;
@@ -99,7 +93,11 @@ function Affordablecar() {
         </div>
 
         <div className="view-all-wrapper">
-          <Link to="/all-cars" className="view-all-button">
+          <Link
+            to="/all-cars"
+            state={{ carType: "affordable",maxPrice: 500 }}
+            className="view-all-button"
+          >
             View All Affordable Cars
           </Link>
         </div>

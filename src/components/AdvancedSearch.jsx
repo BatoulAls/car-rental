@@ -1,29 +1,27 @@
 import React from "react";
 import "../styles/SearchAdvanced.css";
 
-const AdvancedSearch = ({ searchParams, onSearchChange, onReset }) => {
-  const transmissionOptions = ["Automatic", "Manual", "CVT", "Semi-Automatic"];
-  const fuelTypeOptions = ["Petrol", "Diesel", "Electric", "Hybrid", "Plug-in Hybrid"];
-  const colorOptions = ["Black", "White", "Silver", "Red", "Blue", "Grey", "Brown", "Green"];
-  const LocationOptions = ["Kafar Souseh", "Sahnaya", "Shaalan", "Baramkeh", "Bab Touma", "Qasaa", "Mazzeh"];
-  const seatOptions = ["1-2 seats", "4-5 seats", "6-7 seats"];
+ const AdvancedSearch = ({ searchParams, onSearchChange, onReset, onSubmit, searchOptions }) => {
+
+
+
+  const { brands, regions, fuel_types, transmissions, colors } = searchOptions || {};
+
+  const currentYear = new Date().getFullYear();
+
+  const years = Array.from({ length: currentYear - 2009 + 1 }, (_, i) => currentYear - i);
+
+
+  const minPriceOptions = [20, 25, 30, 35, 40, 45, 50,100,200,300,400,500];
+  const maxPriceOptions = [25, 50, 75, 100, 150, 200, 300,500,1000,2000,3000];
+
+  const seatOptions = ["1","2","3", "4", "5","6", "7"];
   const reviewOptions = [
     { value: "1", label: "1 Star & Up" },
     { value: "2", label: "2 Stars & Up" },
     { value: "3", label: "3 Stars & Up" },
     { value: "4", label: "4 Stars & Up" },
     { value: "5", label: "5 Stars" }
-  ];
-
-  const currentYear = new Date().getFullYear();
-  const years = Array.from({ length: currentYear - 2009 }, (_, i) => currentYear - i);
-
-  const minPriceOptions = [20, 25, 30, 35, 40, 45, 50];
-  const maxPriceOptions = [25, 50, 75, 100, 150, 200, 300];
-
-  const makeOptions = [
-    "Audi", "BMW", "Chevrolet", "Ford", "Honda", "Hyundai",
-    "Kia", "Lexus", "Mazda", "Mercedes-Benz", "Nissan", "Tesla", "Toyota", "Volkswagen"
   ];
 
   return (
@@ -41,13 +39,13 @@ const AdvancedSearch = ({ searchParams, onSearchChange, onReset }) => {
           onChange={onSearchChange}
         >
           <option value="">Any Make</option>
-          {makeOptions.map((make) => (
-            <option key={make} value={make}>{make}</option>
-          ))}
+          {brands?.map((brand) => (
+                     <option key={brand} value={brand}>{brand}</option>
+                   ))}
         </select>
       </div>
 
-      {/* Location */}
+
       <div className="search-field">
         <label className="search-label" htmlFor="Location">All Location</label>
         <select
@@ -58,13 +56,13 @@ const AdvancedSearch = ({ searchParams, onSearchChange, onReset }) => {
           onChange={onSearchChange}
         >
           <option value="">Any Location</option>
-          {LocationOptions.map((location) => (
-            <option key={location} value={location}>{location}</option>
-          ))}
+          {regions?.map((region) => (
+                      <option key={region.id} value={region.id}>{region.name_en}</option>
+                    ))}
         </select>
       </div>
 
-      {/* Price Range */}
+
       <div className="search-field">
         <label className="search-label">Price Range</label>
         <div className="price-range">
@@ -97,7 +95,7 @@ const AdvancedSearch = ({ searchParams, onSearchChange, onReset }) => {
         </div>
       </div>
 
-      {/* Year */}
+
       <div className="search-field">
         <label className="search-label" htmlFor="year">Year</label>
         <select
@@ -125,13 +123,14 @@ const AdvancedSearch = ({ searchParams, onSearchChange, onReset }) => {
           onChange={onSearchChange}
         >
           <option value="">Any Transmission</option>
-          {transmissionOptions.map((option) => (
-            <option key={option} value={option}>{option}</option>
-          ))}
+
+                    {transmissions?.map((option) => (
+                      <option key={option} value={option}>{option}</option>
+                    ))}
         </select>
       </div>
 
-      {/* Fuel Type */}
+
       <div className="search-field">
         <label className="search-label" htmlFor="fuelType">Fuel Type</label>
         <select
@@ -142,13 +141,14 @@ const AdvancedSearch = ({ searchParams, onSearchChange, onReset }) => {
           onChange={onSearchChange}
         >
           <option value="">Any Fuel Type</option>
-          {fuelTypeOptions.map((option) => (
-            <option key={option} value={option}>{option}</option>
-          ))}
+
+                    {fuel_types?.map((option) => (
+                      <option key={option} value={option}>{option}</option>
+                    ))}
         </select>
       </div>
 
-      {/* Color */}
+
       <div className="search-field">
         <label className="search-label" htmlFor="color">Color</label>
         <select
@@ -159,13 +159,14 @@ const AdvancedSearch = ({ searchParams, onSearchChange, onReset }) => {
           onChange={onSearchChange}
         >
           <option value="">Any Color</option>
-          {colorOptions.map((option) => (
-            <option key={option} value={option}>{option}</option>
-          ))}
+
+                   {colors?.map((option) => (
+                     <option key={option} value={option}>{option}</option>
+                   ))}
         </select>
       </div>
 
-      {/* Seats */}
+
       <div className="search-field">
         <label className="search-label" htmlFor="seats">No. of Seats</label>
         <select
@@ -182,7 +183,7 @@ const AdvancedSearch = ({ searchParams, onSearchChange, onReset }) => {
         </select>
       </div>
 
-      {/* Review Rating */}
+
       <div className="search-field">
         <label className="search-label" htmlFor="reviewRating">Review</label>
         <select
@@ -199,11 +200,14 @@ const AdvancedSearch = ({ searchParams, onSearchChange, onReset }) => {
         </select>
       </div>
 
-      {/* Filter Buttons */}
+
+
+
       <div className="search-buttons">
-        <button type="button" onClick={onReset} className="reset-btn">Reset</button>
-        <button type="button" className="apply-btn">Apply Filters</button>
-      </div>
+              <button type="button" onClick={onReset} className="reset-btn">Reset</button>
+
+              <button type="button" onClick={onSubmit} className="apply-btn">Apply Filters</button>
+            </div>
     </div>
   );
 };
