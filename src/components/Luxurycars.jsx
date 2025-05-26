@@ -98,9 +98,19 @@ const reviewsData = data.reviews || [];
         </div>
 
         <div className="view-all-wrapper">
-          <Link to="/all-cars" className="view-all-button">
-            View All Luxury Cars
-          </Link>
+
+
+
+           <Link
+                      to="/all-cars"
+                      state={{ carType: "luxury",minPrice: 500 }}
+                      className="view-all-button"
+                    >
+                      View All Luxury Cars
+                    </Link>
+
+
+
         </div>
       </div>
     </section>

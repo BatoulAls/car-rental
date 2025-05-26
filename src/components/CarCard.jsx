@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import "../styles/CarCard.css";
+import DEFAULT_CAR_IMAGE_PATH from '../images/cars-big/default-car.png'
 
 function CarCard({
   car,
@@ -11,6 +12,7 @@ function CarCard({
   onClick,
   onImageLoad,
   rating = 0,
+
 }) {
   const [isBookingFocused, setIsBookingFocused] = useState(false);
   const [isWhatsAppFocused, setIsWhatsAppFocused] = useState(false);
@@ -33,12 +35,12 @@ function CarCard({
             <div className="spinner"></div>
           </div>
         )}
-        <img
-          src={car.img || car.photo}
-          alt={car.name || `${car.company} ${car.model}`}
-          className={`car-image ${isHovered ? "zoomed" : ""} ${isLoading ? "hidden" : "visible"}`}
-          onLoad={onImageLoad}
-        />
+         <img
+           src={car.img || car.photo || DEFAULT_CAR_IMAGE_PATH}
+           alt={car.name || `${car.company} ${car.model}` || "Default Car Image"}
+           className={`car-image ${isHovered ? "zoomed" : ""} ${isLoading ? "hidden" : "visible"}`}
+           onLoad={onImageLoad}
+         />
 
         <div className={`car-overlay ${isHovered ? "show" : ""}`}>
           <div className="car-overlay-content">

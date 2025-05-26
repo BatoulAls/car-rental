@@ -3,9 +3,9 @@ import "../styles/CarBrands.css";
 import { Link } from 'react-router-dom';
 import { useQuery } from "@tanstack/react-query";
 
-const fetchVendors = async () => {
+const fetchHomeData = async () => {
   const res = await fetch("http://localhost:5050/api/home");
-  if (!res.ok) throw new Error("Failed to fetch");
+  if (!res.ok) throw new Error("Failed to fetch home data");
   const data = await res.json();
   return data;
 };
@@ -16,28 +16,31 @@ const CarBrands = () => {
     isLoading,
     error,
   } = useQuery({
-    queryKey: ["vendors"],
-    queryFn: fetchVendors,
+    queryKey: ["homePageData"],
+    queryFn: fetchHomeData,
   });
 
-  if (isLoading) return <p>Loading cars...</p>;
+  if (isLoading) return <p>Loading car brands...</p>;
   if (error) return <p>Error: {error.message}</p>;
 
-  // Combine all cars from the response
+
   const allCars = [
     ...(data?.affordable_cars || []),
     ...(data?.luxury_cars || []),
     ...(data?.recent_cars || []),
   ];
 
-  // Extract unique vendors by id
-  const uniqueVendorsMap = new Map();
+
+  const uniqueBrandsSet = new Set();
   allCars.forEach(car => {
-    if (car.Vendor && !uniqueVendorsMap.has(car.Vendor.id)) {
-      uniqueVendorsMap.set(car.Vendor.id, car.Vendor);
+
+    if (car.brand) {
+      uniqueBrandsSet.add(car.brand);
     }
   });
-  const uniqueVendors = Array.from(uniqueVendorsMap.values());
+
+  const brandsToDisplay = Array.from(uniqueBrandsSet).sort();
+
 
   return (
     <section className="brands-section">
@@ -51,19 +54,13 @@ const CarBrands = () => {
 
       <div className="brands-container">
         <div className="brands-logos">
-          {uniqueVendors.slice(0, 10).map(vendor => (
-            <div className="brand-logo-wrapper" key={vendor.id}>
-              {vendor.photo ? (
-                <img
-                  src={vendor.photo}
-                  alt={`${vendor.name} logo`}
-                  className="brand-logo"
-                  onError={(e) => e.currentTarget.style.display = 'none'}
-                />
-              ) : (
-                <p className="brand-no-logo">No Logo</p>
-              )}
-              <p className="brand-name">{vendor.name}</p>
+
+          {brandsToDisplay.slice(0, 10).map(brandName => (
+            <div className="brand-logo-wrapper" key={brandName}>
+
+
+              <p className="brand-no-logo">{brandName}</p>
+              <p className="brand-name">{brandName}</p>
             </div>
           ))}
         </div>
