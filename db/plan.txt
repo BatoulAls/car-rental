@@ -62,19 +62,21 @@ GET /api/cars?page=1&limit=12
 GET /api/vendors?featured=true
 
 Cars Page:
-
-
 Car details page:
 
 Vendors Page: + vendor details page
 Profile:
 ———————
 Batoul side: create home page + cars page + car details page + vendor page + profile page
-Dima side: implement project + add db to git + (Done)
- start apis
 
 Later
-Make Order Page: _ process order pages _ then orders and management to all sections
+Vendors Page: + vendor details page
+booking page
+login - register
+all orders
+flow order booking
+
+management to all sections
 Continue…
 
 
