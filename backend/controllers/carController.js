@@ -134,26 +134,7 @@ exports.getCarFilterOptions = async (req, res) => {
             Vendor.findAll({ attributes: ['id', 'name'] })
         ]);
 
-        // ✅ Get availability info from bookings
-        const today = new Date().toISOString().split('T')[0];
-        const carIds = rows.map(car => car.id);
 
-        const activeBookings = await Booking.findAll({
-            where: {
-                car_id: carIds,
-                start_date: { [Op.lte]: today },
-                end_date: { [Op.gte]: today },
-                status: 'confirmed'
-            }
-        });
-
-        const bookedCarIds = new Set(activeBookings.map(b => b.car_id));
-
-        // ✅ Add availability field to each car
-        const data = rows.map(car => ({
-            ...car.toJSON(),
-            available: !bookedCarIds.has(car.id)
-        }));
         res.json({
             brands: brands.map(b => b.brand).filter(Boolean),
             regions,
