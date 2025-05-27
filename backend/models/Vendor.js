@@ -37,6 +37,14 @@ const Vendor = sequelize.define('Vendor', {
         type: DataTypes.BOOLEAN,
         defaultValue: true,
     },
+    background_image: { type: DataTypes.STRING }, // background cover
+    description: { type: DataTypes.TEXT },
+    shop_open_time: { type: DataTypes.TIME },
+    shop_close_time: { type: DataTypes.TIME },
+    open_24_7: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+    },
     created_at: {
         type: DataTypes.DATE,
         defaultValue: DataTypes.NOW,
@@ -57,3 +65,9 @@ const Vendor = sequelize.define('Vendor', {
 // Vendor.hasMany(Car, { foreignKey: 'vendor_id' });
 
 module.exports = Vendor;
+
+const Region = require('./Region');
+const User = require('./User');
+
+Vendor.belongsTo(Region, { foreignKey: 'region_id' });
+Vendor.belongsTo(User, { foreignKey: 'user_id' });

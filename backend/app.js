@@ -20,5 +20,7 @@ app.use('/api/cars', carRoutes);
 const brandRoutes = require('./routes/brand');
 app.use('/api/brands', brandRoutes);
 
+const vendorRoutes = require('./routes/vendor');
+app.use('/api/vendors', vendorRoutes);
 
 module.exports = app;
