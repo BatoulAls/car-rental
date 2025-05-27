@@ -320,3 +320,52 @@ exports.getSimilarCars = async (req, res) => {
         res.status(500).json({ error: 'Server error' });
     }
 };
+
+exports.getCarsByVendor = async (req, res) => {
+    try {
+        const vendorId = req.params.id;
+
+        // const currentCar = await Car.findByPk(carId);
+        // if (!currentCar) return res.status(404).json({ error: 'Car not found' });
+
+        const vendorCars = await Car.findAll({
+            where: {
+                vendor_id: vendorId, // exclude current car
+            },
+            limit: 4,
+            include: [
+                {
+                    model: CarCategory,
+                    attributes: ['name']
+                },
+                {
+                    model: CarImage,
+                    where: { is_main: true },
+                    required: false, // in case no main image
+                    attributes: ['image_url']
+                }
+            ],
+            attributes: ['id', 'brand', 'model', 'seats', 'bags', 'no_of_doors', 'price_per_day']
+        });
+
+        const result = vendorCars.map(car => ({
+            id: car.id,
+            brand: car.brand,
+            model: car.model,
+            category: car.CarCategory ? car.CarCategory.name : null,
+            seats: car.seats,
+            bags: car.bags,
+            no_of_doors: car.no_of_doors,
+            price_per_day: car.price_per_day,
+            photo: car.CarImages?.[0]?.image_url || null
+        }));
+
+        res.json(result);
+    } catch (err) {
+        console.error('❌ getSimilarCars error:', err);
+        res.status(500).json({ error: 'Server error' });
+    }
+};
+
+
+
