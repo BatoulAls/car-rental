@@ -14,7 +14,7 @@ const fetchCarsByType = async (type) => {
    if (type === "luxury") cars = data.luxury_cars || [];
    if (type === "recent") cars = data.recent_cars || [];
 
-   return { cars, reviews: data.reviews || [] };
+   return { cars };
 };
 
 function Affordablecar() {
@@ -22,7 +22,7 @@ function Affordablecar() {
   const [hoveredIndex, setHoveredIndex] = useState(null);
 
   const {
-      data = { cars: [], reviews: [] },
+      data = { cars: []},
     isLoading,
     error,
   } = useQuery({
@@ -31,7 +31,7 @@ function Affordablecar() {
   });
 
   const carsData = data.cars || [];
-  const reviewsData = data.reviews || [];
+ 
 
   useEffect(() => {
     carsData.slice(0, 6).forEach((car) => {
@@ -47,12 +47,7 @@ function Affordablecar() {
     }));
   };
 
-  const getRatingForCar = (carId) => {
-    const carReviews = reviewsData.filter((review) => review.car_id === carId);
-    if (carReviews.length === 0) return 0;
-    const total = carReviews.reduce((sum, r) => sum + r.rating, 0);
-    return Math.round(total / carReviews.length);
-  };
+  
 
   if (isLoading) return <p>Loading the cars...</p>;
   if (error) return <p>Error: {error.message}</p>;
@@ -73,7 +68,8 @@ function Affordablecar() {
             const carId = `car-${index}`;
             const isHovered = hoveredIndex === index;
             const isImgLoading = carLoading[carId] !== false;
-            const rating = getRatingForCar(car.id);
+            
+            const rating =  car.average_rating || 0
 
             return (
               <div className="car-column" key={carId}>
@@ -85,7 +81,7 @@ function Affordablecar() {
                   onHoverEnter={() => setHoveredIndex(index)}
                   onHoverLeave={() => setHoveredIndex(null)}
                   onImageLoad={() => handleImageLoad(carId)}
-                  rating={rating}
+                   average_rating={rating}
                 />
               </div>
             );

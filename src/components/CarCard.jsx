@@ -11,15 +11,10 @@ function CarCard({
   onHoverLeave,
   onClick,
   onImageLoad,
-  rating = 0,
-
+  average_rating = 0,
 }) {
   const [isBookingFocused, setIsBookingFocused] = useState(false);
   const [isWhatsAppFocused, setIsWhatsAppFocused] = useState(false);
-
-
-  const numRating = Number(rating);
-  console.log(`CarCard ${carId} received rating: ${rating}, converted to numRating: ${numRating}`);
 
   return (
     <div
@@ -35,12 +30,12 @@ function CarCard({
             <div className="spinner"></div>
           </div>
         )}
-         <img
-           src={car.img || car.photo || DEFAULT_CAR_IMAGE_PATH}
-           alt={car.name || `${car.company} ${car.model}` || "Default Car Image"}
-           className={`car-image ${isHovered ? "zoomed" : ""} ${isLoading ? "hidden" : "visible"}`}
-           onLoad={onImageLoad}
-         />
+          <img
+            src={car.img || car.photo || DEFAULT_CAR_IMAGE_PATH}
+            alt={car.name || `${car.company} ${car.model}` || "Default Car Image"}
+            className={`car-image ${isHovered ? "zoomed" : ""} ${isLoading ? "hidden" : "visible"}`}
+            onLoad={onImageLoad}
+          />
 
         <div className={`car-overlay ${isHovered ? "show" : ""}`}>
           <div className="car-overlay-content">
@@ -56,18 +51,29 @@ function CarCard({
       </div>
 
       <div className="car-details">
+        {/* هذا هو div الذي يجب أن يحتوي على اسم السيارة والتقييم معًا */}
         <div className="car-name-rating">
           <h3>{car.name || `${car.company} ${car.model}`}</h3>
           <div className="rating-stars">
-            {[1, 2, 3, 4, 5].map((star) => (
-              <span
-                key={star}
-                className={star <= numRating ? "filled-star" : "empty-star"}
-              >
-                {console.log(`Star ${star}, numRating ${numRating}, filled: ${star <= numRating}`)}
-                ★
-              </span>
-            ))}
+            {[1, 2, 3, 4, 5].map((star) => {
+              const fullStars = Math.floor(average_rating);
+              const hasHalfStar = average_rating - fullStars >= 0.5;
+
+              return (
+                <span
+                  key={star}
+                  className={
+                    star <= fullStars
+                      ? "filled-star"
+                      : star === fullStars + 1 && hasHalfStar
+                      ? "half-filled-star"
+                      : "empty-star"
+                  }
+                >
+                  ★
+                </span>
+              );
+            })}
           </div>
         </div>
 

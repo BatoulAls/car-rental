@@ -1,4 +1,4 @@
-/* Enhanced CarCard.css with improved button and interactive styles */
+
 
 .car-grid {
   display: grid;
@@ -6,16 +6,41 @@
   gap: 2rem;
 }
 .rating-stars {
-  font-size: 16px;
-  color: #ccc;
-}
 
+  display: flex;
+  align-items: center;
+  gap: 2px; 
+  font-size: 16px; 
+  color: #ccc; 
+}
+.rating-stars span {
+ 
+  display: inline-block;
+  vertical-align: middle; 
+  line-height: 1; 
+}
 .filled-star {
   color: gold;
 }
 
 .empty-star {
   color: #ccc;
+}
+
+.half-filled-star {
+  position: relative;
+  overflow: hidden;
+  color: #ccc;
+}
+
+.half-filled-star::before {
+  content: '★';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 50%; 
+  overflow: hidden; 
+  color: gold; 
 }
 
 

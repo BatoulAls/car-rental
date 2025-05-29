@@ -10,6 +10,20 @@ const fetchHomeData = async () => {
   return data;
 };
 
+
+const brandLogos = {};
+
+const importAll = (r) => {
+  r.keys().forEach((key) => {
+    
+    const brandName = key.replace('./', '').split('.')[0];
+    brandLogos[brandName.toLowerCase()] = r(key); 
+  });
+};
+
+importAll(require.context('../images/brands', false, /\.(png|jpe?g|svg)$/));
+
+
 const CarBrands = () => {
   const {
     data,
@@ -23,24 +37,20 @@ const CarBrands = () => {
   if (isLoading) return <p>Loading car brands...</p>;
   if (error) return <p>Error: {error.message}</p>;
 
-
   const allCars = [
     ...(data?.affordable_cars || []),
     ...(data?.luxury_cars || []),
     ...(data?.recent_cars || []),
   ];
 
-
   const uniqueBrandsSet = new Set();
   allCars.forEach(car => {
-
     if (car.brand) {
       uniqueBrandsSet.add(car.brand);
     }
   });
 
   const brandsToDisplay = Array.from(uniqueBrandsSet).sort();
-
 
   return (
     <section className="brands-section">
@@ -54,15 +64,22 @@ const CarBrands = () => {
 
       <div className="brands-container">
         <div className="brands-logos">
-
-          {brandsToDisplay.slice(0, 10).map(brandName => (
-            <div className="brand-logo-wrapper" key={brandName}>
-
-
-              <p className="brand-no-logo">{brandName}</p>
-              <p className="brand-name">{brandName}</p>
-            </div>
-          ))}
+          {brandsToDisplay.slice(0, 10).map(brandName => {
+          
+            const logoSrc = brandLogos[brandName.toLowerCase()];
+            return (
+              <div className="brand-logo-wrapper" key={brandName}>
+                {logoSrc ? (
+                 
+                  <img src={logoSrc} alt={`${brandName} Logo`} className="brand-logo" />
+                ) : (
+                  
+                  <p className="brand-no-logo">{brandName}</p>
+                )}
+                <p className="brand-name">{brandName}</p>
+              </div>
+            );
+          })}
         </div>
 
         <div className="brands-action">
