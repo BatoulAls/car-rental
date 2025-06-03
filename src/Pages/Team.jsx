@@ -1,4 +1,4 @@
-import Footer from "../components/Footer";
+
 import HeroPages from "../components/HeroPages";
 
 
@@ -23,7 +23,7 @@ function Team() {
             </div>
           </div>
         </div>
-        <Footer />
+       
       </section>
     </>
   );

@@ -1,4 +1,4 @@
-import Footer from "../components/Footer";
+
 import HeroPages from "../components/HeroPages";
 
 function Contact() {
@@ -22,7 +22,7 @@ function Contact() {
             </div>
           </div>
         </div>
-        <Footer />
+        
       </section>
     </>
   );

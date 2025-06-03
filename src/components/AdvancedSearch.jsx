@@ -184,13 +184,13 @@ import "../styles/SearchAdvanced.css";
       </div>
 
 
-      <div className="search-field">
-        <label className="search-label" htmlFor="reviewRating">Review</label>
+      {/*<div className="search-field">
+        <label className="search-label" htmlFor="average_rating">Review</label>
         <select
-          id="reviewRating"
-          name="reviewRating"
+          id="average_rating"
+          name="average_rating"
           className="search-select"
-          value={searchParams.reviewRating}
+          value={searchParams.average_rating}
           onChange={onSearchChange}
         >
           <option value="">Any</option>
@@ -198,7 +198,7 @@ import "../styles/SearchAdvanced.css";
             <option key={opt.value} value={opt.value}>{opt.label}</option>
           ))}
         </select>
-      </div>
+      </div>*/}
 
 
 

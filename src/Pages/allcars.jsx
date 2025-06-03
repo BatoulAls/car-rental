@@ -4,6 +4,7 @@ import { useLocation } from "react-router-dom";
 import CarCard from "../components/CarCard";
 import AdvancedSearch from "../components/AdvancedSearch";
 import Pagination from "../components/Pagination";
+import { useNavigate } from "react-router-dom";
 import "../styles/AllCar.css";
 import "../styles/CarCard.css";
 
@@ -338,7 +339,15 @@ function AllCars() {
     }
   };
 
+
+
   const { subtitle, title, description } = getPageContent();
+
+   const navigate = useNavigate();
+  const onNavigateToDetails = (carId) => {
+    navigate(`/car-details/${carId}`); 
+  }
+   
 
   return (
     <section className="pickcar1-section">
@@ -402,21 +411,23 @@ function AllCars() {
               <p style={{ color: 'red' }}>Error loading cars: {currentError.message}</p>
             ) : currentCars.length > 0 ? (
               currentCars.map((car, index) => {
-                const carId = `car-${index}`;
+                const carUniqueId = car.id; 
                 const isHovered = hoveredIndex === index;
-                const isLoading = carLoading[carId] !== false;
+                const isLoading = carLoading[carUniqueId] !== false;
                 const rating = car.average_rating;
 
                 return (
                   <CarCard
-                    key={carId}
+                    key={carUniqueId}
                     car={car}
-                    carId={carId}
+                    carId={carUniqueId}
+                    cardIndex={index} 
                     isHovered={isHovered}
                     isLoading={isLoading}
                     onHoverEnter={() => setHoveredIndex(index)}
                     onHoverLeave={() => setHoveredIndex(null)}
-                    onImageLoad={() => handleImageLoad(carId)}
+                    onImageLoad={() => handleImageLoad(carUniqueId)}
+                    onNavigateToDetails={() => onNavigateToDetails(carUniqueId)} 
                     average_rating={rating}
                   />
                 );
