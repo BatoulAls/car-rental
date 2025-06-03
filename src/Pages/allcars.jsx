@@ -76,6 +76,12 @@ const fetchCarsWithFiltersAndSort = async (page, limit, searchParams, sortBy, se
         case "vendor":
           params.append("vendor_id", searchParams[key]);
           break;
+        case "pickup_date": 
+          params.append("pickup_date", searchParams[key]);
+          break;
+        case "dropoff_date": 
+          params.append("dropoff_date", searchParams[key]);
+          break;
         default:
           params.append(key, searchParams[key]);
           break;
@@ -112,7 +118,7 @@ const fetchCarsWithFiltersAndSort = async (page, limit, searchParams, sortBy, se
     url += `&${params.toString()}`;
   }
 
-  console.log('URL:', url); 
+  console.log('URL:', url);
 
   const res = await fetch(url);
   if (!res.ok) throw new Error("Failed to load cars with filters and sort");
@@ -123,15 +129,16 @@ const fetchCarsWithFiltersAndSort = async (page, limit, searchParams, sortBy, se
 function AllCars() {
   const location = useLocation();
   const searchedResultData = location.state?.resultData || null;
-  const SimpleSearchData = location.state?.searchFilters || {}
+  const SimpleSearchData = location.state?.searchFilters || {};
   const carType = location.state?.carType || null;
 
   const [carLoading, setCarLoading] = useState({});
   const [hoveredIndex, setHoveredIndex] = useState(null);
   const [searchParams, setSearchParams] = useState({
-    make: SimpleSearchData.brand ||{},
-    Location: SimpleSearchData.location ||{},
+    make: "",
+    Location: "",
     minPrice: "",
+    maxPrice: "",
     transmission: "",
     fuelType: "",
     color: "",
@@ -139,13 +146,15 @@ function AllCars() {
     seats: "",
     review: "",
     vendor: "",
+    pickup_date: "",
+    dropoff_date: "", 
   });
   const [currentPage, setCurrentPage] = useState(1);
   const [showSearch, setShowSearch] = useState(false);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [sortBy, setSortBy] = useState("");
 
-  const [useAdvancedSearch, setUseAdvancedSearch] = useState(true); 
+  const [useAdvancedSearch, setUseAdvancedSearch] = useState(true);
 
   const carsPerPage = 10;
 
@@ -160,27 +169,26 @@ function AllCars() {
     cacheTime: Infinity,
   });
 
-  
+
   const {
     data: carsData,
     isLoading: isLoadingCars,
     error: carsError,
-    refetch: refetchCars, 
+    refetch: refetchCars,
   } = useQuery({
-     
     queryKey: ["allCars", currentPage, searchParams, sortBy, carType, searchOptions],
     queryFn: () => fetchCarsWithFiltersAndSort(currentPage, carsPerPage, searchParams, sortBy, searchOptions, carType),
     keepPreviousData: true,
-    enabled: !!searchOptions, 
+    enabled: !!searchOptions,
   });
 
-  
+
   useEffect(() => {
     let initialSearchParams = {
       make: "",
       Location: "",
       minPrice: "",
-      maxPrice: "", 
+      maxPrice: "",
       transmission: "",
       fuelType: "",
       color: "",
@@ -188,9 +196,11 @@ function AllCars() {
       seats: "",
       review: "",
       vendor: "",
+      pickup_date: "",
+      dropoff_date: "", 
     };
 
-    
+
     if (searchedResultData && searchedResultData.searchFilters) {
       const filters = searchedResultData.searchFilters;
 
@@ -198,7 +208,6 @@ function AllCars() {
         initialSearchParams.make = filters.brand;
       }
       if (filters.location) {
-        
         if (searchOptions && searchOptions.regions) {
           const region = searchOptions.regions.find(r => r.name_en === filters.location);
           if (region) {
@@ -206,10 +215,16 @@ function AllCars() {
           }
         }
       }
-      
+      // Add pickup_date and dropoff_date from simple search data
+      if (filters.pickTime) {
+        initialSearchParams.pickup_date = filters.pickTime;
+      }
+      if (filters.dropTime) {
+        initialSearchParams.dropoff_date = filters.dropTime;
+      }
     }
 
-    
+
     if (carType === "affordable") {
       initialSearchParams.maxPrice = "500";
     } else if (carType === "luxury") {
@@ -220,7 +235,7 @@ function AllCars() {
     setCurrentPage(1);
     setSortBy("");
 
-  }, [carType, searchedResultData, searchOptions]); 
+  }, [carType, searchedResultData, searchOptions]);
 
   const handleImageLoad = (carId) => {
     setCarLoading((prev) => ({
@@ -236,14 +251,14 @@ function AllCars() {
       ...prev,
       [name]: value,
     }));
-    
-    
+
+
   };
 
   const handleApplyFilters = () => {
     console.log('Applying filters with params:', searchParams);
     setCurrentPage(1);
-    
+
   };
 
   const handleResetSearch = () => {
@@ -259,6 +274,8 @@ function AllCars() {
       seats: "",
       review: "",
       vendor: "",
+      pickup_date: "", 
+      dropoff_date: "", 
     };
     if (carType === "affordable") {
       resetToParams.maxPrice = "500";
@@ -266,24 +283,24 @@ function AllCars() {
       resetToParams.minPrice = "500";
     }
 
-    console.log('Resetting search to:', resetToParams); 
+    console.log('Resetting search to:', resetToParams);
     setSearchParams(resetToParams);
     setSortBy("");
     setCurrentPage(1);
-    
+
   };
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
     window.scrollTo({ top: 0, behavior: "smooth" });
-    
+
   };
 
   const handleSortChange = (e) => {
-    console.log('Sort changed to:', e.target.value); 
+    console.log('Sort changed to:', e.target.value);
     setSortBy(e.target.value);
     setCurrentPage(1);
-   
+
   };
 
   useEffect(() => {
@@ -298,16 +315,15 @@ function AllCars() {
     }
   }, [windowWidth]);
 
- 
 
- 
+
   let currentCars = carsData?.data || [];
   let currentTotalPages = carsData?.totalPages || 1;
   let currentIsLoading = isLoadingCars;
   let currentError = carsError;
 
 
-  console.log('Using advanced search data:', currentCars.length, 'cars'); 
+  console.log('Using advanced search data:', currentCars.length, 'cars');
 
   const getPageContent = () => {
     switch (carType) {
@@ -333,7 +349,7 @@ function AllCars() {
         return {
           subtitle: "Premium Selection",
           title: "Explore Our Cars",
-          
+
           description: "Explore our curated collection of new luxury cars."
         };
     }
@@ -343,11 +359,11 @@ function AllCars() {
 
   const { subtitle, title, description } = getPageContent();
 
-   const navigate = useNavigate();
+  const navigateToDetails = useNavigate(); 
   const onNavigateToDetails = (carId) => {
-    navigate(`/car-details/${carId}`); 
+    navigateToDetails(`/car-details/${carId}`);
   }
-   
+
 
   return (
     <section className="pickcar1-section">
@@ -397,7 +413,7 @@ function AllCars() {
                   searchParams={searchParams}
                   onSearchChange={handleSearchParamChange}
                   onReset={handleResetSearch}
-                  onSubmit={handleApplyFilters} 
+                  onSubmit={handleApplyFilters}
                   searchOptions={searchOptions}
                 />
               )}
@@ -411,7 +427,7 @@ function AllCars() {
               <p style={{ color: 'red' }}>Error loading cars: {currentError.message}</p>
             ) : currentCars.length > 0 ? (
               currentCars.map((car, index) => {
-                const carUniqueId = car.id; 
+                const carUniqueId = car.id;
                 const isHovered = hoveredIndex === index;
                 const isLoading = carLoading[carUniqueId] !== false;
                 const rating = car.average_rating;
@@ -421,13 +437,13 @@ function AllCars() {
                     key={carUniqueId}
                     car={car}
                     carId={carUniqueId}
-                    cardIndex={index} 
+                    cardIndex={index}
                     isHovered={isHovered}
                     isLoading={isLoading}
                     onHoverEnter={() => setHoveredIndex(index)}
                     onHoverLeave={() => setHoveredIndex(null)}
                     onImageLoad={() => handleImageLoad(carUniqueId)}
-                    onNavigateToDetails={() => onNavigateToDetails(carUniqueId)} 
+                    onNavigateToDetails={() => onNavigateToDetails(carUniqueId)}
                     average_rating={rating}
                   />
                 );

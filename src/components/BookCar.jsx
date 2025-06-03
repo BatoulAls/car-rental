@@ -31,7 +31,7 @@ function BookCar() {
       const res = await axios.get(
         `http://localhost:5050/api/cars?brand=${encodeURIComponent(
           brand
-        )}&location=${encodeURIComponent(location)}&page=${page}&limit=${limit}`
+        )}&location=${encodeURIComponent(location)}&pickTime=${encodeURIComponent(pickTime)}&dropTime=${encodeURIComponent(dropTime)}&page=${page}&limit=${limit}`
       );
 
       const resultData = res.data;
