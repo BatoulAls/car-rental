@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import CarCard from "./CarCard";
 import { useQuery } from "@tanstack/react-query";
 import "../styles/PickCar.css";
+
 
 const fetchCarsByType = async (type) => {
   const res = await fetch("http://localhost:5050/api/home");
@@ -14,15 +15,16 @@ const fetchCarsByType = async (type) => {
   if (type === "luxury") cars = data.luxury_cars || [];
   if (type === "recent") cars = data.recent_cars || [];
 
-  return { cars, reviews: data.reviews || [] };
+  return { cars };
 };
 
 function Luxurycars() {
   const [carLoading, setCarLoading] = useState({});
   const [hoveredIndex, setHoveredIndex] = useState(null);
 
+
   const {
-    data = { cars: [], reviews: [] },
+    data = { cars: [] },
     isLoading,
     error,
   } = useQuery({
@@ -31,7 +33,6 @@ function Luxurycars() {
   });
 
 const carsData = data.cars || [];
-const reviewsData = data.reviews || [];
 
 
   useEffect(() => {
@@ -47,16 +48,13 @@ const reviewsData = data.reviews || [];
       [carId]: false,
     }));
   };
+  const navigate = useNavigate();
 
-  const getRatingForCar = (carId) => {
-    const carReviews = reviewsData.filter((review) => review.car_id === carId);
-    if (carReviews.length === 0) return 0;
-    const total = carReviews.reduce((sum, r) => sum + r.rating, 0);
+  const onNavigateToDetails = (carId) => {
+    navigate(`/car-details/${carId}`); 
+  }
 
-    return Math.round(total / carReviews.length);
-  };
-
-  if (isLoading) return <p>Loading the cars...</p>;
+  if (isLoading) return <p>Loading cars...</p>;
   if (error) return <p>Error: {error.message}</p>;
 
   return (
@@ -66,31 +64,32 @@ const reviewsData = data.reviews || [];
           <h3 className="pickcar-subtitle">Luxury Cars</h3>
           <h2 className="pickcar-title">Explore Our Luxury Cars</h2>
           <p className="pickcar-description">
-            Drive in style! Make your first car rental a great experience with
-            luxury supercar rentals from top brands such as Rolls Royce,
-            Mercedes Benz, Lamborghini and more.
+            Drive in style! Make your first car rental experience great with luxury car rentals
+            from top brands like Rolls Royce, Mercedes-Benz, Lamborghini, and more.
           </p>
         </div>
 
        <div className="car-row" style={(carsData?.length || 0) < 4 ? { justifyContent: "left" } : {}}>
 
           {carsData.slice(0, 4).map((car, index) => {
-            const carId = `car-${index}`;
+            const carUniqueId = car.id; 
             const isHovered = hoveredIndex === index;
-            const isImgLoading = carLoading[carId] !== false;
-            const rating = getRatingForCar(car.id);
+            const isImgLoading = carLoading[carUniqueId] !== false; 
+            const rating = car.average_rating || 0
 
             return (
-              <div className="car-column" key={carId}>
+              <div className="car-column" key={carUniqueId}> 
                 <CarCard
                   car={car}
-                  carId={carId}
+                  carId={carUniqueId} 
+                  cardIndex={index} 
                   isHovered={isHovered}
                   isLoading={isImgLoading}
                   onHoverEnter={() => setHoveredIndex(index)}
                   onHoverLeave={() => setHoveredIndex(null)}
-                  onImageLoad={() => handleImageLoad(carId)}
-                  rating={rating}
+                  onImageLoad={() => handleImageLoad(carUniqueId)} 
+                  average_rating={rating}
+                  onNavigateToDetails={() => onNavigateToDetails(carUniqueId)} 
                 />
               </div>
             );
@@ -98,19 +97,13 @@ const reviewsData = data.reviews || [];
         </div>
 
         <div className="view-all-wrapper">
-
-
-
-           <Link
-                      to="/all-cars"
-                      state={{ carType: "luxury",minPrice: 500 }}
-                      className="view-all-button"
-                    >
-                      View All Luxury Cars
-                    </Link>
-
-
-
+          <Link
+            to="/all-cars"
+            state={{ carType: "luxury",minPrice: 500 }}
+            className="view-all-button"
+          >
+            View All Luxury Cars
+          </Link>
         </div>
       </div>
     </section>

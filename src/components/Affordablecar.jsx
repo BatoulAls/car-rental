@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { Link } from "react-router-dom";
+
+import { Link, useNavigate } from "react-router-dom";
 import CarCard from "./CarCard";
 import "../styles/PickCar.css";
 
@@ -14,7 +15,7 @@ const fetchCarsByType = async (type) => {
    if (type === "luxury") cars = data.luxury_cars || [];
    if (type === "recent") cars = data.recent_cars || [];
 
-   return { cars, reviews: data.reviews || [] };
+   return { cars };
 };
 
 function Affordablecar() {
@@ -22,7 +23,7 @@ function Affordablecar() {
   const [hoveredIndex, setHoveredIndex] = useState(null);
 
   const {
-      data = { cars: [], reviews: [] },
+      data = { cars: []},
     isLoading,
     error,
   } = useQuery({
@@ -31,7 +32,7 @@ function Affordablecar() {
   });
 
   const carsData = data.cars || [];
-  const reviewsData = data.reviews || [];
+ 
 
   useEffect(() => {
     carsData.slice(0, 6).forEach((car) => {
@@ -46,13 +47,12 @@ function Affordablecar() {
       [carId]: false,
     }));
   };
+  const navigate = useNavigate();
+  const onNavigateToDetails = (carId) => {
+    navigate(`/car-details/${carId}`); 
+  }
 
-  const getRatingForCar = (carId) => {
-    const carReviews = reviewsData.filter((review) => review.car_id === carId);
-    if (carReviews.length === 0) return 0;
-    const total = carReviews.reduce((sum, r) => sum + r.rating, 0);
-    return Math.round(total / carReviews.length);
-  };
+  
 
   if (isLoading) return <p>Loading the cars...</p>;
   if (error) return <p>Error: {error.message}</p>;
@@ -70,22 +70,26 @@ function Affordablecar() {
 
         <div className="car-row" style={(carsData?.length || 0) < 4 ? { justifyContent: "left" } : {}}>
           {carsData.slice(0, 4).map((car, index) => {
-            const carId = `car-${index}`;
+            const carUniqueId = car.id; 
             const isHovered = hoveredIndex === index;
-            const isImgLoading = carLoading[carId] !== false;
-            const rating = getRatingForCar(car.id);
+            const isImgLoading = carLoading[carUniqueId] !== false; 
+            const rating = car.average_rating || 0
+            
+           
 
             return (
-              <div className="car-column" key={carId}>
-                <CarCard
+              <div className="car-column" key={carUniqueId}> 
+                  <CarCard
                   car={car}
-                  carId={carId}
+                  carId={carUniqueId} 
+                  cardIndex={index} 
                   isHovered={isHovered}
                   isLoading={isImgLoading}
                   onHoverEnter={() => setHoveredIndex(index)}
                   onHoverLeave={() => setHoveredIndex(null)}
-                  onImageLoad={() => handleImageLoad(carId)}
-                  rating={rating}
+                  onImageLoad={() => handleImageLoad(carUniqueId)} 
+                  average_rating={rating}
+                  onNavigateToDetails={() => onNavigateToDetails(carUniqueId)} 
                 />
               </div>
             );

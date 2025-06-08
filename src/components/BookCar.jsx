@@ -10,8 +10,7 @@ function BookCar() {
   const [dropTime, setDropTime] = useState("");
   const navigate = useNavigate();
 
-
-const { data, error, isLoading } = useQuery({
+  const { data, error, isLoading } = useQuery({
     queryKey: ["homeData"],
     queryFn: async () => {
       const res = await axios.get("http://localhost:5050/api/home");
@@ -23,12 +22,6 @@ const { data, error, isLoading } = useQuery({
     e.preventDefault();
 
     const errorMsg = document.querySelector(".error-message");
-
-    if (!brand || !location || !pickTime || !dropTime) {
-      errorMsg.style.display = "flex";
-      return;
-    }
-
     errorMsg.style.display = "none";
 
     const page = 1;
@@ -38,14 +31,28 @@ const { data, error, isLoading } = useQuery({
       const res = await axios.get(
         `http://localhost:5050/api/cars?brand=${encodeURIComponent(
           brand
-        )}&location=${encodeURIComponent(location)}&page=${page}&limit=${limit}`
+        )}&location=${encodeURIComponent(location)}&pickTime=${encodeURIComponent(pickTime)}&dropTime=${encodeURIComponent(dropTime)}&page=${page}&limit=${limit}`
       );
 
       const resultData = res.data;
       const cars = resultData.data;
 
       if (cars && cars.length > 0) {
-        navigate("/results", { state: { resultData } });
+        const enhancedResultData = {
+          ...resultData,
+          searchFilters: {
+            brand: brand,
+            location: location,
+            pickTime: pickTime,
+            dropTime: dropTime
+          }
+        };
+
+        navigate("/results", { 
+          state: { 
+            resultData: enhancedResultData
+          } 
+        });
       } else {
         alert("No matching cars were found");
       }
@@ -57,7 +64,6 @@ const { data, error, isLoading } = useQuery({
 
   if (isLoading) return <p>Loading...</p>;
   if (error) return <p>Error loading data</p>;
-
 
   const brands = data?.brands || [];
   const locations = data?.regions?.map((region) => region.name_en) || [];
@@ -76,7 +82,7 @@ const { data, error, isLoading } = useQuery({
             <form className="box-form" onSubmit={toggleModal}>
               <div className="box-form__car-type">
                 <label>
-                  <i className="fa-solid fa-car"></i> &nbsp; Choose a car brand <b>*</b>
+                  <i className="fa-solid fa-car"></i> &nbsp; Choose a car brand <b></b>
                 </label>
                 <select value={brand} onChange={(e) => setBrand(e.target.value)}>
                   <option value="">Choose your car brand</option>
@@ -90,7 +96,7 @@ const { data, error, isLoading } = useQuery({
 
               <div className="box-form__car-type">
                 <label>
-                  <i className="fa-solid fa-location-dot"></i> &nbsp; Pick-up Location <b>*</b>
+                  <i className="fa-solid fa-location-dot"></i> &nbsp; Pick-up Location <b></b>
                 </label>
                 <select value={location} onChange={(e) => setLocation(e.target.value)}>
                   <option value="">Choose a pickup location</option>
@@ -104,7 +110,7 @@ const { data, error, isLoading } = useQuery({
 
               <div className="box-form__car-time">
                 <label htmlFor="picktime">
-                  <i className="fa-regular fa-calendar-days"></i> &nbsp;Time of Pick-up <b>*</b>
+                  <i className="fa-regular fa-calendar-days"></i> &nbsp;Time of Pick-up <b></b>
                 </label>
                 <input
                   id="picktime"
@@ -116,7 +122,7 @@ const { data, error, isLoading } = useQuery({
 
               <div className="box-form__car-time">
                 <label htmlFor="droptime">
-                  <i className="fa-regular fa-calendar-days"></i> &nbsp; Time of Drop-off <b>*</b>
+                  <i className="fa-regular fa-calendar-days"></i> &nbsp; Time of Drop-off <b></b>
                 </label>
                 <input
                   id="droptime"

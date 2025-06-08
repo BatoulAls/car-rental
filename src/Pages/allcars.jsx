@@ -4,10 +4,9 @@ import { useLocation } from "react-router-dom";
 import CarCard from "../components/CarCard";
 import AdvancedSearch from "../components/AdvancedSearch";
 import Pagination from "../components/Pagination";
+import { useNavigate } from "react-router-dom";
 import "../styles/AllCar.css";
 import "../styles/CarCard.css";
-
-
 
 const fetchAdvancedSearchOptions = async () => {
   const res = await fetch("http://localhost:5050/api/cars/options");
@@ -16,13 +15,11 @@ const fetchAdvancedSearchOptions = async () => {
   return data;
 };
 
-
 const fetchCarsWithFiltersAndSort = async (page, limit, searchParams, sortBy, searchOptions, carType) => {
   let url = `http://localhost:5050/api/cars?page=${page}&limit=${limit}`;
 
   const params = new URLSearchParams();
   const regions = searchOptions?.regions || [];
-
 
   if (carType) {
     if (carType === "affordable") {
@@ -30,14 +27,12 @@ const fetchCarsWithFiltersAndSort = async (page, limit, searchParams, sortBy, se
     } else if (carType === "luxury") {
       params.append("minPrice", 500);
     } else if (carType === "recent") {
-
       params.append("sort_by", "created_at");
       params.append("order", "desc");
     }
   }
 
   for (const key in searchParams) {
-
     if ((key === "maxPrice" && carType === "affordable") || (key === "minPrice" && carType === "luxury")) {
       continue;
     }
@@ -76,11 +71,16 @@ const fetchCarsWithFiltersAndSort = async (page, limit, searchParams, sortBy, se
           params.append("seats", searchParams[key]);
           break;
         case "review":
-
           params.append("min_review", searchParams[key]);
           break;
         case "vendor":
           params.append("vendor_id", searchParams[key]);
+          break;
+        case "pickup_date": 
+          params.append("pickup_date", searchParams[key]);
+          break;
+        case "dropoff_date": 
+          params.append("dropoff_date", searchParams[key]);
           break;
         default:
           params.append(key, searchParams[key]);
@@ -88,7 +88,6 @@ const fetchCarsWithFiltersAndSort = async (page, limit, searchParams, sortBy, se
       }
     }
   }
-
 
   if (sortBy) {
     if (!(carType === "recent" && sortBy === "created_at")) {
@@ -119,6 +118,8 @@ const fetchCarsWithFiltersAndSort = async (page, limit, searchParams, sortBy, se
     url += `&${params.toString()}`;
   }
 
+  console.log('URL:', url);
+
   const res = await fetch(url);
   if (!res.ok) throw new Error("Failed to load cars with filters and sort");
   const data = await res.json();
@@ -128,6 +129,7 @@ const fetchCarsWithFiltersAndSort = async (page, limit, searchParams, sortBy, se
 function AllCars() {
   const location = useLocation();
   const searchedResultData = location.state?.resultData || null;
+  const SimpleSearchData = location.state?.searchFilters || {};
   const carType = location.state?.carType || null;
 
   const [carLoading, setCarLoading] = useState({});
@@ -144,41 +146,17 @@ function AllCars() {
     seats: "",
     review: "",
     vendor: "",
+    pickup_date: "",
+    dropoff_date: "", 
   });
   const [currentPage, setCurrentPage] = useState(1);
   const [showSearch, setShowSearch] = useState(false);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [sortBy, setSortBy] = useState("");
+
+  const [useAdvancedSearch, setUseAdvancedSearch] = useState(true);
+
   const carsPerPage = 10;
-
-
-  useEffect(() => {
-    let initialSearchParams = {
-      make: "",
-      Location: "",
-      minPrice: "",
-      maxPrice: "",
-      transmission: "",
-      fuelType: "",
-      color: "",
-      year: "",
-      seats: "",
-      review: "",
-      vendor: "",
-    };
-
-
-    if (carType === "affordable") {
-      initialSearchParams.maxPrice = "500";
-    } else if (carType === "luxury") {
-      initialSearchParams.minPrice = "500";
-    }
-
-
-    setSearchParams(initialSearchParams);
-    setCurrentPage(1);
-    setSortBy("");
-  }, [carType]);
 
   const {
     data: searchOptions,
@@ -201,8 +179,63 @@ function AllCars() {
     queryKey: ["allCars", currentPage, searchParams, sortBy, carType, searchOptions],
     queryFn: () => fetchCarsWithFiltersAndSort(currentPage, carsPerPage, searchParams, sortBy, searchOptions, carType),
     keepPreviousData: true,
-    enabled: !searchedResultData && !!searchOptions,
+    enabled: !!searchOptions,
   });
+
+
+  useEffect(() => {
+    let initialSearchParams = {
+      make: "",
+      Location: "",
+      minPrice: "",
+      maxPrice: "",
+      transmission: "",
+      fuelType: "",
+      color: "",
+      year: "",
+      seats: "",
+      review: "",
+      vendor: "",
+      pickup_date: "",
+      dropoff_date: "", 
+    };
+
+
+    if (searchedResultData && searchedResultData.searchFilters) {
+      const filters = searchedResultData.searchFilters;
+
+      if (filters.brand) {
+        initialSearchParams.make = filters.brand;
+      }
+      if (filters.location) {
+        if (searchOptions && searchOptions.regions) {
+          const region = searchOptions.regions.find(r => r.name_en === filters.location);
+          if (region) {
+            initialSearchParams.Location = region.id.toString();
+          }
+        }
+      }
+      // Add pickup_date and dropoff_date from simple search data
+      if (filters.pickTime) {
+        initialSearchParams.pickup_date = filters.pickTime;
+      }
+      if (filters.dropTime) {
+        initialSearchParams.dropoff_date = filters.dropTime;
+      }
+    }
+
+
+    if (carType === "affordable") {
+      initialSearchParams.maxPrice = "500";
+    } else if (carType === "luxury") {
+      initialSearchParams.minPrice = "500";
+    }
+
+    setSearchParams(initialSearchParams);
+    setCurrentPage(1);
+    setSortBy("");
+
+  }, [carType, searchedResultData, searchOptions]);
 
   const handleImageLoad = (carId) => {
     setCarLoading((prev) => ({
@@ -213,19 +246,22 @@ function AllCars() {
 
   const handleSearchParamChange = (e) => {
     const { name, value } = e.target;
+    console.log('Search param changed:', name, value);
     setSearchParams((prev) => ({
       ...prev,
       [name]: value,
     }));
+
+
   };
 
   const handleApplyFilters = () => {
+    console.log('Applying filters with params:', searchParams);
     setCurrentPage(1);
-    refetchCars();
+
   };
 
   const handleResetSearch = () => {
-
     let resetToParams = {
       make: "",
       Location: "",
@@ -238,23 +274,34 @@ function AllCars() {
       seats: "",
       review: "",
       vendor: "",
+      pickup_date: "", 
+      dropoff_date: "", 
     };
     if (carType === "affordable") {
       resetToParams.maxPrice = "500";
     } else if (carType === "luxury") {
       resetToParams.minPrice = "500";
     }
+
+    console.log('Resetting search to:', resetToParams);
     setSearchParams(resetToParams);
     setSortBy("");
     setCurrentPage(1);
-    refetchCars();
+
   };
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
     window.scrollTo({ top: 0, behavior: "smooth" });
+
   };
 
+  const handleSortChange = (e) => {
+    console.log('Sort changed to:', e.target.value);
+    setSortBy(e.target.value);
+    setCurrentPage(1);
+
+  };
 
   useEffect(() => {
     const handleResize = () => setWindowWidth(window.innerWidth);
@@ -269,26 +316,14 @@ function AllCars() {
   }, [windowWidth]);
 
 
-  let currentCars = [];
-  let currentTotalPages = 1;
-  let currentIsLoading = false;
-  let currentError = null;
+
+  let currentCars = carsData?.data || [];
+  let currentTotalPages = carsData?.totalPages || 1;
+  let currentIsLoading = isLoadingCars;
+  let currentError = carsError;
 
 
-  if (searchedResultData) {
-
-    currentCars = searchedResultData.data || [];
-    currentTotalPages = searchedResultData.totalPages || 1;
-    currentIsLoading = false;
-    currentError = null;
-  } else {
-
-    currentCars = carsData?.data || [];
-    currentTotalPages = carsData?.totalPages || 1;
-    currentIsLoading = isLoadingCars;
-    currentError = carsError;
-  }
-
+  console.log('Using advanced search data:', currentCars.length, 'cars');
 
   const getPageContent = () => {
     switch (carType) {
@@ -314,14 +349,21 @@ function AllCars() {
         return {
           subtitle: "Premium Selection",
           title: "Explore Our Cars",
-          description: searchedResultData
-            ? "The search results were displayed according to the information you provided."
-            : "Explore our curated collection of new luxury cars."
+
+          description: "Explore our curated collection of new luxury cars."
         };
     }
   };
 
+
+
   const { subtitle, title, description } = getPageContent();
+
+  const navigateToDetails = useNavigate(); 
+  const onNavigateToDetails = (carId) => {
+    navigateToDetails(`/car-details/${carId}`);
+  }
+
 
   return (
     <section className="pickcar1-section">
@@ -337,10 +379,7 @@ function AllCars() {
           <select
             id="sortBy"
             value={sortBy}
-            onChange={(e) => {
-              setSortBy(e.target.value);
-              setCurrentPage(1);
-            }}
+            onChange={handleSortChange}
             className="sort-select"
           >
             <option value="">Default</option>
@@ -388,23 +427,24 @@ function AllCars() {
               <p style={{ color: 'red' }}>Error loading cars: {currentError.message}</p>
             ) : currentCars.length > 0 ? (
               currentCars.map((car, index) => {
-                const carId = `car-${index}`;
+                const carUniqueId = car.id;
                 const isHovered = hoveredIndex === index;
-                const isLoading = carLoading[carId] !== false;
-
-                const rating = 0;
+                const isLoading = carLoading[carUniqueId] !== false;
+                const rating = car.average_rating;
 
                 return (
                   <CarCard
-                    key={carId}
+                    key={carUniqueId}
                     car={car}
-                    carId={carId}
+                    carId={carUniqueId}
+                    cardIndex={index}
                     isHovered={isHovered}
                     isLoading={isLoading}
                     onHoverEnter={() => setHoveredIndex(index)}
                     onHoverLeave={() => setHoveredIndex(null)}
-                    onImageLoad={() => handleImageLoad(carId)}
-                    rating={rating}
+                    onImageLoad={() => handleImageLoad(carUniqueId)}
+                    onNavigateToDetails={() => onNavigateToDetails(carUniqueId)}
+                    average_rating={rating}
                   />
                 );
               })
@@ -414,15 +454,13 @@ function AllCars() {
           </div>
         </div>
 
-        {!searchedResultData && (
-          <div className="pagination-wrapper">
-            <Pagination
-              currentPage={currentPage}
-              totalPages={currentTotalPages}
-              onPageChange={handlePageChange}
-            />
-          </div>
-        )}
+        <div className="pagination-wrapper">
+          <Pagination
+            currentPage={currentPage}
+            totalPages={currentTotalPages}
+            onPageChange={handlePageChange}
+          />
+        </div>
       </div>
     </section>
   );

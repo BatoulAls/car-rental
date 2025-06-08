@@ -1,4 +1,4 @@
-import Footer from "../components/Footer";
+
 import HeroPages from "../components/HeroPages";
 
 
@@ -24,7 +24,7 @@ function Models() {
             </div>
           </div>
         </div>
-        <Footer />
+       
       </section>
     </>
   );

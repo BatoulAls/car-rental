@@ -1,4 +1,4 @@
-/* Enhanced CarCard.css with improved button and interactive styles */
+
 
 .car-grid {
   display: grid;
@@ -6,16 +6,41 @@
   gap: 2rem;
 }
 .rating-stars {
-  font-size: 16px;
-  color: #ccc;
-}
 
+  display: flex;
+  align-items: center;
+  gap: 2px; 
+  font-size: 16px; 
+  color: #ccc; 
+}
+.rating-stars span {
+ 
+  display: inline-block;
+  vertical-align: middle; 
+  line-height: 1; 
+}
 .filled-star {
   color: gold;
 }
 
 .empty-star {
   color: #ccc;
+}
+
+.half-filled-star {
+  position: relative;
+  overflow: hidden;
+  color: #ccc;
+}
+
+.half-filled-star::before {
+  content: '★';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 50%; 
+  overflow: hidden; 
+  color: gold; 
 }
 
 
@@ -222,7 +247,7 @@
   transition: all 0.2s ease;
   position: relative;
   overflow: hidden;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  box-shadow: #2c3e50;
 }
 
 .contact-btn::before {
@@ -232,7 +257,7 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(255, 255, 255, 0.1);
+  background: #2c3e50;
   transform: scaleX(0);
   transform-origin: right;
   transition: transform 0.3s ease;
@@ -252,7 +277,7 @@
 }
 
 .whatsapp-btn {
-  background: linear-gradient(135deg, #333333, #252525);
+  background: #2c3e50;
   color: white;
   letter-spacing: 0.3px;
   font-size: 0.95rem;
@@ -262,7 +287,7 @@
 .whatsapp-btn.focused {
   background: linear-gradient(135deg, #252525, #1a1a1a);
   transform: translateY(-3px);
-  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+  box-shadow:#2c3e50;
 }
 
 .card-footer {
@@ -336,6 +361,7 @@
   overflow: hidden;
   display: inline-block;
   text-align: center;
+  
 }
 
 .book-btn::before {
@@ -375,7 +401,62 @@
 .car-card {
   animation: cardFadeIn 0.5s ease forwards;
 }
+/*view more*/
+/* Navigation Arrow Styles */
+.nav-arrow {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  width: 40px;
+  height: 40px;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  opacity: 0;
+  transform: translateX(10px);
+  transition: all 0.3s ease;
+  backdrop-filter: blur(5px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  z-index: 10;
+}
 
+.nav-arrow.show {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.nav-arrow:hover {
+  background: rgba(255, 255, 255, 1);
+  transform: scale(1.1);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.nav-arrow svg {
+  color: #333;
+  transition: transform 0.2s ease;
+}
+
+.nav-arrow:hover svg {
+  transform: translateX(2px);
+}
+
+/* Alternative dark theme arrow */
+.nav-arrow.dark-theme {
+  background: rgba(0, 0, 0, 0.8);
+  border: 1px solid rgba(0, 0, 0, 0.3);
+}
+
+.nav-arrow.dark-theme svg {
+  color: #fff;
+}
+
+.nav-arrow.dark-theme:hover {
+  background: rgba(0, 0, 0, 0.9);
+}
+/**/
 /* Responsive styles */
 @media (max-width: 768px) {
   .car-grid {

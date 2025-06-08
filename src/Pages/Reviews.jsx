@@ -1,4 +1,4 @@
-import Footer from "../components/Footer";
+
 import HeroPages from "../components/HeroPages";
 
 
@@ -20,7 +20,7 @@ function Reviews() {
             </div>
           </div>
         </div>
-        <Footer />
+       
       </section>
     </>
   );

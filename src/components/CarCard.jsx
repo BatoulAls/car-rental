@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import "../styles/CarCard.css";
 import DEFAULT_CAR_IMAGE_PATH from '../images/cars-big/default-car.png'
@@ -5,26 +6,31 @@ import DEFAULT_CAR_IMAGE_PATH from '../images/cars-big/default-car.png'
 function CarCard({
   car,
   carId,
+  cardIndex,
   isHovered,
   isLoading,
   onHoverEnter,
   onHoverLeave,
   onClick,
   onImageLoad,
-  rating = 0,
-
+  onNavigateToDetails,
+  average_rating = 0,
 }) {
   const [isBookingFocused, setIsBookingFocused] = useState(false);
   const [isWhatsAppFocused, setIsWhatsAppFocused] = useState(false);
 
-
-  const numRating = Number(rating);
-  console.log(`CarCard ${carId} received rating: ${rating}, converted to numRating: ${numRating}`);
+  const handleNavigateClick = (e) => {
+    e.stopPropagation();
+    if (onNavigateToDetails) {
+      onNavigateToDetails(car); 
+    }
+  };
 
   return (
     <div
       className={`car-card ${isHovered ? "hovered" : ""}`}
-      style={{ animationDelay: `${parseInt(carId.split("-")[1]) * 100}ms` }}
+      
+      style={{ animationDelay: `${cardIndex * 100}ms` }} 
       onClick={onClick}
       onMouseEnter={onHoverEnter}
       onMouseLeave={onHoverLeave}
@@ -35,18 +41,42 @@ function CarCard({
             <div className="spinner"></div>
           </div>
         )}
-         <img
-           src={car.img || car.photo || DEFAULT_CAR_IMAGE_PATH}
-           alt={car.name || `${car.company} ${car.model}` || "Default Car Image"}
-           className={`car-image ${isHovered ? "zoomed" : ""} ${isLoading ? "hidden" : "visible"}`}
-           onLoad={onImageLoad}
-         />
+          <img
+            src={car.img || car.photo || DEFAULT_CAR_IMAGE_PATH}
+            alt={car.name || `${car.company} ${car.model}` || "Default Car Image"}
+            className={`car-image ${isHovered ? "zoomed" : ""} ${isLoading ? "hidden" : "visible"}`}
+            onLoad={onImageLoad}
+            onError={onImageLoad}
+          />
 
         <div className={`car-overlay ${isHovered ? "show" : ""}`}>
           <div className="car-overlay-content">
             <div><span>{car.year}</span></div>
             <div><span>{car.fuel || "Premium Fuel"}</span></div>
           </div>
+        </div>
+
+       
+        <div 
+          className={`nav-arrow ${isHovered ? "show" : ""}`}
+          onClick={handleNavigateClick}
+          title="View Details"
+        >
+          <svg 
+            width="24" 
+            height="24" 
+            viewBox="0 0 24 24" 
+            fill="none" 
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path 
+              d="M9 18L15 12L9 6" 
+              stroke="currentColor" 
+              strokeWidth="2" 
+              strokeLinecap="round" 
+              strokeLinejoin="round"
+            />
+          </svg>
         </div>
       </div>
 
@@ -56,18 +86,29 @@ function CarCard({
       </div>
 
       <div className="car-details">
+       
         <div className="car-name-rating">
           <h3>{car.name || `${car.company} ${car.model}`}</h3>
           <div className="rating-stars">
-            {[1, 2, 3, 4, 5].map((star) => (
-              <span
-                key={star}
-                className={star <= numRating ? "filled-star" : "empty-star"}
-              >
-                {console.log(`Star ${star}, numRating ${numRating}, filled: ${star <= numRating}`)}
-                ★
-              </span>
-            ))}
+            {[1, 2, 3, 4, 5].map((star) => {
+              const fullStars = Math.floor(average_rating);
+              const hasHalfStar = average_rating - fullStars >= 0.5;
+
+              return (
+                <span
+                  key={star}
+                  className={
+                    star <= fullStars
+                      ? "filled-star"
+                      : star === fullStars + 1 && hasHalfStar
+                      ? "half-filled-star"
+                      : "empty-star"
+                  }
+                >
+                  ★
+                </span>
+              );
+            })}
           </div>
         </div>
 
@@ -107,10 +148,10 @@ function CarCard({
         </div>
 
         <div className="card-footer">
-          <div className="availability">
-            <div className={`status-dot ${car.availability_status?.toLowerCase() === "available" ? "available" : "pending"}`}></div>
-            <span>{car.availability_status || "Available Now"}</span>
-          </div>
+         <div className="availability">
+  <div className={`status-dot ${car.available ? "available" : "pending"}`}></div>
+  <span>{car.available ? "Available Now" : "Unavailable"}</span>
+</div>
           <a
             href="#booking-section"
             className={`book-btn ${isBookingFocused ? "focused" : ""}`}
