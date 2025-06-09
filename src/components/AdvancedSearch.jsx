@@ -29,7 +29,7 @@ const AdvancedSearch = ({ searchParams, onSearchChange, onReset, onSubmit, searc
       {/* Make */}
       <div className="search-field">
         <label className="search-label" htmlFor="make">
-          Make
+          Brand
         </label>
         <select
           id="make"
@@ -84,7 +84,7 @@ const AdvancedSearch = ({ searchParams, onSearchChange, onReset, onSubmit, searc
       {/* Dropoff Date */}
       <div className="search-field">
         <label className="search-label" htmlFor="dropoff_date">
-          Dropoff Date
+          Drop-off Date
         </label>
         <input
           type="date"

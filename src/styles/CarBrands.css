@@ -133,6 +133,26 @@
 }
 
 
+.brand-card-no-logo {
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(135deg, #ff4d30, #ff3c1f);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+}
+
+.brand-initial {
+  color: white;
+  font-size: 1.5rem;
+  font-weight: 700;
+  font-family: "Poppins", sans-serif;
+}
+
+
+
 @media (max-width: 992px) {
   .brands-logos {
     grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
