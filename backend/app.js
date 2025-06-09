@@ -23,4 +23,11 @@ app.use('/api/brands', brandRoutes);
 const vendorRoutes = require('./routes/vendor');
 app.use('/api/vendors', vendorRoutes);
 
+const authRoutes = require('./routes/auth');
+app.use('/api/auth', authRoutes);
+
+const userRoutes = require('./routes/user');
+app.use('/api/user', userRoutes);
+
+
 module.exports = app;

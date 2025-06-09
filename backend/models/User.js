@@ -32,21 +32,18 @@ const User = sequelize.define('User', {
         type: DataTypes.ENUM('customer', 'vendor', 'admin'),
         allowNull: false
     },
-    created_at: {
-        type: DataTypes.DATE,
-        defaultValue: DataTypes.NOW
-    },
-    updated_at: {
-        type: DataTypes.DATE,
+    reset_token: {
+        type: DataTypes.STRING,
         allowNull: true
     },
-    deleted_at: {
+    reset_token_expiry: {
         type: DataTypes.DATE,
         allowNull: true
     }
 }, {
     tableName: 'users',
-    timestamps: false
+    timestamps: true, // enables createdAt and updatedAt
+    paranoid: true     // enables deletedAt (soft deletes)
 });
 
 module.exports = User;
