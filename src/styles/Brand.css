@@ -1,0 +1,483 @@
+.all-brands-page {
+  min-height: 100vh;
+  background-color: #ffffff;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+.page-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 8rem;
+}
+
+/* Loading and Error States */
+.loading-container,
+.error-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 60vh;
+  font-size: 1.125rem;
+  color: #706f7b;
+}
+
+/* Header Section */
+.page-header {
+  padding: 3rem 0 5rem 0;
+  text-align: center;
+}
+
+.breadcrumb {
+  margin-bottom: 2rem;
+  font-size: 0.875rem;
+  color: #706f7b;
+}
+
+.breadcrumb-link {
+  color: #ff4d30;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.breadcrumb-link:hover {
+  color: #ff3c1f;
+}
+
+.breadcrumb-separator {
+  margin: 0 0.5rem;
+  color: #d1d5db;
+}
+
+.breadcrumb-current {
+  color: #334155;
+  font-weight: 500;
+}
+
+.header-content {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.page-subtitle {
+  font-size: 2.4rem;
+  font-family: "Rubik", sans-serif;
+  font-weight: 500;
+  color: #ff4d30;
+  margin-bottom: 1rem;
+}
+
+.page-title {
+  font-size: 4.2rem;
+  font-family: "Poppins", sans-serif;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 1.3rem 0 2rem 0;
+  line-height: 1.1;
+}
+
+.page-description {
+  font-size: 1.6rem;
+  font-family: "Rubik", sans-serif;
+  color: #706f7b;
+  line-height: 1.6;
+  margin-bottom: 3rem;
+}
+
+.stats-container {
+  display: flex;
+  justify-content: center;
+  gap: 4rem;
+  margin-top: 3rem;
+}
+
+.stat-item {
+  text-align: center;
+}
+
+.stat-number {
+  display: block;
+  font-size: 3rem;
+  font-weight: 700;
+  color: #ff4d30;
+  font-family: "Poppins", sans-serif;
+}
+
+.stat-label {
+  display: block;
+  font-size: 1rem;
+  color: #706f7b;
+  font-weight: 500;
+  margin-top: 0.5rem;
+}
+
+/* Brands Grid Section */
+.brands-grid-section {
+  padding: 4rem 0;
+}
+
+.section-header {
+  text-align: center;
+  margin-bottom: 4rem;
+}
+
+.section-title {
+  font-size: 2.5rem;
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+  color: #1e293b;
+  margin-bottom: 1rem;
+}
+
+.section-description {
+  font-size: 1.125rem;
+  color: #706f7b;
+  font-family: "Rubik", sans-serif;
+}
+
+.brands-grid-container {
+  background-color: #f9fafb;
+  border-radius: 1.5rem;
+  padding: 4rem;
+  border: 1px solid #f1f5f9;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.05);
+}
+
+.brands-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 2rem;
+}
+
+/* Brand Card Styles */
+.brand-card {
+  background-color: white;
+  border-radius: 1.25rem;
+  padding: 2.5rem;
+  border: 1px solid rgba(0, 0, 0, 0.03);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+  transition: all 0.3s ease;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.brand-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+}
+
+.brand-card-header {
+  margin-bottom: 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 80px;
+}
+
+.brand-card-logo {
+  height: 60px;
+  width: auto;
+  max-width: 120px;
+  filter: grayscale(100%);
+  opacity: 0.75;
+  transition: all 0.4s ease;
+}
+
+.brand-card:hover .brand-card-logo {
+  filter: grayscale(0%);
+  opacity: 1;
+  transform: scale(1.05);
+}
+
+.brand-card-no-logo {
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(135deg, #ff4d30, #ff3c1f);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+}
+
+.brand-initial {
+  color: white;
+  font-size: 1.5rem;
+  font-weight: 700;
+  font-family: "Poppins", sans-serif;
+}
+
+.brand-card-content {
+  padding-top: 1rem;
+}
+
+.brand-card-name {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #1e293b;
+  margin-bottom: 0.75rem;
+  font-family: "Poppins", sans-serif;
+}
+
+.brand-card-count {
+  font-size: 1rem;
+  color: #706f7b;
+  margin-bottom: 2rem;
+  font-family: "Rubik", sans-serif;
+}
+
+.brand-card-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.brand-card-button {
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.75rem;
+  font-weight: 600;
+  font-size: 0.875rem;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  border: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 100px;
+}
+
+.brand-card-button.primary {
+  background-color: #ff4d30;
+  color: white;
+  box-shadow: 0 4px 15px rgba(255, 77, 48, 0.2);
+}
+
+.brand-card-button.primary:hover {
+  background-color: #ff3c1f;
+  box-shadow: 0 6px 20px rgba(255, 77, 48, 0.3);
+  transform: translateY(-2px);
+}
+
+.brand-card-button.secondary {
+  background-color: transparent;
+  color: #ff4d30;
+  border: 2px solid #ff4d30;
+}
+
+.brand-card-button.secondary:hover {
+  background-color: #ff4d30;
+  color: white;
+  transform: translateY(-2px);
+}
+
+/* Call to Action Section */
+.cta-section {
+  padding: 5rem 0;
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  border-radius: 2rem;
+  margin-top: 4rem;
+  text-align: center;
+}
+
+.cta-content {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+.cta-title {
+  font-size: 2.5rem;
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+  color: #1e293b;
+  margin-bottom: 1.5rem;
+}
+
+.cta-description {
+  font-size: 1.125rem;
+  color: #706f7b;
+  line-height: 1.6;
+  margin-bottom: 3rem;
+  font-family: "Rubik", sans-serif;
+}
+
+.cta-actions {
+  display: flex;
+  gap: 1.5rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.cta-button {
+  padding: 1.25rem 2.5rem;
+  border-radius: 9999px;
+  font-weight: 600;
+  font-size: 1.125rem;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 160px;
+}
+
+.cta-button.primary {
+  background-color: #ff4d30;
+  color: white;
+  box-shadow: 0 12px 20px rgba(255, 77, 48, 0.2);
+}
+
+.cta-button.primary:hover {
+  background-color: #ff3c1f;
+  box-shadow: 0 15px 25px rgba(255, 77, 48, 0.3);
+  transform: translateY(-3px);
+}
+
+.cta-button.secondary {
+  background-color: white;
+  color: #ff4d30;
+  border: 2px solid #ff4d30;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+}
+
+.cta-button.secondary:hover {
+  background-color: #ff4d30;
+  color: white;
+  transform: translateY(-3px);
+  box-shadow: 0 12px 25px rgba(255, 77, 48, 0.15);
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+  .brands-grid {
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  }
+  
+  .brands-grid-container {
+    padding: 3rem;
+  }
+}
+
+@media (max-width: 992px) {
+  .page-title {
+    font-size: 3.5rem;
+  }
+  
+  .page-subtitle {
+    font-size: 2rem;
+  }
+  
+  .brands-grid {
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1.5rem;
+  }
+  
+  .stats-container {
+    gap: 2rem;
+  }
+  
+  .brand-card {
+    padding: 2rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .page-container {
+    padding: 1.5rem;
+  }
+  
+  .page-header {
+    padding: 2rem 0 3rem 0;
+  }
+  
+  .page-title {
+    font-size: 2.5rem;
+  }
+  
+  .page-subtitle {
+    font-size: 1.5rem;
+  }
+  
+  .page-description {
+    font-size: 1.125rem;
+  }
+  
+  .stats-container {
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  
+  .brands-grid {
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  }
+  
+  .brands-grid-container {
+    padding: 2.5rem;
+  }
+  
+  .cta-title {
+    font-size: 2rem;
+  }
+  
+  .cta-actions {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .cta-button {
+    width: 100%;
+    max-width: 280px;
+  }
+}
+
+@media (max-width: 480px) {
+  .page-container {
+    padding: 1rem;
+  }
+  
+  .page-title {
+    font-size: 2rem;
+  }
+  
+  .page-subtitle {
+    font-size: 1.25rem;
+  }
+  
+  .page-description {
+    font-size: 1rem;
+  }
+  
+  .brands-grid {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+  
+  .brands-grid-container {
+    padding: 1.5rem;
+    border-radius: 1rem;
+  }
+  
+  .brand-card {
+    padding: 1.5rem;
+  }
+  
+  .brand-card-actions {
+    flex-direction: column;
+  }
+  
+  .brand-card-button {
+    width: 100%;
+  }
+  
+  .cta-section {
+    padding: 3rem 0;
+    margin-top: 2rem;
+  }
+  
+  .cta-title {
+    font-size: 1.75rem;
+  }
+}

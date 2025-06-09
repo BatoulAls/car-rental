@@ -1,7 +1,9 @@
 import React from 'react';
-import "../styles/CarBrands.css";
+import "../styles/CarBrands.css"; 
+
 import { Link } from 'react-router-dom';
 import { useQuery } from "@tanstack/react-query";
+
 
 const fetchHomeData = async () => {
   const res = await fetch("http://localhost:5050/api/home");
@@ -10,19 +12,16 @@ const fetchHomeData = async () => {
   return data;
 };
 
-
 const brandLogos = {};
 
 const importAll = (r) => {
   r.keys().forEach((key) => {
-    
     const brandName = key.replace('./', '').split('.')[0];
     brandLogos[brandName.toLowerCase()] = r(key); 
   });
 };
 
 importAll(require.context('../images/brands', false, /\.(png|jpe?g|svg)$/));
-
 
 const CarBrands = () => {
   const {
@@ -65,19 +64,21 @@ const CarBrands = () => {
       <div className="brands-container">
         <div className="brands-logos">
           {brandsToDisplay.slice(0, 10).map(brandName => {
-          
             const logoSrc = brandLogos[brandName.toLowerCase()];
             return (
-              <div className="brand-logo-wrapper" key={brandName}>
-                {logoSrc ? (
-                 
-                  <img src={logoSrc} alt={`${brandName} Logo`} className="brand-logo" />
-                ) : (
-                  
-                  <p className="brand-no-logo">{brandName}</p>
-                )}
-                <p className="brand-name">{brandName}</p>
-              </div>
+              <Link to={`/cars?brand=${brandName.toLowerCase()}`} key={brandName} className="brand-logo-link">
+                <div className="brand-logo-wrapper">
+                  {logoSrc ? (
+                    <img src={logoSrc} alt={`${brandName} Logo`} className="brand-logo" />
+                  ) : (
+                   
+                    <div className="brand-card-no-logo">
+                          <span className="brand-initial">{brandName.charAt(0)}</span>
+                        </div>
+                  )}
+                  <p className="brand-name">{brandName}</p>
+                </div>
+              </Link>
             );
           })}
         </div>
