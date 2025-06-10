@@ -14,6 +14,7 @@ function Navbar() {
   return (
     <>
       <nav>
+        {/* mobile */}
         <div className={`mobile-navbar ${nav ? "open-nav" : ""}`}>
           <div onClick={openNav} className="mobile-navbar__close">
             <FontAwesomeIcon icon={faXmark} />
@@ -28,6 +29,7 @@ function Navbar() {
           </ul>
         </div>
 
+        {/* desktop */}
         <div className="navbar">
           <div className="navbar__img">
             <Link to="/" onClick={() => window.scrollTo(0, 0)}>
@@ -49,6 +51,7 @@ function Navbar() {
             <Link className="navbar__buttons__register" to="/">Register</Link>
           </div>
 
+          {/* mobile hamburger */}
           <div className="mobile-hamb" onClick={openNav}>
             <FontAwesomeIcon icon={faBars} />
           </div>

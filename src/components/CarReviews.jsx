@@ -1,5 +1,6 @@
 import React from 'react';
-import { Link } from 'react-router-dom'; 
+import { Link } from 'react-router-dom';
+import defaultAvatar from '../images/testimonials/img_avatar.png';   
 
 const renderStars = (rating) => {
   const stars = [];
@@ -19,20 +20,32 @@ const renderStars = (rating) => {
   return stars;
 };
 
-const CarReviews = ({ reviews, carId }) => { 
-  const displayedReviews = reviews?.slice(0, 2) || []; 
-  const hasMoreReviews = (reviews?.length ?? 0) > 2;
+const CarReviews = ({
+  reviews,
+  carId,
+  displayLimit = 2, 
+  showReadMoreButton = true, 
+  readMoreLinkPath = `/cars/${carId}/reviews`, 
+  title = "Customer Reviews" 
+}) => {
+  const displayedReviews = reviews?.slice(0, displayLimit) || [];
+  const hasMoreReviews = (reviews?.length ?? 0) > displayLimit;
 
   return (
     <>
       {(reviews?.length ?? 0) > 0 ? (
         <div className="reviews-section1">
-          <h3 className="section-title1">Customer Reviews</h3>
+          <h3 className="section-title1">{title}</h3>
           <div className="reviews-list1">
             {displayedReviews.map((review) => (
               <div key={review.id} className="review1">
                 <div className="review-header1">
                   <div className="review-user1">
+                    <img
+                      src={review.user?.photo || defaultAvatar}
+                      alt={review.user?.username || 'Anonymous User'}
+                      className="user-avatar" 
+                    />
                     <h3>{review.user?.username || 'Anonymous'}</h3>
                   </div>
                   <div className="review-rating1">
@@ -46,17 +59,15 @@ const CarReviews = ({ reviews, carId }) => {
               </div>
             ))}
           </div>
-          {hasMoreReviews && (
+          {showReadMoreButton && hasMoreReviews && (
             <div className="read-more-reviews">
-             
-              <Link to={`/cars/${carId}/reviews`}>Read More Reviews</Link>
-              
+              <Link to={readMoreLinkPath}>Read More Reviews</Link>
             </div>
           )}
         </div>
       ) : (
         <div className="reviews-section1">
-          <h3 className="section-title1">Customer Reviews</h3>
+          <h3 className="section-title1">{title}</h3>
           <p>No reviews available yet.</p>
         </div>
       )}
