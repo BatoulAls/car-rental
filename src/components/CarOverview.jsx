@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom'; 
 
 const renderStars = (rating) => {
   const stars = [];
@@ -19,6 +20,15 @@ const renderStars = (rating) => {
 };
 
 const CarOverview = ({ carData }) => {
+  const navigate = useNavigate(); 
+
+  const handleReviewClick = () => {
+    
+    if (carData && carData.id) {
+      navigate('/cars/' + carData.id + '/reviews');
+    }
+  };
+
   return (
     <>
       <div className="price-banner1">
@@ -43,7 +53,12 @@ const CarOverview = ({ carData }) => {
             <div className="rating-stars1">
               {renderStars(carData.average_rating ?? 0)}
             </div>
-            <span className="rating-text1">
+            
+            <span
+              className="rating-text1 clickable-reviews" 
+              onClick={handleReviewClick}
+              title="Click to view all reviews" 
+            >
               {carData.average_rating ?? '0.0'} ({carData.review_count ?? 0} reviews)
             </span>
           </div>

@@ -11,6 +11,15 @@
     --shadow-medium: 0 10px 30px rgba(0, 0, 0, 0.1);
     --transition-speed: 0.3s ease;
 }
+.clickable-reviews {
+    cursor: pointer; 
+    text-decoration: underline;
+    color: orange; 
+}
+
+.clickable-reviews:hover {
+    color: darkorange; 
+}
 
 .similar-cars-header {
     display: flex;
