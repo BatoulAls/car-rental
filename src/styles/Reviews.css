@@ -10,6 +10,7 @@
   box-sizing: border-box;
 }
 
+
 .all-reviews-container h1 {
   font-size: 2.8em;
   color: #2c3e50;
@@ -82,7 +83,7 @@
 }
 
 .review-comment1 {
-  font-size: 1em;
+  font-size: 1.5em;
   line-height: 1.6;
   color: #555;
   margin-bottom: 15px;
