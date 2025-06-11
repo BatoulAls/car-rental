@@ -40,13 +40,13 @@ const CarOverview = ({ carData }) => {
         <div className="car-details-header1">
           <div className="car-title-section1">
             <h1 className="car-details-title1">{carData.brand ?? 'Unknown Brand'} {carData.model ?? 'Unknown Model'}</h1>
-            <p className="car-subtitle1">{carData.year ?? 'N/A'} • {carData.regional_spec ?? 'N/A'}</p>
+          { /* <p className="car-subtitle1">{carData.year ?? 'N/A'} • {carData.regional_spec ?? 'N/A'}</p>
             <div className="car-category1">
               🚗 {carData.category?.name ?? 'Uncategorized'}
             </div>
             <div className="car-location1">
               📍 {carData.location ?? 'Unknown Location'}
-            </div>
+            </div>*/}
           </div>
 
           <div className="rating-section1">
