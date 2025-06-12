@@ -84,6 +84,7 @@ exports.forgotPassword = async (req, res) => {
     }
 };
 
+
 exports.resetPassword = async (req, res) => {
     try {
         const { token, newPassword } = req.body;
@@ -104,6 +105,32 @@ exports.resetPassword = async (req, res) => {
         res.json({ message: 'Password reset successfully' });
     } catch (err) {
         console.error('Reset password error:', err);
+        res.status(500).json({ error: 'Server error' });
+    }
+};
+
+
+exports.logout = (req, res) => {
+    res.json({ message: 'Logout successful' });
+};
+
+
+
+exports.changePassword = async (req, res) => {
+    try {
+        const { currentPassword, newPassword } = req.body;
+        const user = await User.findByPk(req.user.id);
+        if (!user) return res.status(404).json({ error: 'User not found' });
+
+        const match = await bcrypt.compare(currentPassword, user.password);
+        if (!match) return res.status(400).json({ error: 'Incorrect current password' });
+
+        user.password = await bcrypt.hash(newPassword, 10);
+        await user.save();
+
+        res.json({ message: 'Password changed successfully' });
+    } catch (err) {
+        console.error('Change password error:', err);
         res.status(500).json({ error: 'Server error' });
     }
 };
