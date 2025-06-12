@@ -24,6 +24,11 @@ function SimilarCarCard({
     onNavigateToDetails(car.id); 
   }
 };
+const handleCardClick = () => {
+    if (onNavigateToDetails && car?.id) {
+      onNavigateToDetails(car.id);
+    }
+  };
 
 
   const handleBookingClick = (e) => {
@@ -47,8 +52,10 @@ function SimilarCarCard({
      
       onMouseEnter={() => setIsComponentHovered(true)}
       onMouseLeave={() => setIsComponentHovered(false)}
+      onClick={handleCardClick}
     >
       <div className="car-image-container">
+      
         {isLoading && (
           <div className="spinner-container">
             <div className="spinner"></div>

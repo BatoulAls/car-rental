@@ -386,7 +386,7 @@
 
 @media (max-width: 768px) {
   .page-container {
-    padding: 1.5rem;
+    padding: 8rem;
   }
   
   .page-header {
@@ -435,7 +435,7 @@
 
 @media (max-width: 480px) {
   .page-container {
-    padding: 1rem;
+    padding: 7rem;
   }
   
   .page-title {

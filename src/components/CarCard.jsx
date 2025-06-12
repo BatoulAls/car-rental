@@ -1,37 +1,45 @@
-
 import React, { useState } from "react";
 import "../styles/CarCard.css";
 import DEFAULT_CAR_IMAGE_PATH from '../images/cars-big/default-car.png'
 
 function CarCard({
   car,
-  carId,
+  carId, 
   cardIndex,
   isHovered,
   isLoading,
   onHoverEnter,
   onHoverLeave,
-  onClick,
+  onClick, 
   onImageLoad,
-  onNavigateToDetails,
+  onNavigateToDetails, 
   average_rating = 0,
 }) {
   const [isBookingFocused, setIsBookingFocused] = useState(false);
   const [isWhatsAppFocused, setIsWhatsAppFocused] = useState(false);
 
+ 
+  const handleCardClick = () => {
+    
+    if (onNavigateToDetails && car?.id) {
+      onNavigateToDetails(car.id); 
+    }
+  };
+
+ 
   const handleNavigateClick = (e) => {
-    e.stopPropagation();
-    if (onNavigateToDetails) {
-      onNavigateToDetails(car); 
+    e.stopPropagation(); 
+    if (onNavigateToDetails && car?.id) {
+      onNavigateToDetails(car.id); 
     }
   };
 
   return (
     <div
       className={`car-card ${isHovered ? "hovered" : ""}`}
+      style={{ animationDelay: `${cardIndex * 100}ms` }}
       
-      style={{ animationDelay: `${cardIndex * 100}ms` }} 
-      onClick={onClick}
+      onClick={handleCardClick}
       onMouseEnter={onHoverEnter}
       onMouseLeave={onHoverLeave}
     >
@@ -41,13 +49,13 @@ function CarCard({
             <div className="spinner"></div>
           </div>
         )}
-          <img
-            src={car.img || car.photo || DEFAULT_CAR_IMAGE_PATH}
-            alt={car.name || `${car.company} ${car.model}` || "Default Car Image"}
-            className={`car-image ${isHovered ? "zoomed" : ""} ${isLoading ? "hidden" : "visible"}`}
-            onLoad={onImageLoad}
-            onError={onImageLoad}
-          />
+        <img
+          src={car.img || car.photo || DEFAULT_CAR_IMAGE_PATH}
+          alt={car.name || `${car.company} ${car.model}` || "Default Car Image"}
+          className={`car-image ${isHovered ? "zoomed" : ""} ${isLoading ? "hidden" : "visible"}`}
+          onLoad={onImageLoad}
+          onError={onImageLoad}
+        />
 
         <div className={`car-overlay ${isHovered ? "show" : ""}`}>
           <div className="car-overlay-content">
@@ -56,24 +64,30 @@ function CarCard({
           </div>
         </div>
 
-       
-        <div 
+        <div
           className={`nav-arrow ${isHovered ? "show" : ""}`}
           onClick={handleNavigateClick}
           title="View Details"
+          role="button" 
+          tabIndex={0} 
+          onKeyDown={(e) => { 
+            if (e.key === 'Enter' || e.key === ' ') {
+              handleNavigateClick(e);
+            }
+          }}
         >
-          <svg 
-            width="24" 
-            height="24" 
-            viewBox="0 0 24 24" 
-            fill="none" 
+          <svg
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
             xmlns="http://www.w3.org/2000/svg"
           >
-            <path 
-              d="M9 18L15 12L9 6" 
-              stroke="currentColor" 
-              strokeWidth="2" 
-              strokeLinecap="round" 
+            <path
+              d="M9 18L15 12L9 6"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
               strokeLinejoin="round"
             />
           </svg>
@@ -86,7 +100,7 @@ function CarCard({
       </div>
 
       <div className="car-details">
-       
+
         <div className="car-name-rating">
           <h3>{car.name || `${car.company} ${car.model}`}</h3>
           <div className="rating-stars">
@@ -101,8 +115,8 @@ function CarCard({
                     star <= fullStars
                       ? "filled-star"
                       : star === fullStars + 1 && hasHalfStar
-                      ? "half-filled-star"
-                      : "empty-star"
+                        ? "half-filled-star"
+                        : "empty-star"
                   }
                 >
                   ★
@@ -135,31 +149,33 @@ function CarCard({
           <a
             href={`https://wa.me/${car.whatsapp || "+1234567890"}`}
             className={`contact-btn whatsapp-btn ${isWhatsAppFocused ? "focused" : ""}`}
-            onClick={(e) => e.stopPropagation()}
+            onClick={(e) => e.stopPropagation()} 
             onMouseEnter={() => setIsWhatsAppFocused(true)}
             onMouseLeave={() => setIsWhatsAppFocused(false)}
             onFocus={() => setIsWhatsAppFocused(true)}
             onBlur={() => setIsWhatsAppFocused(false)}
             target="_blank"
             rel="noopener noreferrer"
+            aria-label="Contact via WhatsApp"
           >
             <span>Contact via WhatsApp</span>
           </a>
         </div>
 
         <div className="card-footer">
-         <div className="availability">
-  <div className={`status-dot ${car.available ? "available" : "pending"}`}></div>
-  <span>{car.available ? "Available Now" : "Unavailable"}</span>
-</div>
+          <div className="availability">
+            <div className={`status-dot ${car.available ? "available" : "pending"}`}></div>
+            <span>{car.available ? "Available Now" : "Unavailable"}</span>
+          </div>
           <a
-            href="#booking-section"
+            href="#booking-section" 
             className={`book-btn ${isBookingFocused ? "focused" : ""}`}
-            onClick={(e) => e.stopPropagation()}
+            onClick={(e) => e.stopPropagation()} 
             onMouseEnter={() => setIsBookingFocused(true)}
             onMouseLeave={() => setIsBookingFocused(false)}
             onFocus={() => setIsBookingFocused(true)}
             onBlur={() => setIsBookingFocused(false)}
+            aria-label="Book this car"
           >
             Book Now
           </a>

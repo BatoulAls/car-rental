@@ -2,8 +2,6 @@ import React, { useRef } from 'react';
 import '../styles/CarDetails.css';
 import { useQuery } from '@tanstack/react-query';
 import { useParams, useNavigate } from 'react-router-dom';
-import defaultimg from '../images/cars-big/default-car.png';  
-
 import CarImageGallery from '../components/CarImageGallery';
 import CarOverview from '../components/CarOverview';
 import CarFeaturesAndTags from '../components/CarFeaturesAndTags';
@@ -115,6 +113,7 @@ const CarDetails = () => {
     navigate(`/car-details/${similarCarId}`);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
+   
 
   if (isLoading) return <p>Loading car Details...</p>;
   if (error) return <p>Error: {error.message}</p>;
@@ -142,7 +141,8 @@ const CarDetails = () => {
         insuranceIncluded={carData.insurance_included}
       />
 
-      <CarReviews reviews={carData.reviews} />
+      <CarReviews reviews={carData.reviews} carId={carId}/>
+     
 
       <SimilarCarsSection
         similarCars={similarCars}
