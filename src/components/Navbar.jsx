@@ -41,7 +41,7 @@ function Navbar() {
             <li><Link className="home-link" to="/">Home</Link></li>
             <li><Link className="about-link" to="/about">About</Link></li>
             <li><Link className="models-link" to="/all-cars">All Cars</Link></li>
-            <li><Link className="testi-link" to="/testimonials">Testimonials</Link></li>
+            <li><Link className="testi-link" to="/Vendors">All Vendors</Link></li>
             <li><Link className="team-link" to="/team">Our Team</Link></li>
             <li><Link className="contact-link" to="/contact">Contact</Link></li>
           </ul>
