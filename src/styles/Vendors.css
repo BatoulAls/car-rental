@@ -1,0 +1,356 @@
+/* Variables for consistent styling */
+:root {
+  --primary-color: #ff4d30; /* A vibrant orange-red */
+  --secondary-color: #2c3e50; /* Dark blue/charcoal */
+  --text-color: #333;
+  --light-gray: #f8f8f8;
+  --medium-gray: #eee;
+  --dark-gray: #555;
+  --border-radius-large: 1.5rem;
+  --border-radius-medium: 1rem;
+  --border-radius-small: 0.75rem;
+  --shadow-light: 0 5px 15px rgba(0, 0, 0, 0.08);
+  --shadow-medium: 0 10px 30px rgba(0, 0, 0, 0.1);
+  --transition-speed: 0.3s ease;
+}
+
+/* Base styles for the Vendors container */
+.vendors-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 100px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: var(--light-gray);
+  border-radius: var(--border-radius-large);
+  box-shadow: var(--shadow-medium);
+}
+
+/* Header Section */
+.vendors-header {
+  margin-bottom: 32px;
+  text-align: center;
+}
+
+.vendors-title {
+  font-size: 2.8rem;
+  font-weight: 700;
+  margin-bottom: 12px;
+  color: var(--secondary-color);
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.vendors-subtitle {
+  font-size: 1.25rem;
+  color: var(--dark-gray);
+  line-height: 1.6;
+}
+
+/* Vendors Grid */
+.vendors-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 32px;
+  margin-bottom: 40px;
+}
+
+/* Vendor Card */
+.vendor-card {
+  background-color: white;
+  border-radius: var(--border-radius-large);
+  padding: 24px;
+  box-shadow: var(--shadow-light);
+  transition: all var(--transition-speed);
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  height: 100%; /* Ensure cards have equal height in a row */
+}
+
+.vendor-card:hover {
+  transform: translateY(-8px);
+  box-shadow: var(--shadow-medium);
+}
+
+.vendor-image {
+  width: 100%;
+  height: 220px; /* Slightly increased height for better visual */
+  object-fit: cover;
+  border-radius: var(--border-radius-medium);
+  margin-bottom: 20px;
+}
+
+.vendor-info {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  flex-grow: 1; /* Allows info section to expand and push button down */
+}
+
+.vendor-header {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.vendor-name {
+  font-size: 1.6rem; /* Slightly larger name */
+  font-weight: 700;
+  margin: 0;
+  color: var(--secondary-color);
+}
+
+
+.verified-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background-color: #e6f4ea;
+  color: #2e7d32;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  margin-top: 6px;
+  width: fit-content;
+}
+
+.shop-hours {
+  margin-top: 8px;
+  font-size: 0.9rem;
+  color: #444;
+  background-color: #f5f5f5;
+  padding: 6px 12px;
+  border-radius: 8px;
+  display: inline-block;
+  font-weight: 500;
+}
+
+.shop-hours span {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.open-always {
+  color: #1b5e20;
+  font-weight: bold;
+}
+
+
+
+.category-tag {
+  display: inline-block;
+  padding: 6px 16px; /* Increased padding */
+  border-radius: var(--border-radius-small);
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: white;
+  background-color: var(--primary-color);
+  width: fit-content;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.rating {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.stars {
+  display: flex;
+  gap: 2px; /* Closer stars */
+}
+
+.stars svg {
+  width: 18px; /* Slightly larger stars */
+  height: 18px;
+  fill: #fbbf24;
+  color: #fbbf24;
+}
+
+.rating-text {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--dark-gray);
+}
+
+.contact-info {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: auto; /* Pushes contact info and button to the bottom */
+}
+
+.contact-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.95rem;
+  color: var(--dark-gray);
+}
+
+.contact-item svg {
+  width: 18px; /* Larger icons */
+  height: 18px;
+  color: var(--primary-color);
+}
+
+.details-button {
+  width: 100%;
+  padding: 12px 20px; /* More generous padding */
+  border-radius: var(--border-radius-small);
+  font-weight: 600;
+  color: white;
+  background-color: var(--primary-color);
+  border: none;
+  cursor: pointer;
+  transition: background-color var(--transition-speed);
+  margin-top: 15px; /* Spacing from contact info */
+}
+
+.details-button:hover {
+  background-color: #e63e27; /* Darker shade on hover */
+}
+
+/* Pagination */
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 20px;
+  padding: 15px 0;
+  border-top: 1px solid var(--medium-gray);
+  margin-top: 20px;
+}
+
+.results-info {
+  font-size: 1rem;
+  color: var(--dark-gray);
+  flex-shrink: 0;
+}
+
+.pagination-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.pagination-button {
+  padding: 10px;
+  border-radius: var(--border-radius-small);
+  background-color: var(--medium-gray);
+  border: none;
+  cursor: pointer;
+  transition: background-color var(--transition-speed), transform var(--transition-speed);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pagination-button:hover:not(:disabled) {
+  background-color: #dcdcdc;
+  transform: scale(1.05);
+}
+
+.pagination-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.pagination-button svg {
+  width: 22px; /* Larger pagination icons */
+  height: 22px;
+  color: var(--secondary-color);
+}
+
+.page-numbers {
+  display: flex;
+  gap: 6px;
+}
+
+.page-number {
+  padding: 10px 18px; /* More padding for page numbers */
+  border-radius: var(--border-radius-small);
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: all var(--transition-speed);
+}
+
+.page-number.active {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+.page-number.inactive {
+  background-color: var(--medium-gray);
+  color: var(--secondary-color);
+}
+
+.page-number.inactive:hover {
+  background-color: #dcdcdc;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+
+  .vendors-grid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  .vendors-title {
+    font-size: 2.2rem;
+  }
+
+  .vendors-subtitle {
+    font-size: 1rem;
+  }
+
+  .pagination {
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+  }
+
+  .pagination-controls {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .page-numbers {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .vendors-container {
+    padding: 16px;
+    padding-top: 90px;
+  }
+
+  .vendor-card {
+    padding: 16px;
+  }
+
+  .vendor-image {
+    height: 180px;
+  }
+
+  .vendor-name {
+    font-size: 1.4rem;
+  }
+
+  .category-tag {
+    font-size: 0.85rem;
+    padding: 5px 10px;
+  }
+
+  .details-button {
+    padding: 10px 15px;
+    font-size: 0.9rem;
+  }
+}
