@@ -4,26 +4,43 @@ const User = require('../models/User');
 
 exports.getAllVendors = async (req, res) => {
     try {
-        const vendors = await Vendor.findAll({
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 10;
+        const offset = (page - 1) * limit;
+
+
+        const { count, rows: vendors } = await Vendor.findAndCountAll({
             include: [
                 {
                     model: Region,
-                    attributes: ['id', 'name_en','name_ar']
+                    attributes: ['id', 'name_en', 'name_ar']
                 },
                 {
                     model: User,
                     attributes: ['id', 'email']
                 }
             ],
-            // attributes: ['id', 'name', 'phone', 'verified', 'active']
+            limit,
+            offset,
+            order: [['createdAt', 'DESC']], // optional sorting
         });
 
-        res.json(vendors);
+        res.json({
+            total: count,
+            pages: Math.ceil(count / limit),
+            currentPage: page,
+            vendors
+        });
+
+
     } catch (err) {
         console.error('❌ Error fetching vendors:', err);
         res.status(500).json({ error: 'Server error' });
     }
 };
+
+
+
 
 exports.getVendorById = async (req, res) => {
     try {

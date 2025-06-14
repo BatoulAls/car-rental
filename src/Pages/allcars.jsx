@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react"; 
 import { useQuery } from "@tanstack/react-query";
 import { useLocation } from "react-router-dom";
 import CarCard from "../components/CarCard";
@@ -22,7 +22,7 @@ const fetchCarsWithFiltersAndSort = async (page, limit, searchParams, sortBy, se
   const params = new URLSearchParams();
   const regions = searchOptions?.regions || [];
 
-  
+
   if (brandFromUrl) {
     params.append("brand", brandFromUrl);
     console.log('API Call: Adding brand from URL:', brandFromUrl);
@@ -40,13 +40,13 @@ const fetchCarsWithFiltersAndSort = async (page, limit, searchParams, sortBy, se
     }
   }
 
-  
+
   for (const key in searchParams) {
-    
+
     if (
-        (key === "make" && brandFromUrl) ||
-        (key === "maxPrice" && carType === "affordable") ||
-        (key === "minPrice" && carType === "luxury")
+      (key === "make" && brandFromUrl) ||
+      (key === "maxPrice" && carType === "affordable") ||
+      (key === "minPrice" && carType === "luxury")
     ) {
       continue;
     }
@@ -54,7 +54,7 @@ const fetchCarsWithFiltersAndSort = async (page, limit, searchParams, sortBy, se
     if (searchParams[key] && searchParams[key] !== "") {
       switch (key) {
         case "make":
-          
+
           if (!brandFromUrl) {
             params.append("brand", searchParams[key]);
           }
@@ -107,7 +107,7 @@ const fetchCarsWithFiltersAndSort = async (page, limit, searchParams, sortBy, se
   }
 
   if (sortBy) {
-    if (!(carType === "recent" && sortBy === "created_at")) { 
+    if (!(carType === "recent" && sortBy === "created_at")) {
       switch (sortBy) {
         case "priceLowToHigh":
           params.append("sort_by", "price");
@@ -146,7 +146,7 @@ function AllCars() {
   const location = useLocation();
   const navigateToDetails = useNavigate();
 
-  
+
   const queryParams = new URLSearchParams(location.search);
   const brandFromUrl = queryParams.get("brand");
 
@@ -203,96 +203,96 @@ function AllCars() {
     enabled: !!searchOptions,
   });
 
-useEffect(() => {
-  let initialSearchParams = {
-    make: "",
-    Location: "",
-    minPrice: "",
-    maxPrice: "",
-    transmission: "",
-    fuelType: "",
-    color: "",
-    year: "",
-    seats: "",
-    review: "",
-    vendor: "",
-    pickup_date: "",
-    dropoff_date: "",
-  };
+  useEffect(() => {
+    let initialSearchParams = {
+      make: "",
+      Location: "",
+      minPrice: "",
+      maxPrice: "",
+      transmission: "",
+      fuelType: "",
+      color: "",
+      year: "",
+      seats: "",
+      review: "",
+      vendor: "",
+      pickup_date: "",
+      dropoff_date: "",
+    };
 
-  
-  if (brandFromUrl && searchOptions?.brands) {
-    console.log('Available brands:', searchOptions.brands);
-    console.log('Brand from URL (raw):', brandFromUrl);
-    
 
-    const matchedBrand = searchOptions.brands.find(brand => 
-      brand.toLowerCase() === brandFromUrl.toLowerCase()
-    );
-    
-    if (matchedBrand) {
-      initialSearchParams.make = matchedBrand;
-      console.log('Matched brand exactly:', matchedBrand);
-    } else {
-      
-      const variations = [
-        brandFromUrl.toUpperCase(), 
-        brandFromUrl.charAt(0).toUpperCase() + brandFromUrl.slice(1).toLowerCase(), 
-        brandFromUrl.toLowerCase(), 
-        brandFromUrl 
-      ];
-      
-      for (const variation of variations) {
-        const found = searchOptions.brands.find(brand => brand === variation);
-        if (found) {
-          initialSearchParams.make = found;
-          console.log('Matched brand with variation:', found);
-          break;
+    if (brandFromUrl && searchOptions?.brands) {
+      console.log('Available brands:', searchOptions.brands);
+      console.log('Brand from URL (raw):', brandFromUrl);
+
+
+      const matchedBrand = searchOptions.brands.find(brand =>
+        brand.toLowerCase() === brandFromUrl.toLowerCase()
+      );
+
+      if (matchedBrand) {
+        initialSearchParams.make = matchedBrand;
+        console.log('Matched brand exactly:', matchedBrand);
+      } else {
+
+        const variations = [
+          brandFromUrl.toUpperCase(),
+          brandFromUrl.charAt(0).toUpperCase() + brandFromUrl.slice(1).toLowerCase(),
+          brandFromUrl.toLowerCase(),
+          brandFromUrl
+        ];
+
+        for (const variation of variations) {
+          const found = searchOptions.brands.find(brand => brand === variation);
+          if (found) {
+            initialSearchParams.make = found;
+            console.log('Matched brand with variation:', found);
+            break;
+          }
         }
-      }
-      
-      if (!initialSearchParams.make) {
-        console.warn('No brand match found for:', brandFromUrl);
-        console.warn('Available brands:', searchOptions.brands);
-        
-        initialSearchParams.make = brandFromUrl;
-      }
-    }
-  }
-  else if (searchedResultData && searchedResultData.searchFilters) {
-    const filters = searchedResultData.searchFilters;
-    if (filters.brand) {
-      initialSearchParams.make = filters.brand;
-      console.log('Setting initial search params.make from location.state:', filters.brand);
-    }
-    if (filters.location) {
-      if (searchOptions && searchOptions.regions) {
-        const region = searchOptions.regions.find(r => r.name_en === filters.location);
-        if (region) {
-          initialSearchParams.Location = region.id.toString();
+
+        if (!initialSearchParams.make) {
+          console.warn('No brand match found for:', brandFromUrl);
+          console.warn('Available brands:', searchOptions.brands);
+
+          initialSearchParams.make = brandFromUrl;
         }
       }
     }
-    if (filters.pickTime) {
-      initialSearchParams.pickup_date = filters.pickTime;
+    else if (searchedResultData && searchedResultData.searchFilters) {
+      const filters = searchedResultData.searchFilters;
+      if (filters.brand) {
+        initialSearchParams.make = filters.brand;
+        console.log('Setting initial search params.make from location.state:', filters.brand);
+      }
+      if (filters.location) {
+        if (searchOptions && searchOptions.regions) {
+          const region = searchOptions.regions.find(r => r.name_en === filters.location);
+          if (region) {
+            initialSearchParams.Location = region.id.toString();
+          }
+        }
+      }
+      if (filters.pickTime) {
+        initialSearchParams.pickup_date = filters.pickTime;
+      }
+      if (filters.dropTime) {
+        initialSearchParams.dropoff_date = filters.dropTime;
+      }
     }
-    if (filters.dropTime) {
-      initialSearchParams.dropoff_date = filters.dropTime;
+
+
+    if (carType === "affordable") {
+      initialSearchParams.maxPrice = "500";
+    } else if (carType === "luxury") {
+      initialSearchParams.minPrice = "500";
     }
-  }
 
-  
-  if (carType === "affordable") {
-    initialSearchParams.maxPrice = "500";
-  } else if (carType === "luxury") {
-    initialSearchParams.minPrice = "500";
-  }
-
-  console.log('Final initial search params:', initialSearchParams);
-  setSearchParams(initialSearchParams);
-  setCurrentPage(1);
-  setSortBy("");
-}, [carType, searchedResultData, searchOptions, brandFromUrl]); 
+    console.log('Final initial search params:', initialSearchParams);
+    setSearchParams(initialSearchParams);
+    setCurrentPage(1);
+    setSortBy("");
+  }, [carType, searchedResultData, searchOptions, brandFromUrl]);
 
   const handleImageLoad = (carId) => {
     setCarLoading((prev) => ({
@@ -333,13 +333,13 @@ useEffect(() => {
       dropoff_date: "",
     };
 
-   
+
     if (brandFromUrl) {
       resetToParams.make = brandFromUrl;
     }
-  
+
     else if (searchedResultData && searchedResultData.searchFilters && searchedResultData.searchFilters.brand) {
-        resetToParams.make = searchedResultData.searchFilters.brand;
+      resetToParams.make = searchedResultData.searchFilters.brand;
     }
 
 
@@ -366,7 +366,7 @@ useEffect(() => {
     setCurrentPage(1);
   };
 
-  
+
   useEffect(() => {
     const handleResize = () => setWindowWidth(window.innerWidth);
     window.addEventListener("resize", handleResize);
@@ -389,7 +389,7 @@ useEffect(() => {
   console.log('Total cars found:', currentCars.length);
 
 
-  const getPageContent = () => {
+  const { subtitle, title, description } = useMemo(() => {
     if (brandFromUrl) {
       const brandName = brandFromUrl.charAt(0).toUpperCase() + brandFromUrl.slice(1);
       return {
@@ -425,9 +425,7 @@ useEffect(() => {
           description: "Explore our curated collection of new luxury cars."
         };
     }
-  };
-
-  const { subtitle, title, description } = getPageContent();
+  }, [brandFromUrl, carType]);  
 
   const onNavigateToDetails = (carId) => {
     navigateToDetails(`/car-details/${carId}`);
@@ -440,7 +438,7 @@ useEffect(() => {
           <h3 className="pickcar1-subtitle">{subtitle}</h3>
           <h2 className="pickcar1-title">{title}</h2>
           <p className="pickcar1-description">{description}</p>
-          
+
         </div>
 
         <div className="sort-by-container">
@@ -521,7 +519,7 @@ useEffect(() => {
               <div>
                 <p>No cars match your search criteria.</p>
                 {brandFromUrl && (
-                  <p style={{color: 'orange'}}>
+                  <p style={{ color: 'orange' }}>
                     No cars found for brand: {brandFromUrl}. Please check if the brand name is correct.
                   </p>
                 )}

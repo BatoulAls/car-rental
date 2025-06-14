@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Jun 12, 2025 at 05:25 PM
+-- Generation Time: Jun 14, 2025 at 02:29 AM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -35,18 +35,20 @@ CREATE TABLE `bookings` (
   `end_date` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `total_price` double DEFAULT NULL,
   `status` varchar(50) DEFAULT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `updated_at` timestamp NULL DEFAULT current_timestamp(),
-  `deleted_at` timestamp NULL DEFAULT NULL
+  `payment_method` enum('Cash','Card','Online') NOT NULL,
+  `createdAt` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updatedAt` timestamp NULL DEFAULT current_timestamp(),
+  `deletedAt` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `bookings`
 --
 
-INSERT INTO `bookings` (`id`, `car_id`, `customer_id`, `start_date`, `end_date`, `total_price`, `status`, `created_at`, `updated_at`, `deleted_at`) VALUES
-(1, 1, 1, '2025-05-22 20:42:51', '2025-05-31 08:00:00', 700, 'confirmed', '2025-05-05 22:50:00', '2025-05-05 22:50:00', '2025-05-14 20:42:48'),
-(2, 1, 2, '2025-05-19 20:39:05', '2025-05-29 20:39:05', 300, 'confirmed', '2025-05-22 20:39:34', '2025-05-22 20:39:34', NULL);
+INSERT INTO `bookings` (`id`, `car_id`, `customer_id`, `start_date`, `end_date`, `total_price`, `status`, `payment_method`, `createdAt`, `updatedAt`, `deletedAt`) VALUES
+(1, 1, 1, '2025-05-22 20:42:51', '2025-05-31 08:00:00', 700, 'confirmed', 'Cash', '2025-05-05 22:50:00', '2025-05-05 22:50:00', '2025-05-14 20:42:48'),
+(2, 1, 2, '2025-05-19 20:39:05', '2025-05-29 20:39:05', 300, 'confirmed', 'Cash', '2025-05-22 20:39:34', '2025-05-22 20:39:34', NULL),
+(3, 1, 7, '2025-05-01 00:00:00', '2025-05-15 00:00:00', 15150, 'pending', 'Cash', '2025-06-14 00:19:03', '2025-06-14 00:19:03', NULL);
 
 -- --------------------------------------------------------
 
@@ -397,7 +399,10 @@ CREATE TABLE `reviews` (
 --
 
 INSERT INTO `reviews` (`id`, `booking_id`, `customer_id`, `car_id`, `rating`, `comment`, `created_at`, `updated_at`, `deleted_at`) VALUES
-(1, 1, 1, 1, 5, 'Great car, smooth ride!', '2025-05-05 22:51:52', '2025-05-05 22:51:52', NULL);
+(1, 1, 1, 1, 5, 'Great car, smooth ride!', '2025-05-05 22:51:52', '2025-05-05 22:51:52', NULL),
+(2, 1, 1, 1, 5, 'Great car, smooth ride!', '2025-05-05 22:51:52', '2025-05-05 22:51:52', NULL),
+(3, 1, 1, 1, 5, 'Great car, smooth ride!', '2025-05-05 22:51:52', '2025-05-05 22:51:52', NULL),
+(4, 1, 1, 1, 5, 'Great car, smooth ride!', '2025-05-05 22:51:52', '2025-05-05 22:51:52', NULL);
 
 -- --------------------------------------------------------
 
@@ -654,7 +659,7 @@ ALTER TABLE `vendors`
 -- AUTO_INCREMENT for table `bookings`
 --
 ALTER TABLE `bookings`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `booking_status_logs`
@@ -732,7 +737,7 @@ ALTER TABLE `regions`
 -- AUTO_INCREMENT for table `reviews`
 --
 ALTER TABLE `reviews`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `seasonal_pricing`

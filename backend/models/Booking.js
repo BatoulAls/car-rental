@@ -11,10 +11,18 @@ const Booking = sequelize.define('Booking', {
     total_price: {
         type: DataTypes.DECIMAL(10, 2),
         defaultValue: 0
-    }
+    },
+    payment_method: {
+        type: DataTypes.ENUM('Cash', 'Card', 'Online'),
+        allowNull: false,
+        defaultValue: 'Cash'
+    },
 }, {
     tableName: 'bookings',
-    timestamps: false
+    timestamps: false,
+    paranoid: true
 });
 
 module.exports = Booking;
+
+
