@@ -185,7 +185,7 @@ exports.getCarById = async (req, res) => {
             where: { car_id: carId },
             include: [{ model: User, as: 'user', attributes: ['id', 'username'] }],
             order: [['created_at', 'DESC']],
-            limit: 3
+            // limit: 3
         });
 
         const allRatings = await Review.findAll({

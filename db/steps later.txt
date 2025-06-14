@@ -1,3 +1,16 @@
 * when create or update review should update table car colume avg_rating + count rating.
 
 * should change affordable rate - luxery rate for cars depend on syria.
+
+* Send booking email confirmation to user and vendor.
+
+* vendor notification system
+
+booking flow:
+1- when user select "book now"
+2- modal should appear to select start date and end date
+3- call api "check-availability" to check if start date and end date is available
+4- if available go to step 5
+5- call api "preview" with new page to review all data and select payment method " please check the response to "preview API"
+6- user click confirm then you should call "create-booking" API.
+7- user should see "booking success".

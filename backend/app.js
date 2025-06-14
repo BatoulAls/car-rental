@@ -29,5 +29,7 @@ app.use('/api/auth', authRoutes);
 const userRoutes = require('./routes/user');
 app.use('/api/user', userRoutes);
 
+const bookingRoutes = require('./routes/booking');
+app.use('/api/bookings', bookingRoutes);
 
 module.exports = app;
