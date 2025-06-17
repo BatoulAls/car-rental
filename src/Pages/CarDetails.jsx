@@ -127,6 +127,8 @@ const CarDetails = () => {
         carModel={carData.model}
       />
 
+      
+
       <CarOverview carData={carData} />
 
       <CarFeaturesAndTags

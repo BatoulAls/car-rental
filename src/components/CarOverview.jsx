@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom'; 
-
+import { Link } from 'react-router-dom';
 const renderStars = (rating) => {
   const stars = [];
   const numericRating = parseFloat(rating) || 0;
@@ -67,7 +67,15 @@ const CarOverview = ({ carData }) => {
         <div className="vendor-availability-section1">
           <div className="vendor-info1">
             <div className="label1">Provided by</div>
-            <div className="vendor-name1">{carData.vendor?.name ?? 'Unknown Vendor'}</div>
+            <div >
+               <Link className="vendor-name1" to={`/vendors/${carData.vendor?.id}`}>
+                  {carData.vendor?.name ?? 'Unknown Vendor'}
+                </Link>
+
+
+
+
+            </div>
             {carData.vendor?.phone && (
               <div className="vendor-phone1">📞 {carData.vendor.phone}</div>
             )}

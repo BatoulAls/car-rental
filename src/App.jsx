@@ -14,7 +14,9 @@ import AllBrands from "./Pages/AllBrands";
 import Vendors from './Pages/Vendors'
 
 
+
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import VendorDetails from "./Pages/VendorDetails";
 
 const queryClient = new QueryClient();
 
@@ -35,6 +37,8 @@ function App() {
         <Route path="all-cars" element={<AllCars/>}/>
         <Route path="results" element={<AllCars/>}/>
         <Route path="/car-details/:carId" element={<CarDetails/>}/>
+         <Route path="/vendors/:vendorId" element={<VendorDetails/>}/>
+
         <Route path="/all-brands" element={<AllBrands/>}/>
         <Route path="/cars" element={<AllCars />} />
         <Route path="/Vendors" element={<Vendors/>}/>
