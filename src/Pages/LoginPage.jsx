@@ -58,7 +58,7 @@ const LoginPage = () => {
     setShowForgotPasswordModal(false);
   };
    const handleEmailLinkSent = (email) => {
-    console.log(`تم إرسال رابط إعادة التعيين للبريد الإلكتروني: ${email}`);
+   console.log(`Password reset link has been sent to the email: ${email}`);
   };
 
   const validateForm = () => {
@@ -101,16 +101,16 @@ const LoginPage = () => {
         const card = document.querySelector('.register-card-reg');
         if (card) card.style.animation = 'successPulse 0.6s ease-out';
 
-        setTimeout(() => {
-          alert('Login successful!');
-          if (card) card.style.animation = '';
-          setFormData({
-            email: '',
-            password: '',
-            rememberMe: false,
-          });
-          navigate('/UserProfile');  
-        }, 600);
+       setTimeout(() => {
+  if (card) card.style.animation = '';
+  setFormData({
+    email: '',
+    password: '',
+    rememberMe: false,
+  });
+  navigate('/');  
+}, 600);
+
       } catch (error) {
         console.error('Login failed:', error.response?.data || error.message);
         alert('Login failed. Please check your credentials.');
