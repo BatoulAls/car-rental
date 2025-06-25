@@ -1,0 +1,45 @@
+
+
+.auth-options-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 1px; 
+  font-size: 0.875rem;
+}
+
+.remember-me-label {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  color: #4b5563; /* Equivalent to text-gray-700 */
+}
+
+.remember-me-checkbox {
+  margin-right: 0.5rem; /* Equivalent to mr-2 */
+  accent-color: #ef4444; /* Equivalent to accent-red-500 */
+  cursor: pointer;
+  border-radius: 0.25rem; /* Equivalent to rounded */
+}
+
+.remember-me-label span {
+  -webkit-user-select: none; /* For Safari */
+  -moz-user-select: none; /* For Firefox */
+  -ms-user-select: none; /* For Internet Explorer/Edge */
+  user-select: none; /* Equivalent to select-none */
+}
+
+.forgot-password-button {
+  background-color: transparent;
+  border: none;
+  color: #ef4444; /* Equivalent to text-red-500 */
+  font-weight: 600; /* Equivalent to font-semibold */
+  cursor: pointer;
+  outline: none;
+  transition: text-decoration 300ms ease-in-out; /* Equivalent to transition duration-300 ease-in-out */
+}
+
+.forgot-password-button:hover,
+.forgot-password-button:focus {
+  text-decoration: underline; /* Equivalent to hover:underline focus:underline */
+}
