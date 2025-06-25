@@ -1,24 +1,109 @@
+/* General Body and Base Styles */
+body {
+  font-family: 'Inter', sans-serif; /* A modern, clean sans-serif font */
+  margin: 0;
+  padding: 0;
+  background-color: #f8f9fa; /* Light grey background for the whole page */
+  color: #333;
+  line-height: 1.6;
+}
 
+/* --- General Section Styling --- */
+section {
+  padding: 4rem 2rem; /* Consistent padding top/bottom and left/right */
+  margin-bottom: 2rem; /* Space between sections */
+  background-color: #ffffff; /* Default background for sections */
+  border-radius: 1rem; /* Rounded corners, similar to car cards */
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05); /* Subtle shadow for depth */
+  overflow: hidden; /* Ensures content stays within bounds */
+  position: relative; /* For absolute positioning of elements within */
+}
 
+/* Style for section headings */
+section h1,
+section h2,
+section h3 {
+  font-family: "Poppins", sans-serif; /* Assuming you're using Poppins as per your existing CSS */
+  color: #1f2937; /* Darker text color for headings */
+  margin-bottom: 1.5rem; /* Space below headings */
+  font-weight: 700; /* Bold headings */
+  line-height: 1.2;
+}
+
+section h1 {
+  font-size: 2.5rem;
+}
+
+section h2 {
+  font-size: 2rem;
+}
+
+section h3 {
+  font-size: 1.75rem;
+}
+
+/* Style for paragraph text within sections */
+section p {
+  font-family: "Inter", sans-serif; /* Or another clean sans-serif font */
+  font-size: 1.1rem;
+  line-height: 1.7;
+  color: #4b5563; /* Slightly lighter text for body copy */
+  margin-bottom: 1rem;
+}
+
+/* Horizontal rule for visual separation within sections if needed */
+section hr {
+  border: none;
+  border-top: 1px solid #e5e7eb;
+  margin: 2rem 0;
+}
+
+/* --- Section Modifiers (Optional) --- */
+
+/* Example: A section with a darker background */
+.section-dark {
+  background-color: #1f2937;
+  color: #f9fafb;
+}
+
+.section-dark h1,
+.section-dark h2,
+.section-dark h3,
+.section-dark p {
+  color: #f9fafb;
+}
+
+/* Example: A section with a different shadow */
+.section-elevated {
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+/* Example: A section with less padding (for compact content) */
+.section-compact {
+  padding: 2rem 1.5rem;
+}
+
+/* --- Car Grid and Card Specific Styles --- */
 .car-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
   gap: 2rem;
 }
-.rating-stars {
 
+.rating-stars {
   display: flex;
   align-items: center;
-  gap: 2px; 
-  font-size: 16px; 
-  color: #ccc; 
+  gap: 2px;
+  font-size: 16px;
+  color: #ccc;
 }
+
 .rating-stars span {
- 
   display: inline-block;
-  vertical-align: middle; 
-  line-height: 1; 
+  vertical-align: middle;
+  line-height: 1;
 }
+
 .filled-star {
   color: gold;
 }
@@ -38,11 +123,10 @@
   position: absolute;
   top: 0;
   left: 0;
-  width: 50%; 
-  overflow: hidden; 
-  color: gold; 
+  width: 50%;
+  overflow: hidden;
+  color: gold;
 }
-
 
 .car-card {
   background: white;
@@ -55,6 +139,7 @@
   max-width: 450px;
   margin: 0 auto;
   position: relative;
+  animation: cardFadeIn 0.5s ease forwards; /* Already existing animation */
 }
 
 .car-card.hovered {
@@ -194,8 +279,6 @@
   background: linear-gradient(90deg, #ff4d30, transparent);
   border-radius: 2px;
 }
-
-
 
 .specs-grid {
   display: grid;
@@ -361,7 +444,6 @@
   overflow: hidden;
   display: inline-block;
   text-align: center;
-  
 }
 
 .book-btn::before {
@@ -398,11 +480,7 @@
   }
 }
 
-.car-card {
-  animation: cardFadeIn 0.5s ease forwards;
-}
-/*view more*/
-/* Navigation Arrow Styles */
+/* --- View More Navigation Arrow Styles --- */
 .nav-arrow {
   position: absolute;
   top: 15px;
@@ -456,9 +534,32 @@
 .nav-arrow.dark-theme:hover {
   background: rgba(0, 0, 0, 0.9);
 }
-/**/
-/* Responsive styles */
+
+/* --- Responsive styles --- */
 @media (max-width: 768px) {
+  /* General Section responsive adjustments */
+  section {
+    padding: 3rem 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  section h1 {
+    font-size: 2rem;
+  }
+
+  section h2 {
+    font-size: 1.75rem;
+  }
+
+  section h3 {
+    font-size: 1.5rem;
+  }
+
+  section p {
+    font-size: 1rem;
+  }
+
+  /* Car Grid and Card responsive adjustments */
   .car-grid {
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
     gap: 1.5rem;
@@ -495,6 +596,30 @@
 }
 
 @media (max-width: 480px) {
+  /* General Section responsive adjustments */
+  section {
+    padding: 2rem 1rem;
+    margin-bottom: 1rem;
+    border-radius: 0.75rem;
+  }
+
+  section h1 {
+    font-size: 1.75rem;
+  }
+
+  section h2 {
+    font-size: 1.5rem;
+  }
+
+  section h3 {
+    font-size: 1.35rem;
+  }
+
+  section p {
+    font-size: 0.95rem;
+  }
+
+  /* Car Grid and Card responsive adjustments */
   .car-grid {
     grid-template-columns: 1fr;
     gap: 1rem;

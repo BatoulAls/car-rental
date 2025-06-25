@@ -4,15 +4,15 @@ import React from 'react';
 const CarDescriptionAndTerms = ({ overview, mileageLimit, additionalMileageCharge, insuranceIncluded }) => {
   return (
     <>
-    
+    <h3 className="section-title2">Description</h3>
       <div className="description-section1">
-        <h3 className="section-title1">Description</h3>
+        
         <div className="description-text1" dangerouslySetInnerHTML={{ __html: overview ?? 'No detailed description available for this car.' }} />
       </div>
 
-    
+     <h3 className="section-title2">Rental Terms & Conditions</h3>
       <div className="rental-terms-section1">
-        <h3 className="section-title1">Rental Terms & Conditions</h3>
+       
         <div className="rental-terms-grid1">
           <div className="rental-term1">
             <div className="term-icon1">📏</div>

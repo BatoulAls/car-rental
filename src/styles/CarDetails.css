@@ -164,7 +164,7 @@
 }
 
 .car-details-container1 {
-    max-width: 1400px;
+    max-width: 1350px;
     margin: 0 auto;
     background: white;
     border-radius: var(--border-radius-large);
@@ -552,6 +552,24 @@
     margin-bottom: 1.8rem;
     position: relative;
 }
+.section-title2 {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--secondary-color);
+    margin-bottom: 1.8rem;
+    position: relative;
+    margin-left: 15px;
+}
+.section-title2::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -8px;
+    width: 50px;
+    height: 4px;
+    background: linear-gradient(90deg, var(--primary-color), transparent);
+    border-radius: 2px;
+}
 
 .section-title1::after {
     content: '';
@@ -612,6 +630,8 @@
 
 .description-section1 {
     margin-bottom: 2.5rem;
+    margin-left:15px ;
+    margin-right:15px ;
     padding: 1.5rem;
     background: var(--light-gray);
     border-radius: var(--border-radius-small);
@@ -632,6 +652,8 @@
     padding: 2rem;
     border-radius: var(--border-radius-small);
     margin-bottom: 2.5rem;
+    margin-left:15px ;
+    margin-right:15px ;
 }
 
 .rental-terms-grid1 {
@@ -920,6 +942,8 @@
     background: var(--light-gray); 
     border-radius: var(--border-radius-small);
     box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.03);
+     margin-left:15px ;
+    margin-right:15px ;
 }
 
 .feature-category1 {
@@ -1305,7 +1329,9 @@
 
 
 .similar-cars-section1 {
-    margin: 3rem 0 2rem 0;
+    margin: 2rem;
+     margin-left:15px ;
+    margin-right:15px ;
     padding: 2rem;
     background: var(--light-gray);
     border-radius: var(--border-radius-large);

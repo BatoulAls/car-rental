@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import Logo from "../images/logo/logo.png";
 import { useState } from "react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBars, faXmark } from '@fortawesome/free-solid-svg-icons';
+import { faBars, faXmark, faUser } from '@fortawesome/free-solid-svg-icons';
 
 function Navbar() {
   const [nav, setNav] = useState(false);
@@ -26,6 +26,8 @@ function Navbar() {
             <li><Link onClick={openNav} to="/Vendors">All Vendors</Link></li>
             <li><Link onClick={openNav} to="/team">Our Team</Link></li>
             <li><Link onClick={openNav} to="/contact">Contact</Link></li>
+            {/* Profile link for mobile */}
+            <li><Link onClick={openNav} to="/UserProfile" className="mobile-profile-link">Profile</Link></li>
           </ul>
         </div>
 
@@ -47,11 +49,16 @@ function Navbar() {
           </ul>
 
           <div className="navbar__buttons">
-            <Link className="navbar__buttons__sign-in" to="/">Sign In</Link>
-            <Link className="navbar__buttons__register" to="/">Register</Link>
+            <Link className="navbar__buttons__sign-in" to="/Login">Sign In</Link>
+            <Link className="navbar__buttons__register" to="/register">Register</Link>
+            
+          
+            <Link className="navbar__buttons__profile" to="/UserProfile" title="Profile">
+              <FontAwesomeIcon icon={faUser} />
+            </Link>
           </div>
 
-          {/* mobile hamburger */}
+          
           <div className="mobile-hamb" onClick={openNav}>
             <FontAwesomeIcon icon={faBars} />
           </div>

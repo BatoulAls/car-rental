@@ -51,6 +51,8 @@ const VendorDetails = () => {
             region={vendor.region}
             shop_open_time={vendor.shop_open_time}
             shop_close_time={vendor.shop_close_time}
+            vendorId={vendor.id}
+            VendorName={vendor.name}
           />
         </div>
       </div>

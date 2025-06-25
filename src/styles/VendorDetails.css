@@ -44,6 +44,47 @@
     color: var(--secondary-color);
 }
 
+
+/**/
+/* Specific styles for the "See All Cars" button */
+.see-all-cars-btn {
+  /* Inherit common button styles from secondary-button or define anew */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 8px 20px;
+  border-radius: 8px;
+  font-size: 1em;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease; /* Smooth transitions for all properties */
+  width: 100%;
+
+  /* Distinct visual style */
+  background-color: #ff4d30; /* A fresh green, like for cars or availability */
+  color: #fff;
+  border: 1px solid #ff4d30;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.see-all-cars-btn:hover {
+  background-color: #ff4d30; /* Darker green on hover */
+  transform: translateY(-2px); /* Slight lift effect */
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15); /* More pronounced shadow */
+}
+
+.see-all-cars-btn:active {
+  transform: translateY(0); /* Press-down effect */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Optional: Add icon inside the button */
+.see-all-cars-btn svg {
+  margin-right: 5px; /* Space between icon and text */
+}
+/**/
+
 .back-button:hover {
     background-color: var(--medium-gray);
     transform: translateX(-4px);

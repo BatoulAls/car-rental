@@ -1,6 +1,6 @@
-
 import React from 'react';
 import { Award, AlertTriangle } from 'lucide-react';
+
 
 const VendorMainInfo = ({ name, open_24_7, shop_open_time, shop_close_time, verified, description }) => {
   return (
@@ -24,6 +24,8 @@ const VendorMainInfo = ({ name, open_24_7, shop_open_time, shop_close_time, veri
       </div>
 
       <p className="vendor-description">{description || 'N/A'}</p>
+
+      
     </div>
   );
 };
