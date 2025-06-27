@@ -52,7 +52,7 @@ exports.getAllCars = async (req, res) => {
         }
 
         // ✅ Sorting Logic
-        let order = [['created_at', 'DESC']]; // default
+        let order = [['createdAt', 'DESC']]; // default
 
         if (sort_by === 'price') {
             order = [['price_per_day', sort_order === 'asc' ? 'ASC' : 'DESC']];
@@ -184,7 +184,7 @@ exports.getCarById = async (req, res) => {
         const reviews = await Review.findAll({
             where: { car_id: carId },
             include: [{ model: User, as: 'user', attributes: ['id', 'username'] }],
-            order: [['created_at', 'DESC']],
+            order: [['createdAt', 'DESC']],
             // limit: 3
         });
 
@@ -241,7 +241,7 @@ exports.getCarById = async (req, res) => {
                 id: r.id,
                 rating: r.rating,
                 comment: r.comment,
-                created_at: r.created_at,
+                createdAt: r.createdAt,
                 user: r.user
             }))
         });

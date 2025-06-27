@@ -28,21 +28,10 @@ const Review = sequelize.define('Review', {
         type: DataTypes.TEXT,
         allowNull: true
     },
-    created_at: {
-        type: DataTypes.DATE,
-        defaultValue: DataTypes.NOW
-    },
-    updated_at: {
-        type: DataTypes.DATE,
-        allowNull: true
-    },
-    deleted_at: {
-        type: DataTypes.DATE,
-        allowNull: true
-    }
 }, {
     tableName: 'reviews',
-    timestamps: false
+    timestamps: false,
+    paranoid: true
 });
 
 Review.belongsTo(User, { foreignKey: 'customer_id', as: 'user' });

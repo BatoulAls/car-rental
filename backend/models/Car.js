@@ -85,14 +85,7 @@ const Car = sequelize.define('Car', {
         type: DataTypes.STRING,
         allowNull: true
     },
-    created_at: {
-        type: DataTypes.DATE,
-        defaultValue: DataTypes.NOW
-    },
-    updated_at: {
-        type: DataTypes.DATE,
-        defaultValue: DataTypes.NOW
-    },
+
     average_rating: {
         type: DataTypes.DECIMAL(3, 1),
         defaultValue: 0
