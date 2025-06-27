@@ -9,17 +9,26 @@ exports.getProfile = async (req, res) => {
 };
 
 exports.updateProfile = async (req, res) => {
-    const { username, phone, photo } = req.body;
+    try {
+    const { username, phone } = req.body;
+    const photo = req.file; // comes from multer
 
     const user = await User.findByPk(req.user.id);
     if (!user) return res.status(404).json({ error: 'User not found' });
 
-    user.username = username || user.username;
-    user.phone = phone || user.phone;
-    user.photo = photo || user.photo;
+    user.username = username?.trim() || user.username;
+    user.phone = phone?.trim() || user.phone;
+
+    if (photo) {
+        user.photo = `/uploads/${photo.filename}`; // save relative path
+    }
 
     await user.save();
     res.json({ message: 'Profile updated successfully', user });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Something went wrong' });
+    }
 };
 
 exports.changePassword = async (req, res) => {

@@ -1,6 +1,8 @@
 const express = require('express');
 const cors = require('cors');
 const app = express();
+const path = require('path');
+
 
 // Middleware
 app.use(cors());
@@ -31,5 +33,7 @@ app.use('/api/user', userRoutes);
 
 const bookingRoutes = require('./routes/booking');
 app.use('/api/bookings', bookingRoutes);
+
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 module.exports = app;

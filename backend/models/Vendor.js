@@ -45,21 +45,10 @@ const Vendor = sequelize.define('Vendor', {
         type: DataTypes.BOOLEAN,
         defaultValue: false,
     },
-    created_at: {
-        type: DataTypes.DATE,
-        defaultValue: DataTypes.NOW,
-    },
-    updated_at: {
-        type: DataTypes.DATE,
-        allowNull: true,
-    },
-    deleted_at: {
-        type: DataTypes.DATE,
-        allowNull: true,
-    }
 }, {
     tableName: 'vendors',
-    timestamps: false // set to true if using Sequelize-managed timestamps
+    timestamps: false, // set to true if using Sequelize-managed timestamps
+    paranoid: true
 });
 
 // Vendor.hasMany(Car, { foreignKey: 'vendor_id' });
