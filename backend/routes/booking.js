@@ -18,11 +18,8 @@ router.get('/my-bookings', authMiddleware, bookingController.getMyBookings);
 router.get('/:id', authMiddleware, bookingController.getBookingDetails);  //
 
 router.put('/:id/cancel', authMiddleware, bookingController.cancelBooking);
-
-
 // status of booking (pending by system - confirmed -rejected - completed  3 by vendor - canceled by customer)
-// getMyBookings()
-// cancelBooking(bookingId)
+
 
 
 // Reviews & Favorites

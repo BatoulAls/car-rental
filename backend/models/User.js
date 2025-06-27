@@ -39,11 +39,28 @@ const User = sequelize.define('User', {
     reset_token_expiry: {
         type: DataTypes.DATE,
         allowNull: true
+    },
+    is_active: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: true
+    },
+    is_verified: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false
     }
 }, {
     tableName: 'users',
     timestamps: true, // enables createdAt and updatedAt
     paranoid: true     // enables deletedAt (soft deletes)
+});
+
+User.beforeCreate(user => {
+    if (user.role === 'vendor') {
+        user.is_verified = false;      // ensure false no matter what was sent
+    }else
+    {
+        user.is_verified = true;
+    }
 });
 
 module.exports = User;

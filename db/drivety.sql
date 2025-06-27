@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Jun 14, 2025 at 02:29 AM
+-- Generation Time: Jun 27, 2025 at 06:45 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -48,7 +48,8 @@ CREATE TABLE `bookings` (
 INSERT INTO `bookings` (`id`, `car_id`, `customer_id`, `start_date`, `end_date`, `total_price`, `status`, `payment_method`, `createdAt`, `updatedAt`, `deletedAt`) VALUES
 (1, 1, 1, '2025-05-22 20:42:51', '2025-05-31 08:00:00', 700, 'confirmed', 'Cash', '2025-05-05 22:50:00', '2025-05-05 22:50:00', '2025-05-14 20:42:48'),
 (2, 1, 2, '2025-05-19 20:39:05', '2025-05-29 20:39:05', 300, 'confirmed', 'Cash', '2025-05-22 20:39:34', '2025-05-22 20:39:34', NULL),
-(3, 1, 7, '2025-05-01 00:00:00', '2025-05-15 00:00:00', 15150, 'pending', 'Cash', '2025-06-14 00:19:03', '2025-06-14 00:19:03', NULL);
+(3, 1, 7, '2025-06-27 15:16:01', '2025-05-15 00:00:00', 15150, 'pending', 'Cash', '2025-06-14 00:19:03', '2025-06-14 00:19:03', '2025-06-26 15:15:59'),
+(4, 1, 7, '2025-06-27 16:13:57', '2025-05-15 00:00:00', 15150, 'cancelled', 'Cash', '2025-06-14 00:43:06', '2025-06-14 00:43:06', NULL);
 
 -- --------------------------------------------------------
 
@@ -109,16 +110,16 @@ CREATE TABLE `cars` (
   `photo` text DEFAULT NULL,
   `average_rating` decimal(3,1) DEFAULT 0.0,
   `review_count` int(11) DEFAULT 0,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `updated_at` timestamp NULL DEFAULT current_timestamp(),
-  `deleted_at` timestamp NULL DEFAULT NULL
+  `createdAt` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updatedAt` timestamp NULL DEFAULT current_timestamp(),
+  `deletedAt` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `cars`
 --
 
-INSERT INTO `cars` (`id`, `vendor_id`, `region_id`, `category_id`, `name`, `brand`, `model`, `year`, `price_per_day`, `seats`, `no_of_doors`, `bags`, `transmission`, `engine_capacity`, `regional_spec`, `fuel_type`, `description`, `color`, `location`, `availability_status`, `mileage_limit`, `additional_mileage_charge`, `insurance_included`, `deposit_amount`, `photo`, `average_rating`, `review_count`, `created_at`, `updated_at`, `deleted_at`) VALUES
+INSERT INTO `cars` (`id`, `vendor_id`, `region_id`, `category_id`, `name`, `brand`, `model`, `year`, `price_per_day`, `seats`, `no_of_doors`, `bags`, `transmission`, `engine_capacity`, `regional_spec`, `fuel_type`, `description`, `color`, `location`, `availability_status`, `mileage_limit`, `additional_mileage_charge`, `insurance_included`, `deposit_amount`, `photo`, `average_rating`, `review_count`, `createdAt`, `updatedAt`, `deletedAt`) VALUES
 (1, 1, 1, 1, 'Luxury Sedan', 'BMW', '5 Series', 2022, 1010, 3, 4, 3, 'manual', '4 L', 'GCC', 'disel', '<p><strong>Rent and Drive this Mercedes Benz G63 AMG 2022</strong> in Dubai for AED 1600/day. Rental cost includes comprehensive insurance and a mileage limit of 250 km/day. Extra km charged at AED 5/km. A security deposit of AED 2000 is required.</p>\n\n<p>This car has 4 doors and seats up to 5 passengers.</p>\n\n<p><strong>Mercedes Benz G63 AMG 2022</strong><br>\nModel Year: 2022</p>\n\n<h4>Specifications:</h4>\n<ol>\n  <li>3D Surround Camera</li>\n  <li>Memory Front Seats</li>\n  <li>Parking Assist</li>\n  <li>Built-in GPS</li>\n  <li>Parking Sensors</li>\n  <li>Steering Assist</li>\n  <li>Push Button Ignition</li>\n  <li>SRS Airbags</li>\n  <li>Front & Rear Airbags</li>\n  <li>Front Air Bags</li>\n</ol>\n\n<h4>Why hire the Mercedes Benz G63 AMG?</h4>\n<p>\n  Breathtakingly powerful and bold in design, the G63 AMG is built for luxury and performance. It features a twin-turbo 4.0L V8 engine, delivering over 560 horsepower and premium interior finishes. Standard with 4MATIC all-wheel drive, this SUV dominates on-road and off.\n</p>\n', NULL, 'Satwa', 'available', 40, 10, 1, 500, '', 0.0, 0, '2025-05-05 22:46:52', '2025-05-05 22:46:52', NULL),
 (2, 2, 1, 2, 'Compact Car', 'Toyota', 'Yaris', 2021, 150, 7, NULL, NULL, 'auto', NULL, NULL, 'petrol', 'Affordable and efficient.', NULL, 'Satwa', 'available', NULL, NULL, 1, 0, '', 3.0, 0, '2025-05-05 22:46:52', '2025-05-05 22:46:52', NULL),
 (3, 2, 1, 2, 'affordable car 1', 'Toyota', 'Yaris new', 2021, 650, 7, NULL, NULL, 'auto', NULL, NULL, 'petrol', 'Affordable and efficient.', NULL, 'Satwa', 'available', NULL, NULL, 1, 0, '', 0.0, 0, '2025-05-05 22:46:52', '2025-05-05 22:46:52', NULL),
@@ -389,16 +390,16 @@ CREATE TABLE `reviews` (
   `car_id` int(11) DEFAULT NULL,
   `rating` int(11) DEFAULT NULL,
   `comment` text DEFAULT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `updated_at` timestamp NULL DEFAULT current_timestamp(),
-  `deleted_at` timestamp NULL DEFAULT NULL
+  `createdAt` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updatedAt` timestamp NULL DEFAULT current_timestamp(),
+  `deletedAt` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `reviews`
 --
 
-INSERT INTO `reviews` (`id`, `booking_id`, `customer_id`, `car_id`, `rating`, `comment`, `created_at`, `updated_at`, `deleted_at`) VALUES
+INSERT INTO `reviews` (`id`, `booking_id`, `customer_id`, `car_id`, `rating`, `comment`, `createdAt`, `updatedAt`, `deletedAt`) VALUES
 (1, 1, 1, 1, 5, 'Great car, smooth ride!', '2025-05-05 22:51:52', '2025-05-05 22:51:52', NULL),
 (2, 1, 1, 1, 5, 'Great car, smooth ride!', '2025-05-05 22:51:52', '2025-05-05 22:51:52', NULL),
 (3, 1, 1, 1, 5, 'Great car, smooth ride!', '2025-05-05 22:51:52', '2025-05-05 22:51:52', NULL),
@@ -459,6 +460,8 @@ CREATE TABLE `users` (
   `photo` text DEFAULT NULL,
   `password` text DEFAULT NULL,
   `role` varchar(20) DEFAULT NULL,
+  `is_active` tinyint(1) DEFAULT 1,
+  `is_verified` tinyint(1) DEFAULT 0,
   `createdAt` datetime DEFAULT current_timestamp(),
   `updatedAt` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `deletedAt` timestamp NULL DEFAULT NULL,
@@ -470,11 +473,12 @@ CREATE TABLE `users` (
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `username`, `email`, `phone`, `photo`, `password`, `role`, `createdAt`, `updatedAt`, `deletedAt`, `reset_token`, `reset_token_expiry`) VALUES
-(1, 'john_doe', 'john@example.com', '1234567890', '', 'hashed_pass_1', 'customer', '2025-05-06 00:46:30', NULL, NULL, NULL, NULL),
-(2, 'vendor_girl', 'vendor@example.com', '0987654321', '', 'hashed_pass_2', 'vendor', '2025-05-06 00:46:30', NULL, NULL, NULL, NULL),
-(3, 'admin_user', 'admin@example.com', '5551234567', '', 'hashed_pass_3', 'admin', '2025-05-06 00:46:30', NULL, NULL, NULL, NULL),
-(7, 'New Name', 'john1@example.com', '+491234567890', 'https://yourapp.com/uploads/avatar.jpg', '$2b$10$LsGIESKeQEfxPTZBFg1MzurgtRoJA549HNH14q2JYtwnVmA7pjXmW', 'customer', '2025-06-08 18:29:21', '2025-06-08 21:47:05', NULL, 'c055956962ea314e3ccd9d6ee2b22e85a901394f6b1207b59eabca7974c73c29', '2025-06-08 19:31:30');
+INSERT INTO `users` (`id`, `username`, `email`, `phone`, `photo`, `password`, `role`, `is_active`, `is_verified`, `createdAt`, `updatedAt`, `deletedAt`, `reset_token`, `reset_token_expiry`) VALUES
+(1, 'john_doe', 'john@example.com', '1234567890', '', 'hashed_pass_1', 'customer', 1, 0, '2025-05-06 00:46:30', NULL, NULL, NULL, NULL),
+(2, 'vendor_girl', 'vendor@example.com', '0987654321', '', 'hashed_pass_2', 'vendor', 1, 0, '2025-05-06 00:46:30', NULL, NULL, NULL, NULL),
+(3, 'admin_user', 'admin@example.com', '5551234567', '', 'hashed_pass_3', 'admin', 1, 0, '2025-05-06 00:46:30', NULL, NULL, NULL, NULL),
+(7, 'New Name1111', 'john1@example.com', '+491234567890', '/uploads/1751032662906-IMG_0547.PNG', '$2b$10$LsGIESKeQEfxPTZBFg1MzurgtRoJA549HNH14q2JYtwnVmA7pjXmW', 'customer', 1, 0, '2025-06-08 18:29:21', '2025-06-27 14:03:11', NULL, 'c055956962ea314e3ccd9d6ee2b22e85a901394f6b1207b59eabca7974c73c29', '2025-06-08 19:31:30'),
+(8, 'NewUser', 'dema.sharaf1@gmail.com', NULL, NULL, '$2b$10$0un3BbFsTjjMhoIXY7pyQejwEEcFAI1usGOEeZ043vKpPFgkxg03i', 'customer', 1, 0, '2025-06-27 10:55:43', '2025-06-27 10:55:43', NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -496,17 +500,17 @@ CREATE TABLE `vendors` (
   `shop_open_time` time DEFAULT NULL,
   `shop_close_time` time DEFAULT NULL,
   `open_24_7` tinyint(4) DEFAULT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `updated_at` timestamp NULL DEFAULT NULL,
-  `deleted_at` timestamp NULL DEFAULT NULL
+  `createdAt` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updatedAt` timestamp NULL DEFAULT NULL,
+  `deletedAt` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `vendors`
 --
 
-INSERT INTO `vendors` (`id`, `user_id`, `name`, `phone`, `region_id`, `photo`, `verified`, `active`, `background_image`, `description`, `shop_open_time`, `shop_close_time`, `open_24_7`, `created_at`, `updated_at`, `deleted_at`) VALUES
-(1, 2, 'Speedy Rentals', '0987654321', 1, '', 1, 1, NULL, NULL, NULL, NULL, NULL, '2025-05-05 22:46:52', NULL, NULL),
+INSERT INTO `vendors` (`id`, `user_id`, `name`, `phone`, `region_id`, `photo`, `verified`, `active`, `background_image`, `description`, `shop_open_time`, `shop_close_time`, `open_24_7`, `createdAt`, `updatedAt`, `deletedAt`) VALUES
+(1, 2, 'Speedy Rentals', '0987654321', 1, '', 1, 1, NULL, NULL, '09:00:00', '01:00:00', NULL, '2025-05-05 22:46:52', NULL, NULL),
 (2, 2, 'Speedy Rentals2', '0987654321', 1, '', 1, 1, NULL, NULL, NULL, NULL, NULL, '2025-05-05 22:46:52', NULL, NULL);
 
 --
@@ -659,7 +663,7 @@ ALTER TABLE `vendors`
 -- AUTO_INCREMENT for table `bookings`
 --
 ALTER TABLE `bookings`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `booking_status_logs`
@@ -755,7 +759,7 @@ ALTER TABLE `tags`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `vendors`
