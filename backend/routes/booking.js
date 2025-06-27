@@ -13,6 +13,22 @@ router.post('/preview', authMiddleware, bookingController.previewBooking);
 router.post('/', authMiddleware, bookingController.createBooking);
 
 // Get current user's bookings (protected)
-// router.get('/my-bookings', authMiddleware, bookingController.getMyBookings);
+router.get('/my-bookings', authMiddleware, bookingController.getMyBookings);
+
+router.get('/:id', authMiddleware, bookingController.getBookingDetails);  //
+
+router.put('/:id/cancel', authMiddleware, bookingController.cancelBooking);
+
+
+// status of booking (pending by system - confirmed -rejected - completed  3 by vendor - canceled by customer)
+// getMyBookings()
+// cancelBooking(bookingId)
+
+
+// Reviews & Favorites
+// createReview(carId, reviewData)
+// addToFavorites(carId)
+// removeFromFavorites(carId)
+// getFavoriteCars()
 
 module.exports = router;

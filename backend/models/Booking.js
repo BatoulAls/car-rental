@@ -1,5 +1,7 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/db');
+const CarCategory = require("./CarCategory");
+
 
 const Booking = sequelize.define('Booking', {
     id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
@@ -23,6 +25,9 @@ const Booking = sequelize.define('Booking', {
     paranoid: true
 });
 
+
 module.exports = Booking;
 
 
+const Car = require('./Car');
+Booking.belongsTo(Car, { foreignKey: 'car_id' });

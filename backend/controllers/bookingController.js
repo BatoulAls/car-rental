@@ -182,7 +182,7 @@ exports.createBooking = async (req, res) => {
             start_date,
             end_date,
             total_price,
-            status: 'pending', // or 'confirmed' if no payment
+            status: 'pending', // 'pending', 'confirmed', 'rejected', 'completed' , 'canceled'
             payment_method
         });
 
@@ -202,6 +202,209 @@ exports.createBooking = async (req, res) => {
 
     } catch (err) {
         console.error('❌ Create booking error:', err);
+        res.status(500).json({ error: 'Server error' });
+    }
+};
+
+exports.getMyBookings = async (req, res) => {
+    try {
+        // --- query-string helpers -------------------------------------------
+        const {
+            page     = 1,
+            limit    = 10,
+            status,              // optional → ?status=confirmed
+            sort     = 'id',
+            order    = 'DESC'    // ASC | DESC
+        } = req.query;
+
+        const whereClause = { customer_id: req.user.id };
+        if (status) whereClause.status = status;
+
+        // --- main query ------------------------------------------------------
+        const { count, rows } = await Booking.findAndCountAll({
+            where: whereClause,
+            limit: +limit,
+            offset: (page - 1) * limit,
+            order: [[sort, order]],
+            include: [
+                {
+                    model: Car,
+                    attributes: [
+                        'id', 'brand', 'model', 'seats', 'bags', 'no_of_doors', 'price_per_day','year','transmission','engine_capacity','regional_spec','description'
+                        ,'fuel_type','color','location','mileage_limit','additional_mileage_charge','deposit_amount'
+                    ],
+                    include: [
+                        {
+                            model: CarImage,
+                            attributes: ['image_url', 'is_main']
+                        },
+                        {
+                            model: CarCategory,
+                            attributes: ['name']
+                        },
+                        {
+                            model: Vendor,
+                            attributes: ['id', 'name', 'phone']
+                        }
+                    ]
+                }
+            ]
+        });
+
+        // --- shape the output ------------------------------------------------
+        const history = rows.map(b => ({
+            booking_id    : b.id,
+            status        : b.status,
+            payment_method: b.payment_method,
+            start_date    : b.start_date,
+            end_date      : b.end_date,
+            total_price   : b.total_price,
+            car: {
+                id: b.Car.id,
+                brand: b.Car.brand,
+                model: b.Car.model,
+                year: b.Car.year,
+                category: b.Car.CarCategory?.name || null,
+                seats: b.Car.seats,
+                bags: b.Car.bags,
+                no_of_doors: b.Car.no_of_doors,
+                price_per_day: b.Car.price_per_day,
+                transmission: b.Car.transmission,
+                engine_capacity: b.Car.engine_capacity,
+                regional_specs: b.Car.regional_specs,
+                description: b.Car.description,
+                fuel_type: b.Car.fuel_type,
+                color: b.Car.color,
+                location: b.Car.location,
+                mileage_limit: b.Car.mileage_limit,
+                additional_mileage_charge: b.Car.additional_mileage_charge,
+                deposit_amount: b.Car.deposit_amount,
+                images: b.Car.CarImages?.map(img => ({
+                    image_url: img.image_url,
+                    is_main: img.is_main
+                })) || []
+            },
+            vendor: b.Car.Vendor ? {
+                id   : b.Car.Vendor.id,
+                name : b.Car.Vendor.name,
+                phone: b.Car.Vendor.phone
+            } : null,
+            createdAt: b.createdAt
+        }));
+
+        res.json({
+            total      : count,
+            page       : +page,
+            limit      : +limit,
+            totalPages : Math.ceil(count / limit),
+            history
+        });
+
+    } catch (err) {
+        console.error('❌ getMyBookings error:', err);
+        res.status(500).json({ error: 'Server error' });
+    }
+};
+
+exports.getBookingDetails = async (req, res) => {
+    try {
+        const bookingId = req.params.id;
+
+        const booking = await Booking.findOne({
+            where: { id: bookingId, deletedAt: null },
+            include: [
+                {
+                    model : Car,
+                    as    : 'Car',
+                    attributes: [
+                        'id','brand','model','year','price_per_day','seats','bags',
+                        'no_of_doors','transmission','fuel_type','engine_capacity',
+                        'regional_spec','description','color','location'
+                    ],
+                    include: [
+                        {
+                            model      : CarImage,
+                            attributes : ['image_url','is_main']
+                        },
+                        {
+                            model      : CarCategory,
+                            attributes : ['name']
+                        },
+                        {
+                            model      : Vendor,
+                            attributes : ['id','name','phone']
+                        }
+                    ]
+                }
+            ]
+        });
+
+        if (!booking) return res.status(404).json({ error: 'Booking not found' });
+
+        // 🚫  Plain customers may only view their own bookings
+        if (booking.user_id !== req.user.id && req.user.role === 'customer') {
+            return res.status(403).json({ error: 'Forbidden' });
+        }
+
+        res.json({
+            booking_id     : booking.id,
+            status         : booking.status,
+            payment_method : booking.payment_method,
+            start_date     : booking.start_date,
+            end_date       : booking.end_date,
+            total_price    : booking.total_price,
+            created_at     : booking.created_at,
+            car: {
+                ...booking.Car.dataValues,
+                category : booking.Car.CarCategory?.name || null,
+                images   : booking.Car.CarImages.map(i => ({
+                    url     : i.image_url,
+                    is_main : i.is_main
+                })),
+                vendor: booking.Car.Vendor ? {
+                    id   : booking.Car.Vendor.id,
+                    name : booking.Car.Vendor.name,
+                    phone: booking.Car.Vendor.phone
+                } : null
+            }
+        });
+
+    } catch (err) {
+        console.error('❌ getBookingDetails error:', err);
+        res.status(500).json({ error: 'Server error' });
+    }
+};
+
+exports.cancelBooking = async (req, res) => {
+    try {
+        const bookingId = req.params.id;
+        const userId = req.user.id;
+
+        const booking = await Booking.findOne({
+            where: {
+                id: bookingId,
+                customer_id: userId,              // ✅ ensures customer owns the booking
+                status: { [Op.in]: ['pending', 'confirmed'] }
+            }
+        });
+
+        if (!booking) {
+            return res.status(404).json({ error: 'Booking not found or cannot be cancelled.' });
+        }
+
+        // Optional: disallow cancel if start date already passed
+        const now = new Date().toISOString().split('T')[0];
+        if (booking.start_date < now) {
+            return res.status(400).json({ error: 'Booking has already started and cannot be cancelled.' });
+        }
+
+        booking.status = 'cancelled';
+        await booking.save();
+
+        res.json({ message: 'Booking cancelled successfully.' });
+
+    } catch (err) {
+        console.error('❌ Cancel Booking Error:', err);
         res.status(500).json({ error: 'Server error' });
     }
 };

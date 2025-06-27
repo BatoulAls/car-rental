@@ -1,7 +1,5 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/db');
-const Vendor = require('../models/Vendor');
-const CarImage = require('../models/CarImage');
 
 const Car = sequelize.define('Car', {
     id: {
@@ -120,11 +118,8 @@ const Car = sequelize.define('Car', {
 }, {
     tableName: 'cars',
     timestamps: false // manually managing timestamps
+    ,paranoid: true
 });
-
-Car.belongsTo(Vendor, { foreignKey: 'vendor_id' });
-
-Car.hasMany(CarImage, { foreignKey: 'car_id' });
 
 module.exports = Car;
 
@@ -142,3 +137,12 @@ Car.belongsToMany(Tag, {
 
 const CarCategory = require('./CarCategory');
 Car.belongsTo(CarCategory, { foreignKey: 'category_id' });
+
+const Booking     = require('./Booking');   // note capital B
+Car.hasMany(Booking, { foreignKey: 'car_id' });
+
+const Vendor      = require('./Vendor');
+const CarImage    = require('./CarImage');
+
+Car.belongsTo(Vendor,   { foreignKey: 'vendor_id' });
+Car.hasMany(CarImage,   { foreignKey: 'car_id' });
