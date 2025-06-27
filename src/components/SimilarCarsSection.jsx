@@ -34,9 +34,12 @@ const SimilarCarsSection = ({ similarCars, similarCarsLoading, onSimilarCarClick
   }
 
   return (
+    <>
+    <h3 className="section-title2">Similar Cars You Might Like</h3>
     <div className="similar-cars-section1">
-      <div className="similar-cars-header">
-        <h3 className="section-title1">Similar Cars You Might Like</h3>
+      
+      {/*<div className="similar-cars-header">
+        
         <button
           onClick={() => setShowAllSimilarCars(!showAllSimilarCars)}
           className="view-all-btn"
@@ -44,7 +47,7 @@ const SimilarCarsSection = ({ similarCars, similarCarsLoading, onSimilarCarClick
           <span>{showAllSimilarCars ? 'Show Less' : 'View All'}</span>
           <span className={`arrow-icon ${showAllSimilarCars ? 'rotated' : ''}`}>→</span>
         </button>
-      </div>
+      </div>*/}
 
       {showAllSimilarCars ? (
         <div className="similar-cars-grid1">
@@ -101,6 +104,7 @@ const SimilarCarsSection = ({ similarCars, similarCarsLoading, onSimilarCarClick
         </div>
       )}
     </div>
+    </>
   );
 };
 

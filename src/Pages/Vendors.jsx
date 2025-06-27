@@ -5,10 +5,12 @@ import { ChevronLeft, ChevronRight, Star, MapPin, Phone, Mail } from 'lucide-rea
 import '../styles/Vendors.css';
 import defaultVendor from '../images/Vendor/default-vendorImg.jpg'
 import Pagination from '../components/Pagination' 
+import { useNavigate } from 'react-router-dom';
 
 const Vendors = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const vendorsPerPage = 10;
+  const navigate = useNavigate();
 
  
   const { data, isLoading, isError } = useQuery({
@@ -91,8 +93,13 @@ const Vendors = () => {
                   <div className="contact-item"><Phone /><span>{vendor.phone || 'N/A'}</span></div>
                   <div className="contact-item"><Mail /><span>{vendor.User?.email || 'N/A'}</span></div>
                 </div>
-                <button className="details-button">View Details</button>
-              </div>
+                <button
+                className="details-button"
+                onClick={() => navigate(`/vendors/${vendor.id}`)}
+              >
+                View Details
+              </button>
+            </div>
             </div>
           ))
         )}

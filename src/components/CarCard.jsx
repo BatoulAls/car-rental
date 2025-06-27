@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import "../styles/CarCard.css";
+import WhatsAppButton from "./WhatsAppButton";
 import DEFAULT_CAR_IMAGE_PATH from '../images/cars-big/default-car.png'
 
 function CarCard({
@@ -145,22 +146,11 @@ function CarCard({
           </div>
         </div>
 
-        <div className="contact-options">
-          <a
-            href={`https://wa.me/${car.whatsapp || "+1234567890"}`}
-            className={`contact-btn whatsapp-btn ${isWhatsAppFocused ? "focused" : ""}`}
-            onClick={(e) => e.stopPropagation()} 
-            onMouseEnter={() => setIsWhatsAppFocused(true)}
-            onMouseLeave={() => setIsWhatsAppFocused(false)}
-            onFocus={() => setIsWhatsAppFocused(true)}
-            onBlur={() => setIsWhatsAppFocused(false)}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="Contact via WhatsApp"
-          >
-            <span>Contact via WhatsApp</span>
-          </a>
-        </div>
+        
+
+       <WhatsAppButton className={`contact-btn whatsapp-btn ${isWhatsAppFocused ? "focused" : ""}`}/>
+        
+        
 
         <div className="card-footer">
           <div className="availability">

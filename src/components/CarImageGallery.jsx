@@ -1,6 +1,6 @@
-// components/CarImageGallery.jsx
+
 import React, { useState, useEffect } from 'react';
-import defaultimg from '../images/cars-big/default-car.png'; // تأكد من المسار الصحيح
+import defaultimg from '../images/cars-big/default-car.png';
 
 const CarImageGallery = ({ images, carBrand, carModel }) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);

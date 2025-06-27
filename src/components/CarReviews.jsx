@@ -33,9 +33,11 @@ const CarReviews = ({
 
   return (
     <>
+     <h3 className="section-title2">{title}</h3>
       {(reviews?.length ?? 0) > 0 ? (
+        
         <div className="reviews-section1">
-          <h3 className="section-title1">{title}</h3>
+         
           <div className="reviews-list1">
             {displayedReviews.map((review) => (
               <div key={review.id} className="review1">
@@ -67,7 +69,7 @@ const CarReviews = ({
         </div>
       ) : (
         <div className="reviews-section1">
-          <h3 className="section-title1">{title}</h3>
+          <h3 className="section-title2">{title}</h3>
           <p>No reviews available yet.</p>
         </div>
       )}
