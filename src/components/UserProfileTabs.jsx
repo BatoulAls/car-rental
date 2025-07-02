@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import ProfileDetails from './ProfileDetails';
 import RentalHistory from './RentalHistory';
 import AccountSettings from './AccountSettings';
-import '../styles/UserProfile.css'; 
+import ChangePasswordTab from './ChangePasswordTab'; 
+import '../styles/UserProfile.css';
 
 const UserProfileTabs = ({ profileData, setProfileData, loading, error, token, defaultAvatar }) => {
     const [activeTab, setActiveTab] = useState('profile');
@@ -34,6 +35,12 @@ const UserProfileTabs = ({ profileData, setProfileData, loading, error, token, d
                     >
                         Settings
                     </button>
+                    <button 
+                        onClick={() => setActiveTab('change-password')}
+                        className={`tab-button ${activeTab === 'change-password' ? 'active' : ''}`}
+                    >
+                        Change Password
+                    </button>
                 </div>
 
                 {activeTab === 'profile' && (
@@ -48,6 +55,7 @@ const UserProfileTabs = ({ profileData, setProfileData, loading, error, token, d
                 )}
                 {activeTab === 'history' && <RentalHistory />}
                 {activeTab === 'settings' && <AccountSettings />}
+                {activeTab === 'change-password' && <ChangePasswordTab token={token} />}
             </div>
         </div>
     );

@@ -9,11 +9,12 @@ import SubmitButton from '../components/SubmitButton';
 import '../styles/Register.css';
 
 const RegisterPage = () => {
-  const navigate = useNavigate(); // ← initialize navigation
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     username: '',
     email: '',
     password: '',
+    phone:'',
     role: 'customer'
   });
 
@@ -59,6 +60,11 @@ const RegisterPage = () => {
     } else if (formData.password.length < 6) {
       newErrors.password = 'Password must be at least 6 characters';
     }
+    if (!formData.phone.trim()) {
+  newErrors.phone = 'Phone number is required';
+} else if (!/^\+?\d{7,15}$/.test(formData.phone)) {
+  newErrors.phone = 'Phone number is invalid';
+}
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -88,7 +94,9 @@ const RegisterPage = () => {
           setFormData({
             username: '',
             email: '',
+            phone:'',
             password: '',
+           
             role: 'customer'
           });
           navigate('/login'); 
@@ -99,7 +107,7 @@ const RegisterPage = () => {
 
   const apiMessage = error.response?.data?.error || 'Registration failed. Please try again.';
 
-  // Display the error next to the email field if it's related to email
+ 
   if (apiMessage.toLowerCase().includes('email')) {
     setErrors(prev => ({ ...prev, email: apiMessage }));
   } else {
@@ -119,7 +127,7 @@ const RegisterPage = () => {
 
   const radioOptions = [
     { value: 'customer', text: '🛍️ Customer' },
-    { value: 'admin', text: '🧑‍💼 Admin' },
+    
     { value: 'vendor', text: '🏪 Vendor' },
   ];
 
@@ -155,6 +163,17 @@ const RegisterPage = () => {
           error={errors.email}
           index={1}
         />
+         <InputField
+          label="Phone Number"
+          icon="📱"
+          type="tel"
+          name="phone"
+          value={formData.phone}
+          onChange={handleInputChange}
+          placeholder="Enter your phone number"
+          error={errors.phone}
+          index={3}
+        />
         <InputField
           label="Password"
           icon="🔒"
@@ -166,6 +185,7 @@ const RegisterPage = () => {
           error={errors.password}
           index={2}
         />
+        
         <RadioGroupField
           label="Account Type"
           icon="👥"

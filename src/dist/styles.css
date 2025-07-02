@@ -257,6 +257,45 @@ body {
 .navbar__links a:hover {
   color: #ff4d30;
 }
+/*logut*/
+/* Desktop Logout Button */
+.navbar__buttons__logout {
+  background-color: transparent;
+  border: none;
+  color: #ff4d30;
+  font-size: 1.2rem;
+  cursor: pointer;
+  margin-left: 10px;
+  transition: transform 0.2s, color 0.2s;
+}
+
+.navbar__buttons__logout:hover {
+  color: #e64428;
+  transform: scale(1.1);
+}
+
+/* Mobile Logout Button */
+.mobile-logout-button {
+  background-color: transparent;
+  border: none;
+  color: #ff4d30;
+  font-size: 1rem;
+  padding: 10px;
+  width: 100%;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.mobile-logout-button:hover {
+  background-color: rgba(255, 77, 48, 0.1);
+  color: #e64428;
+}
+
+/**/
 @media (max-width: 1000px) {
   .navbar__links {
     display: none;

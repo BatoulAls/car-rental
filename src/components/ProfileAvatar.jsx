@@ -1,6 +1,5 @@
-
 import React from 'react';
-import '../styles/UserProfile.css'; 
+import '../styles/UserProfile.css';
 
 const ProfileAvatar = ({ profilePhoto, selectedFile, defaultAvatar }) => {
     let imageUrl = defaultAvatar;
@@ -8,7 +7,12 @@ const ProfileAvatar = ({ profilePhoto, selectedFile, defaultAvatar }) => {
     if (selectedFile) {
         imageUrl = URL.createObjectURL(selectedFile);
     } else if (profilePhoto) {
-        imageUrl = profilePhoto;
+        const baseUrl = profilePhoto.startsWith('http') 
+            ? profilePhoto 
+            : `http://localhost:5050${profilePhoto}`;
+
+      
+        imageUrl = `${baseUrl}?t=${new Date().getTime()}`;
     }
 
     return (
