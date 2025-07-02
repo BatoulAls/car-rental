@@ -1,12 +1,11 @@
-// src/components/ProfileDetails.jsx
 import React, { useState } from 'react';
 import axios from 'axios';
-import ProfileAvatar from './ProfileAvatar'; 
-import '../styles/UserProfile.css'; 
+import ProfileAvatar from './ProfileAvatar';
+import '../styles/UserProfile.css';
 
 const ProfileDetails = ({ profileData, setProfileData, loading, error, token, defaultAvatar }) => {
     const [isEditing, setIsEditing] = useState(false);
-    const [selectedFile, setSelectedFile] = useState(null); 
+    const [selectedFile, setSelectedFile] = useState(null);
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -29,15 +28,26 @@ const ProfileDetails = ({ profileData, setProfileData, loading, error, token, de
 
             const response = await axios.put('http://localhost:5050/api/user/profile', formData, {
                 headers: {
-                    'Content-Type': 'multipart/form-data',
+                    'Content-Type': 'multipart/form-oc-data', 
                     Authorization: `Bearer ${token}`,
                 },
             });
 
-            setProfileData(response.data);
-            setIsEditing(false);
-            setSelectedFile(null);
-            alert('Profile updated successfully!');
+           
+            const updatedProfileData = {
+                ...profileData,
+                ...response.data.user, 
+            };
+
+
+            if (updatedProfileData.photo && !updatedProfileData.photo.startsWith('http')) {
+                updatedProfileData.photo = `http://localhost:5050${updatedProfileData.photo}`;
+            }
+
+            setProfileData(updatedProfileData);
+            setSelectedFile(null); 
+            setIsEditing(false); 
+
         } catch (err) {
             console.error('Failed to update profile:', err);
             alert(err.response?.data?.message || 'Failed to update profile. Please try again.');
@@ -65,10 +75,10 @@ const ProfileDetails = ({ profileData, setProfileData, loading, error, token, de
         <div className="tab-content">
             <div className="profile-details-header">
                 <div className="avatar-container">
-                    <ProfileAvatar 
-                        profilePhoto={profileData.photo} 
-                        selectedFile={selectedFile} 
-                        defaultAvatar={defaultAvatar} 
+                    <ProfileAvatar
+                        profilePhoto={profileData.photo}
+                        selectedFile={selectedFile}
+                        defaultAvatar={defaultAvatar}
                     />
                     {isEditing && (
                         <>
@@ -83,11 +93,6 @@ const ProfileDetails = ({ profileData, setProfileData, loading, error, token, de
                                 Change Photo
                             </label>
                         </>
-                    )}
-                    {!isEditing && (
-                        <button className="avatar-button" style={{ cursor: 'default' }}>
-                            View Photo
-                        </button>
                     )}
                 </div>
                 <div className="profile-info">

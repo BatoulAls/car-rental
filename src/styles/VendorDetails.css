@@ -251,8 +251,8 @@
     align-items: center;
     gap: 6px;
     padding: 8px 16px;
-    background-color: #ffebee; /* Changed to a red/error-like background */
-    color: #d32f2f; /* Changed to a red/error-like text color */
+    background-color: #ffebee; 
+    color: #d32f2f; 
     border-radius: var(--border-radius-small);
     font-size: 0.9rem;
     font-weight: 600;
@@ -330,7 +330,7 @@
     align-items: center;
     gap: 12px;
     margin-bottom: 15px;
-    font-size: 0.95rem;
+    font-size: 1.2rem;
     color: var(--text-color);
 }
 
