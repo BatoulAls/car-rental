@@ -64,3 +64,14 @@ User.beforeCreate(user => {
 });
 
 module.exports = User;
+
+const Car = require('./Car');
+const Favorite = require('./Favorite');
+User.belongsToMany(Car, {
+    through: Favorite,
+    foreignKey: 'user_id',
+    as: 'FavoriteCars'
+});
+
+// const Review = require('./Review');
+// User.hasMany(Review, { foreignKey: 'customer_id', as: 'Reviews' });

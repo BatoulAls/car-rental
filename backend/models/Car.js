@@ -139,3 +139,15 @@ const CarImage    = require('./CarImage');
 
 Car.belongsTo(Vendor,   { foreignKey: 'vendor_id' });
 Car.hasMany(CarImage,   { foreignKey: 'car_id' });
+
+const User = require('./User');
+const Favorite = require('./Favorite');
+Car.belongsToMany(User, {
+    through: Favorite,
+    foreignKey: 'car_id',
+    as: 'FavoritedByUsers'
+});
+
+const Review = require('./Review');
+Car.hasMany(Review, { foreignKey: 'car_id', as: 'Reviews' });
+

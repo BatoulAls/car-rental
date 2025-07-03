@@ -19,11 +19,11 @@ exports.getHomeData = async function(req, res){
             Car.findAll({ where: { price_per_day: { [Op.gte]: 500 } }, limit: 4 ,     include: [
                     { model: Vendor, attributes: ['id', 'name', 'phone'] },
                 ]}),
-            Car.findAll({ order: [['created_at', 'DESC']], limit: 4,     include: [
+            Car.findAll({ order: [['createdAt', 'DESC']], limit: 4,     include: [
                     { model: Vendor, attributes: ['id', 'name', 'phone'] },
                 ] }),
             Car.findAll({ attributes: ['brand'], group: ['brand'] }),
-            Review.findAll({ order: [['created_at', 'DESC']], limit: 2 ,  include: [
+            Review.findAll({ order: [['createdAt', 'DESC']], limit: 2 ,  include: [
                     { model: User, as: 'user', attributes: ['id', 'username', 'email'] }
                 ]})
 

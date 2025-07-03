@@ -34,6 +34,11 @@ app.use('/api/user', userRoutes);
 const bookingRoutes = require('./routes/booking');
 app.use('/api/bookings', bookingRoutes);
 
+app.use('/api/favorites', require('./routes/favorite'));
+app.use('/api/reviews', require('./routes/review'));
+
+
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
 
 module.exports = app;
