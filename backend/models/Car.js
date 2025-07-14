@@ -110,7 +110,7 @@ const Car = sequelize.define('Car', {
 
 }, {
     tableName: 'cars',
-    timestamps: false // manually managing timestamps
+    timestamps: true // manually managing timestamps
     ,paranoid: true
 });
 
@@ -150,4 +150,11 @@ Car.belongsToMany(User, {
 
 const Review = require('./Review');
 Car.hasMany(Review, { foreignKey: 'car_id', as: 'Reviews' });
+
+const Region = require('./Region');
+
+Car.belongsTo(Region, {
+    foreignKey: 'region_id',
+    as: 'region'
+});
 

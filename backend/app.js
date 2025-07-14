@@ -40,5 +40,7 @@ app.use('/api/reviews', require('./routes/review'));
 
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
+//vendor
+app.use('/api/vendor', require('./routes/vendorCars'));
 
 module.exports = app;

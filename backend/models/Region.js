@@ -24,8 +24,12 @@ const Region = sequelize.define('Region', {
     timestamps: false
 });
 
-// Region.belongsTo(require('./City'), { foreignKey: 'city_id' });
-// City.hasMany(Region, { foreignKey: 'city_id' });
-
-
 module.exports = Region;
+
+
+const Car = require('./Car');
+
+Region.hasMany(Car, {
+    foreignKey: 'region_id',
+    as: 'cars'
+});
