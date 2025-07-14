@@ -21,6 +21,9 @@ import MainLayout from "./layouts/MainLayout";
 import AuthLayout from "./layouts/AuthLayout";
 import UserProfile from "./Pages/UserProfile";
 import { AuthProvider } from './context/AuthContext'; 
+import BookingPreviewPage from './Pages/BookingPreviewPage';
+import BookingDetails from "./Pages/BookingDetails";
+
 
 const queryClient = new QueryClient();
 
@@ -46,8 +49,12 @@ function App() {
           <Route path="/cars" element={<AllCars />} />
           <Route path="/vendors" element={<Vendors />} />
           <Route path="/cars/vendors/:vendorId" element={<AllCars />} />
-           <Route path="/reset-password/:token" element={<ResetPasswordModal  />} />
-            <Route path="/UserProfile" element={<UserProfile  />} />
+          <Route path="/reset-password/:token" element={<ResetPasswordModal  />} />
+          <Route path="/UserProfile" element={<UserProfile  />} />
+          <Route path="/preview-booking" element={<BookingPreviewPage />} />
+          <Route path="/booking-details/:bookingId" element={<BookingDetails />}/>
+
+          
 
         </Route>
 

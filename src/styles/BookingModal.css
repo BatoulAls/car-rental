@@ -1,0 +1,80 @@
+
+.booking-modal-title {
+  font-size: 1.5rem; /* Equivalent to text-2xl */
+  font-weight: 600; /* Equivalent to font-semibold */
+  margin-bottom: 1rem; /* Equivalent to mb-4 */
+  color: #333; /* Equivalent to text-gray-800 */
+  text-align: center; /* Center the title */
+}
+.title-Booking {
+  font-size:20px;
+  font-weight: bold;
+  color: #2c3e50;
+  margin-bottom: 10px;
+  background: linear-gradient(135deg, #2c3e50 0%, #ff4d30 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Margin control for InputFields within the BookingModal */
+.booking-input-margin {
+  margin-bottom: 0.75rem; /* Equivalent to mb-3 */
+}
+
+.booking-input-margin-bottom {
+  margin-bottom: 1rem; /* Equivalent to mb-4 */
+}
+
+/* Styling for error messages */
+.booking-error-message {
+  color: #dc3545; /* A common red color for errors */
+  font-size: 0.875rem; /* Equivalent to text-sm */
+  margin-bottom: 1rem; /* Equivalent to mb-4 */
+  text-align: left; /* Keep error messages left-aligned */
+}
+
+/* Container for action buttons */
+.booking-actions {
+  display: flex;
+  justify-content: flex-end; /* Equivalent to justify-end */
+  gap: 1rem; /* Equivalent to gap-4 */
+  margin-top: 1.5rem; /* Add some space above buttons */
+}
+
+/* Base styles for all buttons */
+.booking-button {
+  padding: 0.5rem 1rem; /* Adjust padding here to control button size. (e.g., 8px top/bottom, 16px left/right) */
+  font-size: 0.9rem; /* Adjust font size here. (e.g., 14px-16px) */
+  font-weight: 600;
+  border: none;
+  border-radius: 0.25rem; /* Small border-radius */
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out, transform 0.1s ease-in-out;
+  flex-shrink: 0; /* Prevent buttons from shrinking too much */
+}
+
+.booking-button:hover {
+  transform: translateY(-1px); /* Slight lift on hover */
+}
+
+/* Specific styles for the Cancel button */
+.booking-button-cancel {
+  background-color: #e0e0e0; /* Light gray */
+  color: #333; /* Dark text */
+}
+
+.booking-button-cancel:hover {
+  background-color: #cccccc; /* Slightly darker gray on hover */
+}
+
+/* Specific styles for the Confirm button */
+.booking-button-confirm {
+  background-color: #007bff; /* A common blue color */
+  color: #fff; /* White text */
+}
+
+.booking-button-confirm:hover {
+  background-color: #0056b3; /* Darker blue on hover */
+}
+

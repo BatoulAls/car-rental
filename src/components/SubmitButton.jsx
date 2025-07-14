@@ -1,10 +1,17 @@
 import React from 'react';
-import '../styles/Register.css';
+import '../styles/Register.css'; 
 
-const SubmitButton = ({ text, icon, onClick, disabled = false }) => {
+const SubmitButton = ({ text, icon, onClick, disabled = false, className }) => {
+ 
+  const defaultClassName = "submit-button-reg";
+
+  
+  const buttonClassName = className || defaultClassName;
+
   return (
     <button
-      className="submit-button-reg"
+    type="button"
+      className={buttonClassName}
       onClick={onClick}
       disabled={disabled}
       style={{

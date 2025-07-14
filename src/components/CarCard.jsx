@@ -2,44 +2,62 @@ import React, { useState } from "react";
 import "../styles/CarCard.css";
 import WhatsAppButton from "./WhatsAppButton";
 import DEFAULT_CAR_IMAGE_PATH from '../images/cars-big/default-car.png'
+import BookingModal from "./BookingModal";
 
 function CarCard({
   car,
-  carId, 
+  carId,
   cardIndex,
   isHovered,
   isLoading,
   onHoverEnter,
   onHoverLeave,
-  onClick, 
+  onClick,
   onImageLoad,
-  onNavigateToDetails, 
+  onNavigateToDetails,
   average_rating = 0,
 }) {
   const [isBookingFocused, setIsBookingFocused] = useState(false);
   const [isWhatsAppFocused, setIsWhatsAppFocused] = useState(false);
-
  
+  const [showBookingModal, setShowBookingModal] = useState(false);
+
   const handleCardClick = () => {
-    
     if (onNavigateToDetails && car?.id) {
-      onNavigateToDetails(car.id); 
+      onNavigateToDetails(car.id);
+    }
+  };
+
+  const handleNavigateClick = (e) => {
+    e.stopPropagation();
+    if (onNavigateToDetails && car?.id) {
+      onNavigateToDetails(car.id);
     }
   };
 
  
-  const handleNavigateClick = (e) => {
+  const handleBookNowClick = (e) => {
     e.stopPropagation(); 
-    if (onNavigateToDetails && car?.id) {
-      onNavigateToDetails(car.id); 
+    setShowBookingModal(true);
+  };
+
+  
+  const handleConfirmBooking = ({ startDate, endDate, available, bookedRange }) => {
+   if (!available) {
+      alert(`❌ The car is not available. Booked during the following periods: ${bookedRange}`);
     }
+    setShowBookingModal(false);
+  };
+
+ 
+  const handleCloseBookingModal = () => {
+    setShowBookingModal(false);
   };
 
   return (
     <div
       className={`car-card ${isHovered ? "hovered" : ""}`}
       style={{ animationDelay: `${cardIndex * 100}ms` }}
-      
       onClick={handleCardClick}
       onMouseEnter={onHoverEnter}
       onMouseLeave={onHoverLeave}
@@ -69,9 +87,9 @@ function CarCard({
           className={`nav-arrow ${isHovered ? "show" : ""}`}
           onClick={handleNavigateClick}
           title="View Details"
-          role="button" 
-          tabIndex={0} 
-          onKeyDown={(e) => { 
+          role="button"
+          tabIndex={0}
+          onKeyDown={(e) => {
             if (e.key === 'Enter' || e.key === ' ') {
               handleNavigateClick(e);
             }
@@ -146,11 +164,7 @@ function CarCard({
           </div>
         </div>
 
-        
-
-       <WhatsAppButton className={`contact-btn whatsapp-btn ${isWhatsAppFocused ? "focused" : ""}`}/>
-        
-        
+        <WhatsAppButton className={`contact-btn whatsapp-btn ${isWhatsAppFocused ? "focused" : ""}`} />
 
         <div className="card-footer">
           <div className="availability">
@@ -158,9 +172,9 @@ function CarCard({
             <span>{car.available ? "Available Now" : "Unavailable"}</span>
           </div>
           <a
-            href="#booking-section" 
+           
             className={`book-btn ${isBookingFocused ? "focused" : ""}`}
-            onClick={(e) => e.stopPropagation()} 
+            onClick={handleBookNowClick} 
             onMouseEnter={() => setIsBookingFocused(true)}
             onMouseLeave={() => setIsBookingFocused(false)}
             onFocus={() => setIsBookingFocused(true)}
@@ -171,6 +185,12 @@ function CarCard({
           </a>
         </div>
       </div>
+      <BookingModal
+        isVisible={showBookingModal}
+        onClose={handleCloseBookingModal}
+        onConfirmBooking={handleConfirmBooking}
+        carId={carId}
+      />
     </div>
   );
 }
