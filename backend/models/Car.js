@@ -85,7 +85,10 @@ const Car = sequelize.define('Car', {
         type: DataTypes.STRING,
         allowNull: true
     },
-
+    is_active: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false //  Not active by default
+    },
     average_rating: {
         type: DataTypes.DECIMAL(3, 1),
         defaultValue: 0

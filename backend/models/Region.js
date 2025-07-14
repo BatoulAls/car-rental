@@ -33,3 +33,7 @@ Region.hasMany(Car, {
     foreignKey: 'region_id',
     as: 'cars'
 });
+
+const City = require('./City');
+
+Region.belongsTo(City, { foreignKey: 'city_id', as: 'city' });

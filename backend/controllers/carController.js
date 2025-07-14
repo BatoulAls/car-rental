@@ -31,7 +31,9 @@ exports.getAllCars = async (req, res) => {
             dropoff_date,
         } = req.query;
 
-        const whereClause = {};
+        const whereClause = {
+            is_active: true
+        };
 
         // If no pickup/dropoff, default to today
         const startDate = pickup_date || new Date().toISOString().split('T')[0];
@@ -154,7 +156,7 @@ exports.getCarById = async (req, res) => {
         const carId = req.params.id;
 
         const car = await Car.findOne({
-            where: { id: carId },
+            where: { id: carId , is_active: true},
             include: [
                 { model: Vendor, attributes: ['id', 'name', 'phone', 'photo'] },
                 { model: CarCategory, attributes: ['id', 'name'] },
@@ -265,7 +267,8 @@ exports.getSimilarCars = async (req, res) => {
                 [Op.or]: [
                     { brand: currentCar.brand },
                     { category_id: currentCar.category_id }
-                ]
+                ],
+                is_active: true
             },
             limit: 4,
             include: [
@@ -312,6 +315,7 @@ exports.getCarsByVendor = async (req, res) => {
         const vendorCars = await Car.findAll({
             where: {
                 vendor_id: vendorId, // exclude current car
+                is_active: true
             },
             limit: 4,
             include: [

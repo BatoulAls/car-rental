@@ -61,3 +61,86 @@ exports.getMyCars = async (req, res) => {
         res.status(500).json({ error: 'Server error' });
     }
 };
+
+exports.createCar = async (req, res) => {
+    try {
+        const vendorId = req.user.id;
+
+        const {
+            name, brand, model, year, price_per_day, seats,
+            no_of_doors, bags, transmission, engine_capacity,
+            fuel_type, regional_spec, description, color,
+            location, mileage_limit, additional_mileage_charge,
+            insurance_included, deposit_amount, region_id,
+            category_id, feature_ids, tag_ids
+        } = req.body;
+
+        const images = req.files; // multer attaches here
+
+        // ✅ Validation
+        if (!brand || !model || !year || !price_per_day || !region_id || !category_id) {
+            return res.status(400).json({ error: 'Required fields are missing' });
+        }
+
+        // ✅ Create tthe car
+        const car = await Car.create({
+            vendor_id: vendorId,
+            name,
+            brand,
+            model,
+            year,
+            price_per_day,
+            seats,
+            no_of_doors,
+            bags,
+            transmission,
+            engine_capacity,
+            fuel_type,
+            regional_spec,
+            description,
+            color,
+            location,
+            mileage_limit,
+            additional_mileage_charge,
+            insurance_included,
+            deposit_amount,
+            region_id,
+            category_id,
+
+        });
+
+        // ✅ Attach features
+        if (Array.isArray(feature_ids) && feature_ids.length > 0) {
+            await car.setFeatures(feature_ids);
+        }
+
+        // ✅ Attach tags
+        if (Array.isArray(tag_ids) && tag_ids.length > 0) {
+            await car.setTags(tag_ids);
+        }
+
+        if (images && images.length > 0) {
+            const mainImageUrl = `/uploads/${images[0].filename}`;
+
+            const imagePromises = images.map((img, index) =>
+                CarImage.create({
+                    car_id: car.id,
+                    image_url: `/uploads/${img.filename}`,
+                    is_main: index === 0
+                })
+            );
+
+            await Promise.all(imagePromises);
+
+            //  Update main photo in Car table
+            car.photo = mainImageUrl;
+            await car.save();
+        }
+
+        res.status(201).json({ message: 'Car created successfully', car });
+
+    } catch (err) {
+        console.error('❌ createCar error:', err);
+        res.status(500).json({ error: 'Server error' });
+    }
+};
