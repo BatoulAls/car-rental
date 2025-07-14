@@ -29,25 +29,25 @@ function SimilarCarCard({
     };
 
     const handleBookingClick = (e) => {
-        e.stopPropagation(); // Prevent the card's onClick from firing
-        setShowBookingModal(true); // Open the booking modal
+        e.stopPropagation();
+        setShowBookingModal(true); 
     };
 
     const carName = car?.name || `${car?.company || car?.brand || 'Unknown'} ${car?.model || 'Car'}`;
     const carImage = car?.img || car?.photo || DEFAULT_CAR_IMAGE_PATH;
     const pricePerDay = car?.price_per_day || car?.price || 0;
     const carBrand = car?.brand || car?.company || 'Unknown Brand';
-    const carSeats = car?.seats || car?.capacity || '5 People'; // Derived variable for consistency
+    const carSeats = car?.seats || car?.capacity || '5 People';
     const availabilityStatus = car?.availability_status || 'Available Now';
     const whatsappNumber = car?.whatsapp || '+1234567890';
 
     const handleConfirmBooking = ({ startDate, endDate, available, bookedRange }) => {
-        // In a real application, you'd typically make an API call to book the car here.
+        
         if (!available) {
             console.log(`Car ${car.id} not available for booking from ${startDate} to ${endDate}. Booked periods: ${bookedRange}`);
             alert(`❌ The car is not available. Booked during the following periods: ${bookedRange}`);
         }
-        setShowBookingModal(false); // Close the modal after confirmation attempt
+        setShowBookingModal(false); 
     };
 
     const handleCloseBookingModal = () => {
@@ -60,7 +60,7 @@ function SimilarCarCard({
             style={{ animationDelay: `${(cardIndex || 0) * 100}ms` }}
             onMouseEnter={() => setIsComponentHovered(true)}
             onMouseLeave={() => setIsComponentHovered(false)}
-            onClick={handleCardClick} // Card click navigates to details
+            onClick={handleCardClick}
         >
             <div className="car-image-container">
                 {isLoading && (
@@ -84,7 +84,7 @@ function SimilarCarCard({
                             <span className="overlay-text">{car?.bags}</span>
                         </div>
                         <div className="overlay-item">
-                            <span className="overlay-icon">🚪 Doors:</span> {/* Changed emoji for doors */}
+                            <span className="overlay-icon">🚪 Doors:</span> 
                             <span className="overlay-text">{car?.no_of_doors}</span>
                         </div>
                     </div>
@@ -141,7 +141,7 @@ function SimilarCarCard({
                     </div>
                     <div className="spec">
                         <span className="label">Capacity</span>
-                        <span className="value">{carSeats}</span> {/* Using the derived carSeats variable */}
+                        <span className="value">{carSeats}</span>
                     </div>
                 </div>
 
@@ -181,7 +181,7 @@ function SimilarCarCard({
                     </button>
                 </div>
             </div>
-            {/* BookingModal component */}
+          
             <BookingModal
                 isVisible={showBookingModal}
                 onClose={handleCloseBookingModal}

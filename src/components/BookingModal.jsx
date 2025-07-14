@@ -178,13 +178,13 @@ const BookingModal = ({ isVisible, onClose, onConfirmBooking, carId }) => {
         <SubmitButton
           text="Cancel"
           onClick={handleCancel}
-          className="booking-button booking-button-cancel"
+         
         />
         <SubmitButton
           text={loading ? 'Processing...' : 'Check Availability'}
           onClick={handleConfirm}
           disabled={loading}
-          className="booking-button booking-button-confirm"
+         
         />
       </div>
     </PopUpModal>
