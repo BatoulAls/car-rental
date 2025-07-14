@@ -342,7 +342,7 @@ exports.getBookingDetails = async (req, res) => {
         if (!booking) return res.status(404).json({ error: 'Booking not found' });
 
         // 🚫  Plain customers may only view their own bookings
-        if (booking.user_id !== req.user.id && req.user.role === 'customer') {
+        if (booking.customer_id !== req.user.id && req.user.role === 'customer') {
             return res.status(403).json({ error: 'Forbidden' });
         }
 

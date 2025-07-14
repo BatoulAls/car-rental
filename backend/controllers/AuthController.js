@@ -10,7 +10,8 @@ const CLIENT_URL = process.env.CLIENT_URL || 'http://localhost:3000';
 
 exports.register = async (req, res) => {
     try {
-        const { username, email, password, role } = req.body;
+        // console.log(req.body);
+        const { username, email, password, role ,phone} = req.body;
         const existingUser = await User.findOne({ where: { email } });
         if (existingUser) return res.status(400).json({ error: 'Email already registered' });
 
@@ -20,6 +21,7 @@ exports.register = async (req, res) => {
             username,
             email,
             password: hashedPassword,
+            phone:phone,
             role,
             is_active: true,
 
