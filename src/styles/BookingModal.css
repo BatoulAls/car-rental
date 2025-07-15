@@ -77,4 +77,46 @@
 .booking-button-confirm:hover {
   background-color: #0056b3; /* Darker blue on hover */
 }
+.availability-message {
+  margin-top: 10px;
+  padding: 12px 20px;
+  background-color: #ffe6e6;
+  color: #d8000c;
+  border: 1px solid #d8000c;
+  border-radius: 5px;
+  font-weight: 600;
+  font-size: 14px;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+/*for alert messages */
+.booking-message {
+  padding: 12px 20px;
+  margin: 15px 0;
+  border-radius: 5px;
+  font-weight: 600;
+  font-size: 14px;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.booking-message--error {
+  background-color: #ffe6e6;
+  color: #d8000c;
+  border: 1px solid #d8000c;
+}
+
+.booking-message--success {
+  background-color: #e6ffea;
+  color: #4f8a10;
+  border: 1px solid #4f8a10;
+}
+
+.booking-message--warning {
+  background-color: #fff4e5;
+  color: #9f6000;
+  border: 1px solid #9f6000;
+}
+
 

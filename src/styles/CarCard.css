@@ -413,6 +413,16 @@ section hr {
   background: rgba(16, 185, 129, 0.3);
   animation: pulse 1.5s infinite;
 }
+.availability-message {
+  margin-top: 10px;
+  padding: 10px 15px;
+  background-color: #ffe6e6;
+  border: 1px solid #cc0000;
+  color: #cc0000;
+  font-weight: 500;
+  border-radius: 5px;
+  font-size: 14px;
+}
 
 @keyframes pulse {
   0% {

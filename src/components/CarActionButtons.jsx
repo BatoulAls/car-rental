@@ -3,24 +3,24 @@ import BookingModal from './BookingModal';
 
 const CarActionButtons = ({ carData, handleWhatsApp }) => {
   const [showBookingModal, setShowBookingModal] = useState(false); 
+  const [availabilityMessage, setAvailabilityMessage] = useState(''); 
 
-  
   const handleBookNowClick = (e) => {
     e.stopPropagation(); 
-    setShowBookingModal(true);
+    setShowBookingModal(true); 
   };
 
-  
   const handleCloseBookingModal = () => {
     setShowBookingModal(false);
+    setAvailabilityMessage(''); 
   };
 
- 
-  const handleConfirmBooking = ({ startDate, endDate, available, bookedRange }) => {
-    
+  const handleConfirmBooking = ({ startDate, endDate, available }) => {
     if (!available) {
-      console.log(`Car ${carData.id} not available. Booked periods: ${bookedRange}`);
-      alert(`❌ ${carData.name} is not available. Booked during: ${bookedRange}`);
+      const message = `❌ this car is not available right now.}`;
+      setAvailabilityMessage(message);
+    } else {
+      setAvailabilityMessage('');
     }
     setShowBookingModal(false);
   };
@@ -43,7 +43,12 @@ const CarActionButtons = ({ carData, handleWhatsApp }) => {
         <span>{(carData.available ?? false) ? 'Book Now' : 'Not Available'}</span>
       </button>
 
-     
+      {availabilityMessage && (
+  <div className="availability-message">
+    <p>{availabilityMessage}</p>
+  </div>
+)}
+
       <BookingModal
         isVisible={showBookingModal}
         onClose={handleCloseBookingModal}

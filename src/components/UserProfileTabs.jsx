@@ -7,11 +7,17 @@ import ChangePasswordTab from './ChangePasswordTab';
 import { useAuth } from '../context/AuthContext';
 import '../styles/UserProfile.css';
 
+import { useLocation } from 'react-router-dom';
+
 const UserProfileTabs = ({ profileData, setProfileData, loading, error, defaultAvatar }) => {
-    const [activeTab, setActiveTab] = useState('profile');
+    const location = useLocation();
+
+    const queryParams = new URLSearchParams(location.search);
+    const initialTab = queryParams.get('tab') || 'profile';
+
+    const [activeTab, setActiveTab] = useState(initialTab);
     const { token } = useAuth();
 
-    
     const [rentalHistoryData, setRentalHistoryData] = useState({
         total: 0,
         page: 1,
@@ -23,13 +29,10 @@ const UserProfileTabs = ({ profileData, setProfileData, loading, error, defaultA
     const [rentalHistoryError, setRentalHistoryError] = useState(null);
     const [currentPage, setCurrentPage] = useState(1);
 
-  
-    const [statusFilter, setStatusFilter] = useState('all'); 
+    const [statusFilter, setStatusFilter] = useState('all');
 
-    
     const RENTAL_HISTORY_API_ENDPOINT = 'http://localhost:5050/api/bookings/my-bookings/';
 
-   
     const fetchRentalHistory = async () => {
         if (!token) {
             setRentalHistoryLoading(false);
@@ -68,25 +71,21 @@ const UserProfileTabs = ({ profileData, setProfileData, loading, error, defaultA
     };
 
     useEffect(() => {
-        if (activeTab === 'history') { 
+        if (activeTab === 'history') {
             fetchRentalHistory();
         }
     }, [currentPage, statusFilter, activeTab, RENTAL_HISTORY_API_ENDPOINT, token, rentalHistoryData.limit]);
-
 
     const handleStatusFilterChange = (status) => {
         setStatusFilter(status);
         setCurrentPage(1);
     };
 
-  
     const handleBookingActionSuccess = () => {
-      
         fetchRentalHistory();
     };
 
-   
-    const availableStatuses = ['all', 'completed', 'pending', 'cancelled']; 
+    const availableStatuses = ['all', 'completed', 'pending', 'cancelled'];
 
     return (
         <div className="profile-card">
@@ -146,7 +145,7 @@ const UserProfileTabs = ({ profileData, setProfileData, loading, error, defaultA
                         setStatusFilter={handleStatusFilterChange}
                         availableStatuses={availableStatuses}
                         token={token}
-                        onBookingActionSuccess={handleBookingActionSuccess} 
+                        onBookingActionSuccess={handleBookingActionSuccess}
                     />
                 )}
                 {activeTab === 'settings' && <AccountSettings />}

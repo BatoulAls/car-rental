@@ -8,7 +8,7 @@ import { BookingSummaryCard } from '../components/BookingSummaryCard';
 import { PaymentMethodSelector } from '../components/PaymentMethodSelector';
 import { Message } from '../components/Message';
 import { AdditionalInfoCard } from '../components/AdditionalInfoCard';
-
+import { useNavigate } from 'react-router-dom';
 const BookingPreviewPage = () => {
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState('');
   const [isBooking, setIsBooking] = useState(false);
@@ -18,6 +18,7 @@ const BookingPreviewPage = () => {
   const location = useLocation();
   const [carRentalData, setCarRentalData] = useState(null);
   const { token } = useAuth();
+  const navigate= useNavigate()
 
   useEffect(() => {
     if (location.state && location.state.previewData) {
@@ -88,7 +89,9 @@ const BookingPreviewPage = () => {
 
       setBookingStatus('success');
       setBookingMessage(response.data.message || 'Booking successful! Your booking has been confirmed.');
+     
       setIsBookedSuccessfully(true); 
+       navigate('/UserProfile?tab=history')
       
     } catch (error) {
       setBookingStatus('error');
