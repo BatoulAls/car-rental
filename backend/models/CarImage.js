@@ -21,7 +21,8 @@ const CarImage = sequelize.define('CarImage', {
     }
 }, {
     tableName: 'car_images',
-    timestamps: false
+    timestamps: true,
+    paranoid: true,
 });
 
 module.exports = CarImage;

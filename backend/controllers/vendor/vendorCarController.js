@@ -144,3 +144,232 @@ exports.createCar = async (req, res) => {
         res.status(500).json({ error: 'Server error' });
     }
 };
+
+exports.getMyCarDetails = async (req, res) => {
+    try {
+        const vendorId = req.user.id;
+        const carId = req.params.carId;
+
+        const car = await Car.findOne({
+            where: {
+                id: carId,
+                vendor_id: vendorId
+            },
+            include: [
+                { model: Region, as: 'region', attributes: ['id', 'name_en', 'name_ar'] },
+                { model: CarCategory, attributes: ['id', 'name'] },
+                {
+                    model: CarImage,
+                    attributes: ['id', 'image_url', 'is_main']
+                },
+                {
+                    model: Feature,
+                    through: { attributes: [] },
+                    attributes: ['id', 'name', 'type_']
+                },
+                {
+                    model: Tag,
+                    as: 'Tags',
+                    through: { attributes: [] },
+                    attributes: ['id', 'name']
+                }
+            ]
+        });
+
+        if (!car) return res.status(404).json({ error: 'Car not found or unauthorized' });
+
+        res.json({ car });
+
+    } catch (err) {
+        console.error('❌ getMyCarDetails error:', err);
+        res.status(500).json({ error: 'Server error' });
+    }
+};
+
+exports.updateMyCar = async (req, res) => {
+    try {
+        const carId = req.params.carId;
+        const vendorId = req.user.id;
+        const files = req.files;
+
+        const {
+            name,
+            brand,
+            model,
+            year,
+            price_per_day,
+            seats,
+            no_of_doors,
+            bags,
+            transmission,
+            engine_capacity,
+            regional_spec,
+            fuel_type,
+            color,
+            location,
+            mileage_limit,
+            additional_mileage_charge,
+            deposit_amount,
+            category_id,
+            region_id,
+            description,
+            availability_status,
+            insurance_included,
+            is_active,
+            tagIds = [],
+            featureIds = []
+        } = req.body;
+
+        const car = await Car.findOne({ where: { id: carId, vendor_id: vendorId } });
+        if (!car) return res.status(404).json({ error: 'Car not found or unauthorized' });
+
+        // ✅ Assign updated values
+        Object.assign(car, {
+            name,
+            brand,
+            model,
+            year,
+            price_per_day,
+            seats,
+            no_of_doors,
+            bags,
+            transmission,
+            engine_capacity,
+            regional_spec,
+            fuel_type,
+            color,
+            location,
+            mileage_limit,
+            additional_mileage_charge,
+            deposit_amount,
+            category_id,
+            region_id,
+            description,
+            availability_status,
+            insurance_included,
+            is_active
+        });
+
+        await car.save();
+
+        // ✅ Tags and Features
+        // 🔄 Clear and set new tags and features
+        if (Array.isArray(tagIds)) {
+            await car.setTags([]);          // clear old
+            await car.setTags(tagIds);      // add new
+        }
+
+        if (Array.isArray(featureIds)) {
+            await car.setFeatures([]);      // clear old
+            await car.setFeatures(featureIds); // add new
+        }
+
+
+        // ✅ Replace Images if any
+        if (files && files.length > 0) {
+            const oldImages = await CarImage.findAll({ where: { car_id: car.id } });
+            for (const img of oldImages) {
+                await img.destroy();
+            }
+
+            const uploaded = await Promise.all(
+                files.map((file, index) =>
+                    CarImage.create({
+                        car_id: car.id,
+                        image_url: `/uploads/${file.filename}`,
+                        is_main: index === 0
+                    })
+                )
+            );
+
+            // Update main image path in `car.photo`
+            car.photo = uploaded[0]?.image_url || null;
+            await car.save();
+        }
+
+        res.json({ message: 'Car updated successfully', car });
+
+    } catch (err) {
+        console.error('❌ updateCar error:', err);
+        res.status(500).json({ error: 'Server error' });
+    }
+};
+
+exports.updateCarImages = async (req, res) => {
+    try {
+        const carId = req.params.carId;
+        const vendorId = req.user.id;
+        const files = req.files;
+
+        if (!files || files.length === 0) {
+            return res.status(400).json({ error: 'Please upload at least one image.' });
+        }
+
+        // ✅ Verify car belongs to vendor
+        const car = await Car.findOne({ where: { id: carId, vendor_id: vendorId } });
+        if (!car) return res.status(404).json({ error: 'Car not found or unauthorized' });
+
+        // ✅ Delete old images
+        await CarImage.destroy({ where: { car_id: carId } });
+
+        // ✅ Save new images
+        const uploadedImages = await Promise.all(
+            files.map((file, index) =>
+                CarImage.create({
+                    car_id: carId,
+                    image_url: `/uploads/${file.filename}`,
+                    is_main: index === 0 // first image = main image
+                })
+            )
+        );
+
+        // ✅ Update car photo (main image) field if exists
+        car.photo = uploadedImages[0]?.image_url || null;
+        await car.save();
+
+        res.json({
+            message: 'Car images updated successfully',
+            images: uploadedImages
+        });
+
+    } catch (err) {
+        console.error('❌ updateCarImages error:', err);
+        res.status(500).json({ error: 'Server error' });
+    }
+};
+
+exports.deleteCar = async (req, res) => {
+    try {
+        const carId = req.params.carId;
+        const vendorId = req.user.id;
+
+        const car = await Car.findOne({
+            where: {
+                id: carId,
+                vendor_id: vendorId
+            }
+        });
+
+        if (!car) {
+            return res.status(404).json({ error: 'Car not found or unauthorized' });
+        }
+
+        // 1. ✅ Delete all images related to this car
+        await CarImage.destroy({ where: { car_id: carId } });
+
+        // 2. ✅ Remove all car-feature mapping
+        await car.setFeatures([]); // removes entries from `car_feature_mapping`
+
+        // 3. ✅ Remove all car-tag mapping
+        await car.setTags([]); // removes entries from `car_tags`
+
+        // 4. ✅ Soft delete the car
+        await car.destroy();
+
+        res.json({ message: 'Car and its related data deleted successfully' });
+
+    } catch (error) {
+        console.error('❌ deleteCar error:', error);
+        res.status(500).json({ error: 'Server error' });
+    }
+};

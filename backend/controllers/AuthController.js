@@ -26,8 +26,10 @@ exports.register = async (req, res) => {
             is_active: true,
 
         });
+        const token = jwt.sign({ id: user.id, role: user.role }, JWT_SECRET, { expiresIn: '7d' });
 
-        res.status(201).json({ message: 'User registered successfully', user });
+
+        res.status(201).json({ message: 'User registered successfully', user ,token });
     } catch (err) {
         console.error('Register error:', err);
         res.status(500).json({ error: 'Server error' });

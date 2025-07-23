@@ -131,6 +131,8 @@ Car.belongsToMany(Tag, {
     foreignKey: 'car_id'
 });
 
+
+
 const CarCategory = require('./CarCategory');
 Car.belongsTo(CarCategory, { foreignKey: 'category_id' });
 
@@ -160,4 +162,3 @@ Car.belongsTo(Region, {
     foreignKey: 'region_id',
     as: 'region'
 });
-
