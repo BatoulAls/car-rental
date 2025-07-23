@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Jul 15, 2025 at 12:20 AM
+-- Generation Time: Jul 23, 2025 at 03:22 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -123,7 +123,7 @@ CREATE TABLE `cars` (
 
 INSERT INTO `cars` (`id`, `vendor_id`, `region_id`, `category_id`, `name`, `brand`, `model`, `year`, `price_per_day`, `seats`, `no_of_doors`, `bags`, `transmission`, `engine_capacity`, `regional_spec`, `fuel_type`, `description`, `color`, `location`, `availability_status`, `mileage_limit`, `additional_mileage_charge`, `insurance_included`, `deposit_amount`, `photo`, `is_active`, `average_rating`, `review_count`, `createdAt`, `updatedAt`, `deletedAt`) VALUES
                                                                                                                                                                                                                                                                                                                                                                                                                                                                            (1, 1, 1, 1, 'Luxury Sedan', 'BMW', '5 Series', 2022, 1010, 3, 4, 3, 'manual', '4 L', 'GCC', 'disel', '<p><strong>Rent and Drive this Mercedes Benz G63 AMG 2022</strong> in Dubai for AED 1600/day. Rental cost includes comprehensive insurance and a mileage limit of 250 km/day. Extra km charged at AED 5/km. A security deposit of AED 2000 is required.</p>\n\n<p>This car has 4 doors and seats up to 5 passengers.</p>\n\n<p><strong>Mercedes Benz G63 AMG 2022</strong><br>\nModel Year: 2022</p>\n\n<h4>Specifications:</h4>\n<ol>\n  <li>3D Surround Camera</li>\n  <li>Memory Front Seats</li>\n  <li>Parking Assist</li>\n  <li>Built-in GPS</li>\n  <li>Parking Sensors</li>\n  <li>Steering Assist</li>\n  <li>Push Button Ignition</li>\n  <li>SRS Airbags</li>\n  <li>Front & Rear Airbags</li>\n  <li>Front Air Bags</li>\n</ol>\n\n<h4>Why hire the Mercedes Benz G63 AMG?</h4>\n<p>\n  Breathtakingly powerful and bold in design, the G63 AMG is built for luxury and performance. It features a twin-turbo 4.0L V8 engine, delivering over 560 horsepower and premium interior finishes. Standard with 4MATIC all-wheel drive, this SUV dominates on-road and off.\n</p>\n', NULL, 'Satwa', 'available', 40, 10, 1, 500, '', 1, 0.0, 0, '2025-05-05 22:46:52', '2025-05-05 22:46:52', NULL),
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                           (2, 2, 1, 2, 'Compact Car', 'Toyota', 'Yaris', 2021, 150, 7, NULL, NULL, 'auto', NULL, NULL, 'petrol', 'Affordable and efficient.', NULL, 'Satwa', 'available', NULL, NULL, 1, 0, '', 1, 3.0, 0, '2025-05-05 22:46:52', '2025-05-05 22:46:52', NULL),
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                           (2, 2, 1, 2, 'Toyota updated', 'Toyota', 'Camry', 2021, 250, 7, NULL, NULL, 'Automatic', NULL, NULL, 'petrol', 'Updated info', NULL, 'Satwa', 'available', NULL, NULL, 1, 0, '/uploads/1753276013519-IMG_0665.jpg', 1, 3.0, 0, '2025-05-05 22:46:52', '2025-07-23 13:06:58', '2025-07-23 13:06:58'),
                                                                                                                                                                                                                                                                                                                                                                                                                                                                            (3, 2, 1, 2, 'affordable car 1', 'Toyota', 'Yaris new', 2021, 650, 7, NULL, NULL, 'auto', NULL, NULL, 'petrol', 'Affordable and efficient.', NULL, 'Satwa', 'available', NULL, NULL, 1, 0, '', 1, 0.0, 0, '2025-05-05 22:46:52', '2025-05-05 22:46:52', NULL),
                                                                                                                                                                                                                                                                                                                                                                                                                                                                            (4, 2, 1, 1, 'New Test', 'BMW', 'Yaris', 2025, 150, 7, NULL, NULL, 'auto', NULL, NULL, 'petrol', 'Affordable and efficient.', NULL, 'Satwa', 'available', NULL, NULL, 1, 0, '', 1, 0.0, 0, '2025-05-05 22:46:52', '2025-05-05 22:46:52', NULL),
                                                                                                                                                                                                                                                                                                                                                                                                                                                                            (6, 2, 1, 2, 'BMW X5', 'BMW', 'X5', 2023, 500, 5, 4, 3, 'Automatic', '3.0L', 'GCC', 'Petrol', 'Luxury mid-size SUV', 'Black', 'Dubai Marina', NULL, 250, 1.5, 1, 2000, NULL, 1, 0.0, 0, '2025-07-14 21:44:27', '2025-07-14 21:44:27', NULL),
@@ -194,38 +194,35 @@ CREATE TABLE `car_feature_mapping` (
                                        `car_id` int(11) DEFAULT NULL,
                                        `feature_id` int(11) DEFAULT NULL,
                                        `createdAt` timestamp NOT NULL DEFAULT current_timestamp(),
-                                       `updatedAt` timestamp NULL DEFAULT current_timestamp(),
-                                       `deletedAt` timestamp NULL DEFAULT NULL
+                                       `updatedAt` timestamp NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `car_feature_mapping`
 --
 
-INSERT INTO `car_feature_mapping` (`id`, `car_id`, `feature_id`, `createdAt`, `updatedAt`, `deletedAt`) VALUES
-                                                                                                            (1, 1, 1, '2025-05-05 22:50:00', '2025-05-05 22:50:00', NULL),
-                                                                                                            (2, 1, 2, '2025-05-05 22:50:00', '2025-05-05 22:50:00', NULL),
-                                                                                                            (3, 2, 1, '2025-05-05 22:50:00', '2025-05-05 22:50:00', NULL),
-                                                                                                            (4, 2, 3, '2025-05-05 22:50:00', '2025-05-05 22:50:00', NULL),
-                                                                                                            (5, 1, 3, '2025-05-05 22:50:00', '2025-05-05 22:50:00', NULL),
-                                                                                                            (6, 7, 1, '2025-07-14 21:46:11', '2025-07-14 21:46:11', NULL),
-                                                                                                            (7, 7, 2, '2025-07-14 21:46:11', '2025-07-14 21:46:11', NULL),
-                                                                                                            (8, 7, 3, '2025-07-14 21:46:11', '2025-07-14 21:46:11', NULL),
-                                                                                                            (9, 8, 1, '2025-07-14 21:47:16', '2025-07-14 21:47:16', NULL),
-                                                                                                            (10, 8, 2, '2025-07-14 21:47:16', '2025-07-14 21:47:16', NULL),
-                                                                                                            (11, 8, 3, '2025-07-14 21:47:16', '2025-07-14 21:47:16', NULL),
-                                                                                                            (12, 9, 1, '2025-07-14 21:59:53', '2025-07-14 21:59:53', NULL),
-                                                                                                            (13, 9, 2, '2025-07-14 21:59:53', '2025-07-14 21:59:53', NULL),
-                                                                                                            (14, 9, 3, '2025-07-14 21:59:53', '2025-07-14 21:59:53', NULL),
-                                                                                                            (15, 10, 1, '2025-07-14 22:07:55', '2025-07-14 22:07:55', NULL),
-                                                                                                            (16, 10, 2, '2025-07-14 22:07:55', '2025-07-14 22:07:55', NULL),
-                                                                                                            (17, 10, 3, '2025-07-14 22:07:55', '2025-07-14 22:07:55', NULL),
-                                                                                                            (18, 11, 1, '2025-07-14 22:09:37', '2025-07-14 22:09:37', NULL),
-                                                                                                            (19, 11, 2, '2025-07-14 22:09:37', '2025-07-14 22:09:37', NULL),
-                                                                                                            (20, 11, 3, '2025-07-14 22:09:37', '2025-07-14 22:09:37', NULL),
-                                                                                                            (21, 12, 1, '2025-07-14 22:11:20', '2025-07-14 22:11:20', NULL),
-                                                                                                            (22, 12, 2, '2025-07-14 22:11:20', '2025-07-14 22:11:20', NULL),
-                                                                                                            (23, 12, 3, '2025-07-14 22:11:20', '2025-07-14 22:11:20', NULL);
+INSERT INTO `car_feature_mapping` (`id`, `car_id`, `feature_id`, `createdAt`, `updatedAt`) VALUES
+                                                                                               (1, 1, 1, '2025-05-05 22:50:00', '2025-05-05 22:50:00'),
+                                                                                               (2, 1, 2, '2025-05-05 22:50:00', '2025-05-05 22:50:00'),
+                                                                                               (5, 1, 3, '2025-05-05 22:50:00', '2025-05-05 22:50:00'),
+                                                                                               (6, 7, 1, '2025-07-14 21:46:11', '2025-07-14 21:46:11'),
+                                                                                               (7, 7, 2, '2025-07-14 21:46:11', '2025-07-14 21:46:11'),
+                                                                                               (8, 7, 3, '2025-07-14 21:46:11', '2025-07-14 21:46:11'),
+                                                                                               (9, 8, 1, '2025-07-14 21:47:16', '2025-07-14 21:47:16'),
+                                                                                               (10, 8, 2, '2025-07-14 21:47:16', '2025-07-14 21:47:16'),
+                                                                                               (11, 8, 3, '2025-07-14 21:47:16', '2025-07-14 21:47:16'),
+                                                                                               (12, 9, 1, '2025-07-14 21:59:53', '2025-07-14 21:59:53'),
+                                                                                               (13, 9, 2, '2025-07-14 21:59:53', '2025-07-14 21:59:53'),
+                                                                                               (14, 9, 3, '2025-07-14 21:59:53', '2025-07-14 21:59:53'),
+                                                                                               (15, 10, 1, '2025-07-14 22:07:55', '2025-07-14 22:07:55'),
+                                                                                               (16, 10, 2, '2025-07-14 22:07:55', '2025-07-14 22:07:55'),
+                                                                                               (17, 10, 3, '2025-07-14 22:07:55', '2025-07-14 22:07:55'),
+                                                                                               (18, 11, 1, '2025-07-14 22:09:37', '2025-07-14 22:09:37'),
+                                                                                               (19, 11, 2, '2025-07-14 22:09:37', '2025-07-14 22:09:37'),
+                                                                                               (20, 11, 3, '2025-07-14 22:09:37', '2025-07-14 22:09:37'),
+                                                                                               (21, 12, 1, '2025-07-14 22:11:20', '2025-07-14 22:11:20'),
+                                                                                               (22, 12, 2, '2025-07-14 22:11:20', '2025-07-14 22:11:20'),
+                                                                                               (23, 12, 3, '2025-07-14 22:11:20', '2025-07-14 22:11:20');
 
 -- --------------------------------------------------------
 
@@ -237,16 +234,20 @@ CREATE TABLE `car_images` (
                               `id` int(11) NOT NULL,
                               `car_id` int(11) NOT NULL,
                               `image_url` text NOT NULL,
-                              `is_main` tinyint(1) DEFAULT 0
+                              `is_main` tinyint(1) DEFAULT 0,
+                              `createdAt` timestamp NOT NULL DEFAULT current_timestamp(),
+                              `updatedAt` timestamp NOT NULL DEFAULT current_timestamp(),
+                              `deletedAt` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `car_images`
 --
 
-INSERT INTO `car_images` (`id`, `car_id`, `image_url`, `is_main`) VALUES
-                                                                      (1, 13, '/uploads/1752531372495-Screenshot_2025-07-14_at_2.44.23_PM.png', 1),
-                                                                      (2, 13, '/uploads/1752531372501-Screenshot_2025-07-14_at_10.52.49_AM.png', 0);
+INSERT INTO `car_images` (`id`, `car_id`, `image_url`, `is_main`, `createdAt`, `updatedAt`, `deletedAt`) VALUES
+                                                                                                             (1, 13, '/uploads/1752531372495-Screenshot_2025-07-14_at_2.44.23_PM.png', 1, '2025-07-23 13:03:43', '2025-07-23 13:03:43', NULL),
+                                                                                                             (2, 13, '/uploads/1752531372501-Screenshot_2025-07-14_at_10.52.49_AM.png', 0, '2025-07-23 13:03:43', '2025-07-23 13:03:43', NULL),
+                                                                                                             (7, 2, '/uploads/1753276013519-IMG_0665.jpg', 1, '2025-07-23 13:06:53', '2025-07-23 13:06:53', '2025-07-23 13:06:58');
 
 -- --------------------------------------------------------
 
@@ -258,26 +259,25 @@ CREATE TABLE `car_tags` (
                             `car_id` int(11) NOT NULL,
                             `tag_id` int(11) NOT NULL,
                             `createdAt` timestamp NOT NULL DEFAULT current_timestamp(),
-                            `updatedAt` timestamp NULL DEFAULT NULL,
-                            `deletedAt` timestamp NULL DEFAULT NULL
+                            `updatedAt` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `car_tags`
 --
 
-INSERT INTO `car_tags` (`car_id`, `tag_id`, `createdAt`, `updatedAt`, `deletedAt`) VALUES
-                                                                                       (1, 1, '2025-07-14 21:47:04', NULL, NULL),
-                                                                                       (8, 1, '2025-07-14 21:47:16', '2025-07-14 21:47:16', NULL),
-                                                                                       (8, 4, '2025-07-14 21:47:16', '2025-07-14 21:47:16', NULL),
-                                                                                       (9, 1, '2025-07-14 21:59:53', '2025-07-14 21:59:53', NULL),
-                                                                                       (9, 4, '2025-07-14 21:59:53', '2025-07-14 21:59:53', NULL),
-                                                                                       (10, 1, '2025-07-14 22:07:55', '2025-07-14 22:07:55', NULL),
-                                                                                       (10, 4, '2025-07-14 22:07:55', '2025-07-14 22:07:55', NULL),
-                                                                                       (11, 1, '2025-07-14 22:09:37', '2025-07-14 22:09:37', NULL),
-                                                                                       (11, 4, '2025-07-14 22:09:37', '2025-07-14 22:09:37', NULL),
-                                                                                       (12, 1, '2025-07-14 22:11:20', '2025-07-14 22:11:20', NULL),
-                                                                                       (12, 4, '2025-07-14 22:11:20', '2025-07-14 22:11:20', NULL);
+INSERT INTO `car_tags` (`car_id`, `tag_id`, `createdAt`, `updatedAt`) VALUES
+                                                                          (1, 1, '2025-07-14 21:47:04', NULL),
+                                                                          (8, 1, '2025-07-14 21:47:16', '2025-07-14 21:47:16'),
+                                                                          (8, 4, '2025-07-14 21:47:16', '2025-07-14 21:47:16'),
+                                                                          (9, 1, '2025-07-14 21:59:53', '2025-07-14 21:59:53'),
+                                                                          (9, 4, '2025-07-14 21:59:53', '2025-07-14 21:59:53'),
+                                                                          (10, 1, '2025-07-14 22:07:55', '2025-07-14 22:07:55'),
+                                                                          (10, 4, '2025-07-14 22:07:55', '2025-07-14 22:07:55'),
+                                                                          (11, 1, '2025-07-14 22:09:37', '2025-07-14 22:09:37'),
+                                                                          (11, 4, '2025-07-14 22:09:37', '2025-07-14 22:09:37'),
+                                                                          (12, 1, '2025-07-14 22:11:20', '2025-07-14 22:11:20'),
+                                                                          (12, 4, '2025-07-14 22:11:20', '2025-07-14 22:11:20');
 
 -- --------------------------------------------------------
 
@@ -552,7 +552,9 @@ INSERT INTO `users` (`id`, `username`, `email`, `phone`, `photo`, `password`, `r
                                                                                                                                                                                                   (8, 'NewUser1', 'dema.sharaf1@gmail.com', '+4915737384665', NULL, '$2b$10$0un3BbFsTjjMhoIXY7pyQejwEEcFAI1usGOEeZ043vKpPFgkxg03i', 'customer', 1, 0, '2025-06-27 10:55:43', '2025-07-14 14:10:07', NULL, NULL, NULL),
                                                                                                                                                                                                   (9, 'dema', 'dema@dema.com', NULL, NULL, '$2b$10$AYPQaMV85FOYTWARmIomRekQ/svdj7uFVomptAZygDTnOdsmr5ek.', 'customer', 1, 1, '2025-07-14 14:11:46', '2025-07-14 14:11:46', NULL, NULL, NULL),
                                                                                                                                                                                                   (10, 'test', 'test@test.com', NULL, NULL, '$2b$10$BOstR.TJf6vjjgujXNHuj.6ME2nNIE4EqPu6dOGZKmPKfkdcfOEpO', 'customer', 1, 1, '2025-07-14 14:35:31', '2025-07-14 14:35:31', NULL, NULL, NULL),
-                                                                                                                                                                                                  (11, 'test11', 'test@teeeeee.com', '5454545455', NULL, '$2b$10$/QG0dPTANJsFAekjSuJJ.utgHN8.RidJtI17LAlmKT8t..DVVTUMm', 'customer', 1, 1, '2025-07-14 14:36:39', '2025-07-14 14:36:39', NULL, NULL, NULL);
+                                                                                                                                                                                                  (11, 'test11', 'test@teeeeee.com', '5454545455', NULL, '$2b$10$/QG0dPTANJsFAekjSuJJ.utgHN8.RidJtI17LAlmKT8t..DVVTUMm', 'customer', 1, 1, '2025-07-14 14:36:39', '2025-07-14 14:36:39', NULL, NULL, NULL),
+                                                                                                                                                                                                  (12, 'JohnDoe', 'john1ee@example.com', '1234567890', NULL, '$2b$10$8GTC7a0.qRMDMRWqfQ1rreAAqzhG2D.TivXisg6oVTorftt8c94C2', 'customer', 1, 1, '2025-07-23 13:19:39', '2025-07-23 13:19:39', NULL, NULL, NULL),
+                                                                                                                                                                                                  (13, 'JohnDoe', 'john1e11e@example.com', '1234567890', NULL, '$2b$10$hWXpJe/wG.yYx3Mo2G/E1uFYUmcWBSgWU2lcjwwm43hug.libYPE2', 'customer', 1, 1, '2025-07-23 13:20:00', '2025-07-23 13:20:00', NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -775,13 +777,13 @@ ALTER TABLE `car_features`
 -- AUTO_INCREMENT for table `car_feature_mapping`
 --
 ALTER TABLE `car_feature_mapping`
-    MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+    MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
 
 --
 -- AUTO_INCREMENT for table `car_images`
 --
 ALTER TABLE `car_images`
-    MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+    MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `cities`
@@ -847,7 +849,7 @@ ALTER TABLE `tags`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-    MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+    MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `vendors`
