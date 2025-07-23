@@ -14,6 +14,7 @@ function SimilarCarCard({
     const [isBookingFocused, setIsBookingFocused] = useState(false);
     const [isWhatsAppFocused, setIsWhatsAppFocused] = useState(false);
     const [showBookingModal, setShowBookingModal] = useState(false);
+    const [availabilityMessage, setAvailabilityMessage] = useState('');
 
     const handleNavigateClick = (e) => {
         e.stopPropagation();
@@ -36,18 +37,19 @@ function SimilarCarCard({
     const carName = car?.name || `${car?.company || car?.brand || 'Unknown'} ${car?.model || 'Car'}`;
     const carImage = car?.img || car?.photo || DEFAULT_CAR_IMAGE_PATH;
     const pricePerDay = car?.price_per_day || car?.price || 0;
-    const carBrand = car?.brand || car?.company || 'Unknown Brand';
-    const carSeats = car?.seats || car?.capacity || '5 People';
+    const carBrand = car?.brand || car?.company;
+    const carSeats = car?.seats || car?.capacity;
     const availabilityStatus = car?.availability_status || 'Available Now';
-    const whatsappNumber = car?.whatsapp || '+1234567890';
+    const whatsappNumber = car?.whatsapp || '';
 
     const handleConfirmBooking = ({ startDate, endDate, available, bookedRange }) => {
-        
         if (!available) {
-            console.log(`Car ${car.id} not available for booking from ${startDate} to ${endDate}. Booked periods: ${bookedRange}`);
-            alert(`❌ The car is not available. Booked during the following periods: ${bookedRange}`);
+            setAvailabilityMessage(`❌ ${carBrand || 'This car'} ${car?.model || ''} is not available at the moment.`);
+            setTimeout(() => setAvailabilityMessage(''), 5000);
+        } else {
+            setAvailabilityMessage('');
         }
-        setShowBookingModal(false); 
+        setShowBookingModal(false);
     };
 
     const handleCloseBookingModal = () => {
@@ -79,14 +81,18 @@ function SimilarCarCard({
 
                 <div className={`car-overlay ${isComponentHovered ? "show" : ""}`}>
                     <div className="car-overlay-content">
-                        <div className="overlay-item">
-                            <span className="overlay-icon">🎒 Bags: </span>
-                            <span className="overlay-text">{car?.bags}</span>
-                        </div>
-                        <div className="overlay-item">
-                            <span className="overlay-icon">🚪 Doors:</span> 
-                            <span className="overlay-text">{car?.no_of_doors}</span>
-                        </div>
+                        {car?.bags && (
+                            <div className="overlay-item">
+                                <span className="overlay-icon">🎒 Bags: </span>
+                                <span className="overlay-text">{car.bags}</span>
+                            </div>
+                        )}
+                        {car?.no_of_doors && (
+                            <div className="overlay-item">
+                                <span className="overlay-icon">🚪 Doors: </span> 
+                                <span className="overlay-text">{car.no_of_doors}</span>
+                            </div>
+                        )}
                     </div>
                 </div>
 
@@ -102,20 +108,8 @@ function SimilarCarCard({
                         }
                     }}
                 >
-                    <svg
-                        width="24"
-                        height="24"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                    >
-                        <path
-                            d="M9 18L15 12L9 6"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                        />
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <path d="M9 18L15 12L9 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                     </svg>
                 </div>
             </div>
@@ -127,40 +121,50 @@ function SimilarCarCard({
 
             <div className="car-details">
                 <div className="specs-grid">
-                    <div className="spec">
-                        <span className="label">Model</span>
-                        <span className="value">{car?.model || 'Unknown'}</span>
-                    </div>
-                    <div className="spec">
-                        <span className="label">Brand</span>
-                        <span className="value">{carBrand}</span>
-                    </div>
-                    <div className="spec">
-                        <span className="label">Category</span>
-                        <span className="value">{car?.category || 'Standard'}</span>
-                    </div>
-                    <div className="spec">
-                        <span className="label">Capacity</span>
-                        <span className="value">{carSeats}</span>
-                    </div>
+                    {car?.model && (
+                        <div className="spec">
+                            <span className="label">Model</span>
+                            <span className="value">{car.model}</span>
+                        </div>
+                    )}
+                    {carBrand && (
+                        <div className="spec">
+                            <span className="label">Brand</span>
+                            <span className="value">{carBrand}</span>
+                        </div>
+                    )}
+                    {car?.category && (
+                        <div className="spec">
+                            <span className="label">Category</span>
+                            <span className="value">{car.category}</span>
+                        </div>
+                    )}
+                    {carSeats && (
+                        <div className="spec">
+                            <span className="label">Capacity</span>
+                            <span className="value">{carSeats}</span>
+                        </div>
+                    )}
                 </div>
 
-                <div className="contact-options">
-                    <a
-                        href={`https://wa.me/${whatsappNumber.replace(/[^\d+]/g, '')}`}
-                        className={`contact-btn whatsapp-btn ${isWhatsAppFocused ? "focused" : ""}`}
-                        onClick={(e) => e.stopPropagation()}
-                        onMouseEnter={() => setIsWhatsAppFocused(true)}
-                        onMouseLeave={() => setIsWhatsAppFocused(false)}
-                        onFocus={() => setIsWhatsAppFocused(true)}
-                        onBlur={() => setIsWhatsAppFocused(false)}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        aria-label="Contact via WhatsApp"
-                    >
-                        <span>Contact via WhatsApp</span>
-                    </a>
-                </div>
+               
+                    <div className="contact-options">
+                        <a
+                            href={`https://wa.me/${whatsappNumber.replace(/[^\d+]/g, '')}`}
+                            className={`contact-btn whatsapp-btn ${isWhatsAppFocused ? "focused" : ""}`}
+                            onClick={(e) => e.stopPropagation()}
+                            onMouseEnter={() => setIsWhatsAppFocused(true)}
+                            onMouseLeave={() => setIsWhatsAppFocused(false)}
+                            onFocus={() => setIsWhatsAppFocused(true)}
+                            onBlur={() => setIsWhatsAppFocused(false)}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            aria-label="Contact via WhatsApp"
+                        >
+                            <span>Contact via WhatsApp</span>
+                        </a>
+                    </div>
+                
 
                 <div className="card-footer">
                     <div className="availability">
@@ -180,8 +184,14 @@ function SimilarCarCard({
                         Book Now
                     </button>
                 </div>
+
+                {availabilityMessage && (
+                    <div className="availability-message">
+                        <p>{availabilityMessage}</p>
+                    </div>
+                )}
             </div>
-          
+
             <BookingModal
                 isVisible={showBookingModal}
                 onClose={handleCloseBookingModal}

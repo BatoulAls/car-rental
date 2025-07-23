@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "../styles/CarCard.css";
 import WhatsAppButton from "./WhatsAppButton";
-import DEFAULT_CAR_IMAGE_PATH from '../images/cars-big/default-car.png'
+import DEFAULT_CAR_IMAGE_PATH from '../images/cars-big/default-car.png';
 import BookingModal from "./BookingModal";
 
 function CarCard({
@@ -19,8 +19,8 @@ function CarCard({
 }) {
   const [isBookingFocused, setIsBookingFocused] = useState(false);
   const [isWhatsAppFocused, setIsWhatsAppFocused] = useState(false);
- 
   const [showBookingModal, setShowBookingModal] = useState(false);
+  const [availabilityMessage, setAvailabilityMessage] = useState(""); 
 
   const handleCardClick = () => {
     if (onNavigateToDetails && car?.id) {
@@ -35,23 +35,25 @@ function CarCard({
     }
   };
 
- 
   const handleBookNowClick = (e) => {
-    e.stopPropagation(); 
+    e.stopPropagation();
     setShowBookingModal(true);
+    setAvailabilityMessage(""); 
   };
 
-  
   const handleConfirmBooking = ({ startDate, endDate, available, bookedRange }) => {
-   if (!available) {
-      alert(`❌ The car is not available. Booked during the following periods: ${bookedRange}`);
+    if (!available) {
+      const message = `❌ This car  is not available right now.}`;
+      setAvailabilityMessage(message);
+    } else {
+      setAvailabilityMessage("");
     }
     setShowBookingModal(false);
   };
 
- 
   const handleCloseBookingModal = () => {
     setShowBookingModal(false);
+    setAvailabilityMessage("");
   };
 
   return (
@@ -119,14 +121,12 @@ function CarCard({
       </div>
 
       <div className="car-details">
-
         <div className="car-name-rating">
           <h3>{car.name || `${car.company} ${car.model}`}</h3>
           <div className="rating-stars">
             {[1, 2, 3, 4, 5].map((star) => {
               const fullStars = Math.floor(average_rating);
               const hasHalfStar = average_rating - fullStars >= 0.5;
-
               return (
                 <span
                   key={star}
@@ -172,9 +172,8 @@ function CarCard({
             <span>{car.available ? "Available Now" : "Unavailable"}</span>
           </div>
           <a
-           
             className={`book-btn ${isBookingFocused ? "focused" : ""}`}
-            onClick={handleBookNowClick} 
+            onClick={handleBookNowClick}
             onMouseEnter={() => setIsBookingFocused(true)}
             onMouseLeave={() => setIsBookingFocused(false)}
             onFocus={() => setIsBookingFocused(true)}
@@ -184,7 +183,12 @@ function CarCard({
             Book Now
           </a>
         </div>
+
+        {availabilityMessage && (
+          <div className="availability-message">{availabilityMessage}</div>
+        )}
       </div>
+
       <BookingModal
         isVisible={showBookingModal}
         onClose={handleCloseBookingModal}

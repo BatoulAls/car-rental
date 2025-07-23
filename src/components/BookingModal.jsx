@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PopUpModal from './PopUpModal';
 import InputField from './InputField';
 import SubmitButton from './SubmitButton';
@@ -11,16 +11,29 @@ const BookingModal = ({ isVisible, onClose, onConfirmBooking, carId }) => {
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
   const [message, setMessage] = useState('');
+  const [messageType, setMessageType] = useState(''); 
   const [loading, setLoading] = useState(false);
 
   const { token } = useAuth();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (message) {
+      const timer = setTimeout(() => {
+        setMessage('');
+        setMessageType('');
+      }, 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [message]);
 
   const previewBooking = async () => {
     setLoading(true);
     try {
       if (!token) {
         setMessage('Please log in.');
+        setMessageType('error');
+        navigate('/Login');
         setLoading(false);
         return;
       }
@@ -65,10 +78,11 @@ const BookingModal = ({ isVisible, onClose, onConfirmBooking, carId }) => {
     } catch (error) {
       console.error('Error during booking preview:', error);
       setMessage(
-        `⚠️ Error during booking preview: ${
+        `Error during booking preview: ${
           error.response?.data?.message || error.message
         }`
       );
+      setMessageType('error');
       if (onConfirmBooking) {
         onConfirmBooking({ startDate, endDate, available: true, previewError: true });
       }
@@ -80,12 +94,12 @@ const BookingModal = ({ isVisible, onClose, onConfirmBooking, carId }) => {
   const handleConfirm = async () => {
     if (!startDate || !endDate) {
       setMessage('Please select both start and end dates.');
+      setMessageType('error');
       return;
     }
 
     const start = new Date(startDate);
     const end = new Date(endDate);
-
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 
@@ -93,12 +107,14 @@ const BookingModal = ({ isVisible, onClose, onConfirmBooking, carId }) => {
     selectedStartDate.setHours(0, 0, 0, 0);
 
     if (selectedStartDate < today) {
-      setMessage("Start date cannot be in the past. Please select a future date.");
+      setMessage('Start date cannot be in the past. Please select a future date.');
+      setMessageType('error');
       return;
     }
 
     if (end < start) {
       setMessage('End date cannot be before start date.');
+      setMessageType('error');
       return;
     }
 
@@ -126,14 +142,16 @@ const BookingModal = ({ isVisible, onClose, onConfirmBooking, carId }) => {
               ).toLocaleDateString()}`
           )
           .join(', ');
-        setMessage(`❌ Not available. Booked during: ${bookedRange}`);
-        if (onConfirmBooking) {
-          onConfirmBooking({ startDate, endDate, available: false });
-        }
+        setMessage(`Not available. Booked during: ${bookedRange}`);
+        setMessageType('error');
+         if (onConfirmBooking) {
+    onConfirmBooking({ startDate, endDate, available: false, bookedRange }); 
+  }
       }
     } catch (error) {
       console.error(error);
-      setMessage(`⚠️ Error while checking availability: ${error.message}`);
+      setMessage(`Error while checking availability: ${error.message}`);
+      setMessageType('error');
       if (onConfirmBooking) {
         onConfirmBooking({ startDate, endDate, available: false });
       }
@@ -146,6 +164,7 @@ const BookingModal = ({ isVisible, onClose, onConfirmBooking, carId }) => {
     setStartDate('');
     setEndDate('');
     setMessage('');
+    setMessageType('');
     setLoading(false);
     onClose();
   };
@@ -172,19 +191,21 @@ const BookingModal = ({ isVisible, onClose, onConfirmBooking, carId }) => {
         className="booking-input-margin-bottom"
       />
 
-      {message && <p className="booking-error-message">{message}</p>}
+      {message && (
+        <div className={`booking-message booking-message--${messageType}`}>
+          {message}
+        </div>
+      )}
 
       <div className="booking-actions">
         <SubmitButton
           text="Cancel"
           onClick={handleCancel}
-         
         />
         <SubmitButton
           text={loading ? 'Processing...' : 'Check Availability'}
           onClick={handleConfirm}
           disabled={loading}
-         
         />
       </div>
     </PopUpModal>

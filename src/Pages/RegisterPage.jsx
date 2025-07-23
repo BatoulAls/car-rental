@@ -7,9 +7,12 @@ import InputField from '../components/InputField';
 import RadioGroupField from '../components/RadioGroupField';
 import SubmitButton from '../components/SubmitButton';
 import '../styles/Register.css';
+import { useAuth } from '../context/AuthContext'; 
 
 const RegisterPage = () => {
   const navigate = useNavigate();
+  const { login } = useAuth(); 
+
   const [formData, setFormData] = useState({
     username: '',
     email: '',
@@ -61,10 +64,10 @@ const RegisterPage = () => {
       newErrors.password = 'Password must be at least 6 characters';
     }
     if (!formData.phone.trim()) {
-  newErrors.phone = 'Phone number is required';
-} else if (!/^\+?\d{7,15}$/.test(formData.phone)) {
-  newErrors.phone = 'Phone number is invalid';
-}
+      newErrors.phone = 'Phone number is required';
+    } else if (!/^\+?\d{7,15}$/.test(formData.phone)) {
+      newErrors.phone = 'Phone number is invalid';
+    }
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -73,7 +76,7 @@ const RegisterPage = () => {
   const handleSubmit = async () => {
     if (validateForm()) {
       const button = document.querySelector('.submit-button-reg');
-      if (button) button.style.transform = 'scale(0.95)';
+      if (button) button.style.transform = 'scale(0.95)'; 
 
       try {
         const response = await axios.post('http://localhost:5050/api/auth/register', formData, {
@@ -83,39 +86,40 @@ const RegisterPage = () => {
         });
 
         console.log('API Response:', response.data);
+        const { token, user } = response.data; 
+        login(token, user); 
 
-        if (button) button.style.transform = 'scale(1)';
+        if (button) button.style.transform = 'scale(1)'; 
         const card = document.querySelector('.register-card-reg');
-        if (card) card.style.animation = 'successPulse 0.6s ease-out';
+        if (card) card.style.animation = 'successPulse 0.6s ease-out'; 
 
         setTimeout(() => {
-          
-          if (card) card.style.animation = '';
+          if (card) card.style.animation = ''; 
           setFormData({
             username: '',
             email: '',
             phone:'',
             password: '',
-           
             role: 'customer'
           });
-          navigate('/login'); 
+          navigate('/'); 
         }, 600);
       }
       catch (error) {
-  console.error('API Error:', error.response?.data || error.message);
+        console.error('API Error:', error.response?.data || error.message);
 
-  const apiMessage = error.response?.data?.error || 'Registration failed. Please try again.';
+        const apiMessage = error.response?.data?.error || 'Registration failed. Please try again.';
 
- 
-  if (apiMessage.toLowerCase().includes('email')) {
-    setErrors(prev => ({ ...prev, email: apiMessage }));
-  } else {
-    alert(apiMessage);
-  }
+      
+        if (apiMessage.toLowerCase().includes('email')) {
+          setErrors(prev => ({ ...prev, email: apiMessage }));
+        } else {
+         
+          console.log("Error Message:", apiMessage);
+        }
 
-  if (button) button.style.transform = 'scale(1)';
-}
+        if (button) button.style.transform = 'scale(1)';
+      }
     } else {
       const card = document.querySelector('.register-card-reg');
       if (card) card.style.animation = 'shake 0.5s ease-in-out';
@@ -125,9 +129,9 @@ const RegisterPage = () => {
     }
   };
 
+ 
   const radioOptions = [
     { value: 'customer', text: '🛍️ Customer' },
-    
     { value: 'vendor', text: '🏪 Vendor' },
   ];
 
@@ -163,7 +167,7 @@ const RegisterPage = () => {
           error={errors.email}
           index={1}
         />
-         <InputField
+        <InputField
           label="Phone Number"
           icon="📱"
           type="tel"
