@@ -4,6 +4,7 @@ import WhatsAppButton from "./WhatsAppButton";
 import DEFAULT_CAR_IMAGE_PATH from '../images/cars-big/default-car.png';
 import BookingModal from "./BookingModal";
 
+
 function CarCard({
   car,
   carId,
@@ -16,6 +17,8 @@ function CarCard({
   onImageLoad,
   onNavigateToDetails,
   average_rating = 0,
+  isFavorite = false,
+  onToggleFavorite,
 }) {
   const [isBookingFocused, setIsBookingFocused] = useState(false);
   const [isWhatsAppFocused, setIsWhatsAppFocused] = useState(false);
@@ -39,6 +42,13 @@ function CarCard({
     e.stopPropagation();
     setShowBookingModal(true);
     setAvailabilityMessage(""); 
+  };
+
+  const handleFavoriteClick = (e) => {
+    e.stopPropagation();
+    if (onToggleFavorite) {
+      onToggleFavorite();
+    }
   };
 
   const handleConfirmBooking = ({ startDate, endDate, available, bookedRange }) => {
@@ -83,6 +93,36 @@ function CarCard({
             <div><span>{car.year}</span></div>
             <div><span>{car.fuel || "Premium Fuel"}</span></div>
           </div>
+        </div>
+
+       
+        <div
+          className={`favorite-icon ${isFavorite ? "favorited" : ""}`}
+          onClick={handleFavoriteClick}
+          title={isFavorite ? "Remove from favorites" : "Add to favorites"}
+          role="button"
+          tabIndex={0}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              handleFavoriteClick(e);
+            }
+          }}
+        >
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill={isFavorite ? "currentColor" : "none"}
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
         </div>
 
         <div

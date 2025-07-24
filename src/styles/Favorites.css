@@ -1,0 +1,183 @@
+/* RentalCarFavorites.css */
+
+.favorites-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+/* Header Section */
+.favorites-header {
+  background: white;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.favorites-header-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 80px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.favorites-header-left {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.favorites-header-icon {
+  background: linear-gradient(135deg, rgb(255, 138, 120) 0%, #ff4d30 100%);
+  padding: 12px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.favorites-heart-icon {
+  width: 24px;
+  height: 24px;
+  color: white;
+}
+
+.favorites-title {
+  font-size: 28px;
+  font-weight: bold;
+  color: #1f2937;
+  margin: 0 0 4px 0;
+}
+
+.favorites-subtitle {
+  font-size: 14px;
+  color: #6b7280;
+  margin: 0;
+}
+
+/* Main Section */
+.favorites-main {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+/* Empty State */
+.favorites-empty-state {
+  text-align: center;
+  padding: 80px 0;
+}
+
+.favorites-empty-icon {
+  width: 64px;
+  height: 64px;
+  color: #d1d5db;
+  margin: 0 auto 16px;
+}
+
+.favorites-empty-title {
+  font-size: 20px;
+  font-weight: 600;
+  color: #6b7280;
+  margin: 0 0 8px 0;
+}
+
+.favorites-empty-subtitle {
+  font-size: 16px;
+  color: #9ca3af;
+  margin: 0;
+}
+
+/* Car Grid */
+.favorites-car-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 30px;
+}
+
+/* Loading State */
+.favorites-loading {
+  text-align: center;
+  padding: 50px;
+  font-size: 18px;
+  color: #374151;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.favorites-loading-spinner {
+  width: 40px;
+  height: 40px;
+  color: #3b82f6;
+  animation: spin 1s linear infinite;
+}
+
+/* Error State */
+.favorites-error {
+  text-align: center;
+  padding: 50px;
+  font-size: 18px;
+  color: #ef4444;
+}
+
+/* Spinner Animation */
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .favorites-header-content {
+    flex-direction: column;
+    align-items: flex-start;
+    height: auto;
+    padding: 20px;
+  }
+
+  .favorites-title {
+    font-size: 24px;
+  }
+
+  .favorites-subtitle {
+    font-size: 13px;
+  }
+
+  .favorites-main {
+    padding: 20px;
+  }
+
+  .favorites-empty-icon {
+    width: 48px;
+    height: 48px;
+  }
+
+  .favorites-empty-title {
+    font-size: 18px;
+  }
+
+  .favorites-empty-subtitle {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .favorites-title {
+    font-size: 20px;
+  }
+
+  .favorites-subtitle {
+    font-size: 12px;
+  }
+
+  .favorites-car-grid {
+    gap: 20px;
+  }
+}

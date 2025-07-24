@@ -1,5 +1,7 @@
-import { useState, useEffect, useMemo } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useState, useEffect, useMemo, useCallback } from "react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import axios from "axios";
+import { useAuth } from "../context/AuthContext"; 
 import { useLocation, useParams, useNavigate } from "react-router-dom";
 import CarCard from "../components/CarCard";
 import AdvancedSearch from "../components/AdvancedSearch";
@@ -7,36 +9,41 @@ import Pagination from "../components/Pagination";
 import "../styles/AllCar.css";
 import "../styles/CarCard.css";
 
+const API_BASE_URL = "http://localhost:5050"; 
 
 const fetchAdvancedSearchOptions = async () => {
-  const res = await fetch("http://localhost:5050/api/cars/options");
+  const res = await fetch(`${API_BASE_URL}/api/cars/options`);
   if (!res.ok) throw new Error("Failed to load advanced search options");
   const data = await res.json();
   return data;
 };
 
-const fetchCarsWithFiltersAndSort = async (page, limit, searchParams, sortBy, searchOptions, carType, brandFromUrl, vendorIdFromUrl) => {
+const fetchCarsWithFiltersAndSort = async (
+  page,
+  limit,
+  searchParams,
+  sortBy,
+  searchOptions,
+  carType,
+  brandFromUrl,
+  vendorIdFromUrl
+) => {
   let url;
   const params = new URLSearchParams();
 
- 
   if (vendorIdFromUrl) {
-    
-    url = `http://localhost:5050/api/cars/vendors/${vendorIdFromUrl}?page=${page}&limit=${limit}`;
+    url = `${API_BASE_URL}/api/cars/vendors/${vendorIdFromUrl}?page=${page}&limit=${limit}`;
   } else {
-   
-    url = `http://localhost:5050/api/cars?page=${page}&limit=${limit}`;
+    url = `${API_BASE_URL}/api/cars?page=${page}&limit=${limit}`;
   }
 
   const regions = searchOptions?.regions || [];
-
 
   if (brandFromUrl) {
     params.append("brand", brandFromUrl);
   }
 
   for (const key in searchParams) {
-   
     if (key === "make" && brandFromUrl) {
       continue;
     }
@@ -44,12 +51,13 @@ const fetchCarsWithFiltersAndSort = async (page, limit, searchParams, sortBy, se
     if (searchParams[key] && searchParams[key] !== "") {
       switch (key) {
         case "make":
-         
           params.append("brand", searchParams[key]);
           break;
         case "Location":
           const selectedRegionId = searchParams[key];
-          const selectedRegion = regions.find(region => region.id === parseInt(selectedRegionId));
+          const selectedRegion = regions.find(
+            (region) => region.id === parseInt(selectedRegionId)
+          );
           if (selectedRegion) {
             params.append("location", selectedRegion.name_en);
           }
@@ -79,7 +87,6 @@ const fetchCarsWithFiltersAndSort = async (page, limit, searchParams, sortBy, se
           params.append("min_review", searchParams[key]);
           break;
         case "vendor":
-          
           if (!vendorIdFromUrl) {
             params.append("vendor_id", searchParams[key]);
           }
@@ -97,7 +104,6 @@ const fetchCarsWithFiltersAndSort = async (page, limit, searchParams, sortBy, se
     }
   }
 
-  
   if (sortBy) {
     if (!(carType === "recent" && sortBy === "created_at")) {
       switch (sortBy) {
@@ -123,31 +129,50 @@ const fetchCarsWithFiltersAndSort = async (page, limit, searchParams, sortBy, se
     }
   }
 
-
   if (params.toString()) {
     url += `&${params.toString()}`;
   }
 
-  console.log('Final API URL:', url);
+  console.log("Final API URL:", url);
   const res = await fetch(url);
   if (!res.ok) throw new Error("Failed to load cars with filters and sort");
-  const resultData = await res.json(); 
+  const resultData = await res.json();
 
-  
   if (Array.isArray(resultData)) {
     return {
       data: resultData,
-      totalPages: 1 
+      totalPages: 1,
     };
   }
   return resultData;
 };
 
+const fetchFavoriteCars = async (token) => {
+  if (!token) return [];
+  try {
+    const res = await axios.get(`${API_BASE_URL}/api/favorites`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    if (process.env.NODE_ENV === "development") {
+      console.debug("Fetched favorites:", res.data);
+    }
+    return res.data;
+  } catch (error) {
+    console.error("Error fetching favorites:", error);
+    return [];
+  }
+};
 
 function AllCars() {
   const location = useLocation();
   const navigateToDetails = useNavigate();
   const { vendorId: vendorIdFromUrl } = useParams();
+
+  const queryClient = useQueryClient();
+
+  const { token } = useAuth();
+
+  const [cars, setCars] = useState([]);
 
   const vendorNameFromState = location.state?.vendorName || null;
 
@@ -170,7 +195,7 @@ function AllCars() {
     year: "",
     seats: "",
     review: "",
-    vendor: "", 
+    vendor: "",
     pickup_date: "",
     dropoff_date: "",
   });
@@ -198,11 +223,69 @@ function AllCars() {
     error: carsError,
     refetch: refetchCars,
   } = useQuery({
-    queryKey: ["allCars", currentPage, searchParams, sortBy, carType, searchOptions, brandFromUrl, vendorIdFromUrl],
-    queryFn: () => fetchCarsWithFiltersAndSort(currentPage, carsPerPage, searchParams, sortBy, searchOptions, carType, brandFromUrl, vendorIdFromUrl), // Pass brandFromUrl and vendorIdFromUrl
+    queryKey: [
+      "allCars",
+      currentPage,
+      searchParams,
+      sortBy,
+      carType,
+      searchOptions,
+      brandFromUrl,
+      vendorIdFromUrl,
+    ],
+    queryFn: () =>
+      fetchCarsWithFiltersAndSort(
+        currentPage,
+        carsPerPage,
+        searchParams,
+        sortBy,
+        searchOptions,
+        carType,
+        brandFromUrl,
+        vendorIdFromUrl
+      ),
     keepPreviousData: true,
     enabled: !!searchOptions,
   });
+
+  const {
+    data: favoriteCarsData = [],
+    isLoading: favoritesLoading,
+    error: favoritesError,
+  } = useQuery({
+    queryKey: ["favorites"],
+    queryFn: () => fetchFavoriteCars(token),
+    enabled: !!token,
+  });
+
+  
+  useEffect(() => {
+     
+  
+    if (!carsData?.data || carsData.data.length === 0) return;
+
+    
+      const favoritedCarIds = new Set(favoriteCarsData.map((favCar) => favCar.id));
+      const updatedCars = carsData.data.map((car) => ({
+      ...car,
+      isFavorite: favoritedCarIds.has(car.id),
+      favoriteId: favoritedCarIds.has(car.id) ? car.id : null,
+    }));
+
+    setCars(updatedCars);
+
+   
+    updatedCars.slice(0, 6).forEach((car) => {
+      if (car.photo) {
+        const img = new Image();
+        img.src = car.photo;
+      }
+    });
+
+    if (process.env.NODE_ENV === "development") {
+      console.debug("Updated cars with favorites:", updatedCars);
+    }
+  }, [carsData?.data, favoriteCarsData]);
 
   useEffect(() => {
     let initialSearchParams = {
@@ -223,42 +306,44 @@ function AllCars() {
 
     if (vendorIdFromUrl) {
       initialSearchParams.vendor = vendorIdFromUrl;
-      initialSearchParams.make = ""; 
-    }
-    else if (brandFromUrl && searchOptions?.brands) {
-      const matchedBrand = searchOptions.brands.find(brand =>
-        brand.toLowerCase() === brandFromUrl.toLowerCase()
+      initialSearchParams.make = "";
+    } else if (brandFromUrl && searchOptions?.brands) {
+      const matchedBrand = searchOptions.brands.find(
+        (brand) => brand.toLowerCase() === brandFromUrl.toLowerCase()
       );
       if (matchedBrand) {
-        initialSearchParams.make = matchedBrand; 
+        initialSearchParams.make = matchedBrand;
       } else {
         const variations = [
           brandFromUrl.toUpperCase(),
           brandFromUrl.charAt(0).toUpperCase() + brandFromUrl.slice(1).toLowerCase(),
           brandFromUrl.toLowerCase(),
-          brandFromUrl
+          brandFromUrl,
         ];
         for (const variation of variations) {
-          const found = searchOptions.brands.find(brand => brand === variation);
+          const found = searchOptions.brands.find((brand) => brand === variation);
           if (found) {
             initialSearchParams.make = found;
             break;
           }
         }
         if (!initialSearchParams.make) {
-          console.warn('No exact brand match found in options for:', brandFromUrl, 'Setting dropdown to exact URL value.');
-          initialSearchParams.make = brandFromUrl; 
+          console.warn(
+            "No exact brand match found in options for:",
+            brandFromUrl,
+            "Setting dropdown to exact URL value."
+          );
+          initialSearchParams.make = brandFromUrl;
         }
       }
-    }
-    else if (searchedResultData && searchedResultData.searchFilters) {
+    } else if (searchedResultData && searchedResultData.searchFilters) {
       const filters = searchedResultData.searchFilters;
       if (filters.brand) {
         initialSearchParams.make = filters.brand;
       }
       if (filters.location) {
         if (searchOptions && searchOptions.regions) {
-          const region = searchOptions.regions.find(r => r.name_en === filters.location);
+          const region = searchOptions.regions.find((r) => r.name_en === filters.location);
           if (region) {
             initialSearchParams.Location = region.id.toString();
           }
@@ -283,13 +368,53 @@ function AllCars() {
     setSortBy("");
   }, [carType, searchedResultData, searchOptions, brandFromUrl, vendorIdFromUrl]);
 
-
   const handleImageLoad = (carId) => {
     setCarLoading((prev) => ({
       ...prev,
       [carId]: false,
     }));
   };
+
+  const handleToggleFavorite = useCallback(
+    async (car) => {
+      if (!token) {
+        alert("Please log in to manage favorites.");
+        return;
+      }
+
+      try {
+        if (car.isFavorite) {
+          await axios.delete(`${API_BASE_URL}/api/favorites/${car.id}`, {
+            headers: { Authorization: `Bearer ${token}` },
+          });
+          if (process.env.NODE_ENV === "development") {
+            console.debug(`Removed favorite for car ID: ${car.id}`);
+          }
+        } else {
+          const response = await axios.post(
+            `${API_BASE_URL}/api/favorites`,
+            { car_id: car.id },
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json",
+              },
+            }
+          );
+          if (process.env.NODE_ENV === "development") {
+            console.debug("Added favorite response:", response.data);
+          }
+        }
+      } catch (error) {
+        console.error("Failed to toggle favorite:", error);
+        alert("An error occurred while updating favorites. Please try again.");
+      } finally {
+        queryClient.invalidateQueries(["allCars"]);
+        queryClient.invalidateQueries(["favorites"]);
+      }
+    },
+    [token, queryClient]
+  );
 
   const handleSearchParamChange = (e) => {
     const { name, value } = e.target;
@@ -322,11 +447,9 @@ function AllCars() {
 
     if (vendorIdFromUrl) {
       resetToParams.vendor = vendorIdFromUrl;
-    }
-    else if (brandFromUrl) {
-        resetToParams.make = brandFromUrl;
-    }
-    else if (searchedResultData && searchedResultData.searchFilters && searchedResultData.searchFilters.brand) {
+    } else if (brandFromUrl) {
+      resetToParams.make = brandFromUrl;
+    } else if (searchedResultData && searchedResultData.searchFilters && searchedResultData.searchFilters.brand) {
       resetToParams.make = searchedResultData.searchFilters.brand;
     }
 
@@ -363,10 +486,10 @@ function AllCars() {
     }
   }, [windowWidth]);
 
-  const currentCars = carsData?.data || [];
+  const currentCars = cars; 
   const currentTotalPages = carsData?.totalPages || 1;
-  const currentIsLoading = isLoadingCars;
-  const currentError = carsError;
+  const currentIsLoading = isLoadingCars || favoritesLoading;
+  const currentError = carsError || favoritesError;
 
   const { subtitle, title, description } = useMemo(() => {
     if (vendorIdFromUrl) {
@@ -374,7 +497,7 @@ function AllCars() {
       return {
         subtitle: `Cars from ${displayVendorName}`,
         title: `Explore Cars from ${displayVendorName}`,
-        description: `Browse all available cars from ${displayVendorName}.`
+        description: `Browse all available cars from ${displayVendorName}.`,
       };
     }
     if (brandFromUrl) {
@@ -382,7 +505,7 @@ function AllCars() {
       return {
         subtitle: `${brandName} Cars`,
         title: `Explore Our ${brandName} Collection`,
-        description: `Browse all available cars from the ${brandName} brand.`
+        description: `Browse all available cars from the ${brandName} brand.`,
       };
     }
 
@@ -391,32 +514,32 @@ function AllCars() {
         return {
           subtitle: "Affordable Cars",
           title: "Explore Our Affordable Cars",
-          description: "Discover budget-friendly car rentals with great value for money."
+          description: "Discover budget-friendly car rentals with great value for money.",
         };
       case "luxury":
         return {
           subtitle: "Luxury Cars",
           title: "Explore Our Luxury Cars",
-          description: "Experience premium luxury vehicles with top-tier features and comfort."
+          description: "Experience premium luxury vehicles with top-tier features and comfort.",
         };
       case "recent":
         return {
           subtitle: "Recent Cars",
           title: "Explore Our Latest Cars",
-          description: "Check out our newest additions to the fleet."
+          description: "Check out our newest additions to the fleet.",
         };
       default:
         return {
           subtitle: "Premium Selection",
           title: "Explore Our Cars",
-          description: "Explore our curated collection of new luxury cars."
+          description: "Explore our curated collection of new luxury cars.",
         };
     }
   }, [brandFromUrl, carType, vendorIdFromUrl, vendorNameFromState]);
 
   const onNavigateToDetails = (carId) => {
     navigateToDetails(`/car-details/${carId}`);
-  }
+  };
 
   return (
     <section className="pickcar1-section">
@@ -428,7 +551,9 @@ function AllCars() {
         </div>
 
         <div className="sort-by-container">
-          <label htmlFor="sortBy" className="sort-label">Sort by:</label>
+          <label htmlFor="sortBy" className="sort-label">
+            Sort by:
+          </label>
           <select
             id="sortBy"
             value={sortBy}
@@ -445,10 +570,7 @@ function AllCars() {
 
         {windowWidth <= 768 && (
           <div className="toggle-search-container">
-            <button
-              className="toggle-search-btn"
-              onClick={() => setShowSearch((prev) => !prev)}
-            >
+            <button className="toggle-search-btn" onClick={() => setShowSearch((prev) => !prev)}>
               {showSearch ? "Hide Filters" : "Show Filters"}
             </button>
           </div>
@@ -460,7 +582,9 @@ function AllCars() {
               {loadingSearchOptions ? (
                 <p>Loading search options...</p>
               ) : searchOptionsError ? (
-                <p style={{ color: 'red' }}>Error loading search options: {searchOptionsError.message}</p>
+                <p style={{ color: "red" }}>
+                  Error loading search options: {searchOptionsError.message}
+                </p>
               ) : (
                 <AdvancedSearch
                   searchParams={searchParams}
@@ -477,55 +601,33 @@ function AllCars() {
             {currentIsLoading ? (
               <p>Loading cars...</p>
             ) : currentError ? (
-              <p style={{ color: 'red' }}>Error loading cars: {currentError.message}</p>
-            ) : currentCars.length > 0 ? (
-              currentCars.map((car, index) => {
-                const carUniqueId = car.id;
-                const isHovered = hoveredIndex === index;
-                const isLoading = carLoading[carUniqueId] !== false;
-                const rating = car.average_rating;
-
-                return (
-                  <CarCard
-                    key={carUniqueId}
-                    car={car}
-                    carId={carUniqueId}
-                    cardIndex={index}
-                    isHovered={isHovered}
-                    isLoading={isLoading}
-                    onHoverEnter={() => setHoveredIndex(index)}
-                    onHoverLeave={() => setHoveredIndex(null)}
-                    onImageLoad={() => handleImageLoad(carUniqueId)}
-                    onNavigateToDetails={() => onNavigateToDetails(carUniqueId)}
-                    average_rating={rating}
-                  />
-                );
-              })
+              <p style={{ color: "red" }}>Error loading cars: {currentError.message}</p>
+            ) : currentCars.length === 0 ? (
+              <p>No cars found matching your criteria.</p>
             ) : (
-              <div>
-                <p>No cars match your search criteria.</p>
-                {vendorIdFromUrl && (
-                  <p style={{ color: 'orange' }}>
-                    No cars found for this vendor ({vendorIdFromUrl}).
-                  </p>
-                )}
-                {brandFromUrl && (
-                  <p style={{ color: 'orange' }}>
-                    No cars found for brand: {brandFromUrl}. Please check if the brand name is correct.
-                  </p>
-                )}
-              </div>
+              currentCars.map((car, index) => (
+                <CarCard
+                  key={car.id}
+                  car={car}
+                  index={index}
+                  carLoading={carLoading}
+                  handleImageLoad={handleImageLoad}
+                  onClick={() => onNavigateToDetails(car.id)}
+                  onToggleFavorite={() => handleToggleFavorite(car)}
+                  hoveredIndex={hoveredIndex}
+                  isFavorite={car.isFavorite}
+                  setHoveredIndex={setHoveredIndex}
+                />
+              ))
             )}
           </div>
         </div>
 
-        <div className="pagination-wrapper">
-          <Pagination
-            currentPage={currentPage}
-            totalPages={currentTotalPages}
-            onPageChange={handlePageChange}
-          />
-        </div>
+        <Pagination
+          currentPage={currentPage}
+          totalPages={currentTotalPages}
+          onPageChange={handlePageChange}
+        />
       </div>
     </section>
   );
