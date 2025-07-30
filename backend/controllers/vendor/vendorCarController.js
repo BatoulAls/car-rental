@@ -373,3 +373,55 @@ exports.deleteCar = async (req, res) => {
         res.status(500).json({ error: 'Server error' });
     }
 };
+
+exports.getCarFeatures = async (req ,res) => {
+    try {
+    const carId = req.params.carId;
+        const features = await Feature.findAll(
+            {
+                attributes: ['id', 'name','type_'],
+                include: [
+                    {
+                        model: Car,
+                        attributes: [],
+                        through : {attributes : []},
+                        where : { id: carId }
+                    }
+                ]
+            }
+        )
+        if(!features) return res.status(404).json({ error: 'Car not have features' });
+        return res.status(201).json({features})
+    }catch (err){
+        console.error('❌ getCarFeatures error:', err);
+        res.status(500).json({ error: 'Server error' });
+    }
+}
+
+exports.addCarFeatures = async (req,res) => {
+    try{
+        const {carId , featureId} = req.body;
+        const car = await Car.findByPk(carId);
+        if(!car) return res.status(404).json({ error: 'Car not found or unauthorized' });
+        await car.addFeature(featureId);
+        return res.status(201).json({message: 'Feature added to Car'});
+    }catch (err){
+        console.error('❌ addCarFeatures error:', err);
+        res.status(500).json({ error: 'Server error' });
+    }
+}
+
+exports.removeFeatureFromCar = async (req ,res) => {
+    try {
+        const {carId, featureId} = req.params;
+        const car = await Car.findByPk(carId);
+        if (!car) return res.status(404).json({error: 'Car not found or unauthorized'});
+        const hasFeature = car.hasFeature(featureId);
+        if(!hasFeature) res.status(400).json({ message: 'Feature not associated with this car' });
+        await car.removeFeature(featureId);
+        res.status(201).json({message: 'Feature removed successfully'});
+    }catch (err){
+        console.error('❌ removeFeatureFromCar error:', err);
+         res.status(500).json({ error: 'Server error' });
+    }
+}

@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { getMyCars, createCar , getMyCarDetails , updateMyCar , updateCarImages , deleteCar} = require('../controllers/vendor/vendorCarController')
+const { getMyCars, createCar , getMyCarDetails , updateMyCar , updateCarImages , deleteCar , getCarFeatures , addCarFeatures , removeFeatureFromCar} = require('../controllers/vendor/vendorCarController')
 const { authMiddleware } = require('../middleware/auth');
 const authRole = require('../middleware/authRole');
 const upload = require('../middleware/upload');
@@ -16,7 +16,9 @@ router.put('/car/:carId', updateMyCar);
 router.put('/car/:carId/images', upload.array('images', 7) // allow up to 7 images,
 , updateCarImages);
 router.delete('/car/:carId',  deleteCar);
-
+router.get('/car/features/:carId',getCarFeatures)
+router.post('/car/features',addCarFeatures)
+router.delete('/car/:carId/features/:featureId',removeFeatureFromCar)
 
 module.exports = router;
 

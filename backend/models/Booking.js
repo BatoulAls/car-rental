@@ -32,5 +32,8 @@ module.exports = Booking;
 const Car = require('./Car');
 Booking.belongsTo(Car, { foreignKey: 'car_id' });
 
+const User = require('./User');
+Booking.belongsTo(User, { foreignKey: 'customer_id' });
+
 const Review = require('./Review');
 Booking.hasMany(Review, { foreignKey: 'booking_id', as: 'reviews' });
