@@ -423,7 +423,35 @@ section hr {
   border-radius: 5px;
   font-size: 14px;
 }
+.favorite-icon {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  width: 32px;
+  height: 32px;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 10;
+  color: #666;
+}
 
+.favorite-icon:hover {
+  background: rgba(255, 255, 255, 1);
+  transform: scale(1.1);
+}
+
+.favorite-icon.favorited {
+  color: #e74c3c;
+}
+
+.favorite-icon.favorited:hover {
+  color: #c0392b;
+}
 @keyframes pulse {
   0% {
     transform: scale(1);

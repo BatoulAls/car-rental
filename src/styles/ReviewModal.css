@@ -1,0 +1,334 @@
+/* src/styles/ReviewModal.css */
+.review-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(0, 0, 0, 0.7), rgba(255, 77, 48, 0.15));
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.review-modal-content {
+    background: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%);
+    padding: 40px;
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 
+        0 25px 50px -12px rgba(0, 0, 0, 0.25),
+        0 0 0 1px rgba(255, 255, 255, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.6);
+    width: 92%;
+    max-width: 560px;
+    box-sizing: border-box;
+    animation: slideIn 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+    position: relative;
+    overflow: hidden;
+}
+
+.review-modal-content::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255, 77, 48, 0.4), transparent);
+}
+
+.review-modal-content h3 {
+    margin-top: 0;
+    margin-bottom: 32px;
+    color: #0f172a;
+    font-size: 1.75rem;
+    text-align: center;
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    background: linear-gradient(135deg, #1e293b 0%, #475569 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    position: relative;
+}
+
+.review-modal-content h3::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 3px;
+    background: linear-gradient(90deg, #ff4d30, #ff6b4a);
+    border-radius: 2px;
+}
+
+.review-modal-content .form-group {
+    margin-bottom: 24px;
+    position: relative;
+}
+
+.review-modal-content label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: #374151;
+    letter-spacing: 0.01em;
+    position: relative;
+}
+
+.review-modal-content select,
+.review-modal-content textarea {
+    width: 100%;
+    padding: 16px 20px;
+    border: 2px solid #e5e7eb;
+    border-radius: 12px;
+    font-size: 1rem;
+    background: linear-gradient(145deg, #ffffff 0%, #f9fafb 100%);
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    font-family: inherit;
+    box-shadow: 
+        0 1px 3px rgba(0, 0, 0, 0.1),
+        inset 0 1px 2px rgba(255, 255, 255, 0.8);
+}
+
+.review-modal-content select:focus,
+.review-modal-content textarea:focus {
+    border-color: #ff4d30;
+    box-shadow: 
+        0 0 0 4px rgba(255, 77, 48, 0.15),
+        0 4px 12px rgba(255, 77, 48, 0.1),
+        inset 0 1px 2px rgba(255, 255, 255, 0.8);
+    outline: none;
+    background: #ffffff;
+    transform: translateY(-1px);
+}
+
+.review-modal-content select:hover,
+.review-modal-content textarea:hover {
+    border-color: #9ca3af;
+    transform: translateY(-1px);
+    box-shadow: 
+        0 2px 8px rgba(0, 0, 0, 0.1),
+        inset 0 1px 2px rgba(255, 255, 255, 0.8);
+}
+
+.review-modal-content textarea {
+    resize: vertical;
+    min-height: 140px;
+    line-height: 1.6;
+}
+
+.review-modal-content .modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 16px;
+    margin-top: 36px;
+    padding-top: 24px;
+    border-top: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.review-modal-content .submit-review-btn,
+.review-modal-content .cancel-review-btn {
+    padding: 14px 28px;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    position: relative;
+    overflow: hidden;
+    min-width: 120px;
+    font-family: inherit;
+}
+
+.review-modal-content .submit-review-btn {
+    background: linear-gradient(135deg, #ff4d30 0%, #ff6b4a 100%);
+    color: white;
+    box-shadow: 
+        0 4px 12px rgba(255, 77, 48, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.review-modal-content .submit-review-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.6s ease;
+}
+
+.review-modal-content .submit-review-btn:hover {
+    background: linear-gradient(135deg, #e8421e 0%, #ff4d30 100%);
+    transform: translateY(-2px);
+    box-shadow: 
+        0 8px 20px rgba(255, 77, 48, 0.5),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.review-modal-content .submit-review-btn:hover::before {
+    left: 100%;
+}
+
+.review-modal-content .submit-review-btn:active {
+    transform: translateY(0);
+    box-shadow: 
+        0 2px 8px rgba(255, 77, 48, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.review-modal-content .cancel-review-btn {
+    background: linear-gradient(145deg, #f3f4f6 0%, #e5e7eb 100%);
+    color: #374151;
+    border: 1px solid #d1d5db;
+    box-shadow: 
+        0 2px 4px rgba(0, 0, 0, 0.05),
+        inset 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+.review-modal-content .cancel-review-btn:hover {
+    background: linear-gradient(145deg, #e5e7eb 0%, #d1d5db 100%);
+    color: #1f2937;
+    transform: translateY(-1px);
+    box-shadow: 
+        0 4px 8px rgba(0, 0, 0, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+.review-modal-content .cancel-review-btn:active {
+    transform: translateY(0);
+    box-shadow: 
+        0 1px 2px rgba(0, 0, 0, 0.05),
+        inset 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+/* Enhanced animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        backdrop-filter: blur(0px);
+        -webkit-backdrop-filter: blur(0px);
+    }
+    to {
+        opacity: 1;
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+    }
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateY(-40px) scale(0.95);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+    }
+}
+
+/* Star rating enhancement (if you have star ratings) */
+.review-modal-content .star-rating {
+    display: flex;
+    gap: 4px;
+    margin: 12px 0;
+    justify-content: center;
+}
+
+.review-modal-content .star {
+    font-size: 1.5rem;
+    color: #d1d5db;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.review-modal-content .star:hover,
+.review-modal-content .star.active {
+    color: #fbbf24;
+    transform: scale(1.1);
+}
+
+/* Responsive design */
+@media (max-width: 640px) {
+    .review-modal-content {
+        padding: 24px;
+        margin: 16px;
+        border-radius: 16px;
+    }
+    
+    .review-modal-content h3 {
+        font-size: 1.5rem;
+        margin-bottom: 24px;
+    }
+    
+    .review-modal-content .modal-actions {
+        flex-direction: column;
+        gap: 12px;
+    }
+    
+    .review-modal-content .submit-review-btn,
+    .review-modal-content .cancel-review-btn {
+        width: 100%;
+        padding: 16px;
+    }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+    .review-modal-overlay {
+        background: linear-gradient(135deg, rgba(0, 0, 0, 0.8), rgba(15, 23, 42, 0.9));
+    }
+    
+    .review-modal-content {
+        background: linear-gradient(145deg, #1e293b 0%, #0f172a 100%);
+        border-color: rgba(255, 255, 255, 0.1);
+        color: #f1f5f9;
+    }
+    
+    .review-modal-content h3 {
+        background: linear-gradient(135deg, #f1f5f9 0%, #cbd5e1 100%);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+    
+    .review-modal-content label {
+        color: #cbd5e1;
+    }
+    
+    .review-modal-content select,
+    .review-modal-content textarea {
+        background: linear-gradient(145deg, #334155 0%, #1e293b 100%);
+        border-color: #475569;
+        color: #f1f5f9;
+    }
+    
+    .review-modal-content select:focus,
+    .review-modal-content textarea:focus {
+        background: #334155;
+        border-color: #ff4d30;
+    }
+    
+    .review-modal-content .cancel-review-btn {
+        background: linear-gradient(145deg, #475569 0%, #334155 100%);
+        color: #f1f5f9;
+        border-color: #64748b;
+    }
+    
+    .review-modal-content .cancel-review-btn:hover {
+        background: linear-gradient(145deg, #64748b 0%, #475569 100%);
+    }
+}
