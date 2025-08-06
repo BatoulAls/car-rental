@@ -46,7 +46,7 @@ exports.login = async (req, res) => {
 
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) return res.status(401).json({ error: 'Invalid email or password' });
-
+        if(user.role === 'vendor' && user.is_verified === false) return res.status(401).json({ error: 'User is Not verified' });
         const token = jwt.sign({ id: user.id, role: user.role }, JWT_SECRET, { expiresIn: '7d' });
         res.json({ token, user });
     } catch (err) {

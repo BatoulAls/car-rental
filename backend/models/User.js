@@ -73,5 +73,8 @@ User.belongsToMany(Car, {
     as: 'FavoriteCars'
 });
 
+const Vendor = require('./Vendor');
+User.hasOne(Vendor, {foreignKey: 'user_id'});
+
 // const Review = require('./Review');
 // User.hasMany(Review, { foreignKey: 'customer_id', as: 'Reviews' });

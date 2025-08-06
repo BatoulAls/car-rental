@@ -5,6 +5,7 @@ const Tag = require('../../models/Tag');
 const CarImage = require('../../models/CarImage');
 const CarCategory = require('../../models/CarCategory');
 const Region = require("../../models/Region");
+const Vendor = require("../../models/Vendor");
 
 exports.getMyCars = async (req, res) => {
     try {
@@ -16,6 +17,7 @@ exports.getMyCars = async (req, res) => {
         const { count, rows } = await Car.findAndCountAll({
             where: { vendor_id: vendorId },
             include: [
+                { model: Vendor, attributes: ['id', 'name', 'phone', 'photo'] },
                 {
                     model: Region,
                     as: 'region',
