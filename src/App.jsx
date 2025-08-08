@@ -1,5 +1,5 @@
 import "../src/dist/styles.css";
-import Navbar from './components/Navbar';
+
 import Home from './Pages/Home';
 import About from "./Pages/About";
 import Contact from "./Pages/Contact";
@@ -9,7 +9,7 @@ import { Route, Routes } from "react-router-dom";
 import Reviews from "./Pages/Reviews";
 import AllCars from "./Pages/allcars";
 import CarDetails from "./Pages/CarDetails";
-import Footer from "./components/Footer"
+
 import AllBrands from "./Pages/AllBrands";
 import Vendors from './Pages/Vendors'
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -19,11 +19,15 @@ import LoginPage from "./Pages/LoginPage";
 import ResetPasswordModal from "./components/ResetPasswordModal";
 import MainLayout from "./layouts/MainLayout";
 import AuthLayout from "./layouts/AuthLayout";
+import VendorLayout from "./layouts/VendorLayout";
 import UserProfile from "./Pages/UserProfile";
 import { AuthProvider } from './context/AuthContext'; 
 import BookingPreviewPage from './Pages/BookingPreviewPage';
 import BookingDetails from "./Pages/BookingDetails";
+// vendors
 
+import AddCar from './Pages/Vendor/AddCar'
+import MyCars from './Pages/Vendor/MyCars'
 
 const queryClient = new QueryClient();
 
@@ -53,9 +57,18 @@ function App() {
           <Route path="/UserProfile" element={<UserProfile  />} />
           <Route path="/preview-booking" element={<BookingPreviewPage />} />
           <Route path="/booking-details/:bookingId" element={<BookingDetails />}/>
+         
 
           
 
+        </Route>
+
+
+        <Route element={<VendorLayout />}>
+          
+          
+           <Route path="/vendors/MyCars" element={<MyCars />}/>
+           <Route path="/vendors/add-car" element={<AddCar/>}/>
         </Route>
 
         <Route element={<AuthLayout />}>

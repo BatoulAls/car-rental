@@ -73,61 +73,65 @@ const RegisterPage = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = async () => {
-    if (validateForm()) {
-      const button = document.querySelector('.submit-button-reg');
-      if (button) button.style.transform = 'scale(0.95)'; 
+ const handleSubmit = async () => {
+  if (validateForm()) {
+    const button = document.querySelector('.submit-button-reg');
+    if (button) button.style.transform = 'scale(0.95)'; 
 
-      try {
-        const response = await axios.post('http://localhost:5050/api/auth/register', formData, {
-          headers: {
-            'Content-Type': 'application/json'
-          }
+    try {
+      const response = await axios.post('http://localhost:5050/api/auth/register', formData, {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+
+      console.log('API Response:', response.data);
+      const { token, user } = response.data; 
+      login(token, user); 
+
+      if (button) button.style.transform = 'scale(1)'; 
+      const card = document.querySelector('.register-card-reg');
+      if (card) card.style.animation = 'successPulse 0.6s ease-out'; 
+
+      setTimeout(() => {
+        if (card) card.style.animation = ''; 
+        setFormData({
+          username: '',
+          email: '',
+          phone: '',
+          password: '',
+          role: 'customer'
         });
 
-        console.log('API Response:', response.data);
-        const { token, user } = response.data; 
-        login(token, user); 
-
-        if (button) button.style.transform = 'scale(1)'; 
-        const card = document.querySelector('.register-card-reg');
-        if (card) card.style.animation = 'successPulse 0.6s ease-out'; 
-
-        setTimeout(() => {
-          if (card) card.style.animation = ''; 
-          setFormData({
-            username: '',
-            email: '',
-            phone:'',
-            password: '',
-            role: 'customer'
-          });
-          navigate('/'); 
-        }, 600);
-      }
-      catch (error) {
-        console.error('API Error:', error.response?.data || error.message);
-
-        const apiMessage = error.response?.data?.error || 'Registration failed. Please try again.';
-
-      
-        if (apiMessage.toLowerCase().includes('email')) {
-          setErrors(prev => ({ ...prev, email: apiMessage }));
+        if (formData.role === 'vendor') {
+          navigate('/vendors/Dashboard');
         } else {
-         
-          console.log("Error Message:", apiMessage);
+          navigate('/');
         }
-
-        if (button) button.style.transform = 'scale(1)';
-      }
-    } else {
-      const card = document.querySelector('.register-card-reg');
-      if (card) card.style.animation = 'shake 0.5s ease-in-out';
-      setTimeout(() => {
-        if (card) card.style.animation = '';
-      }, 500);
+      }, 600);
     }
-  };
+    catch (error) {
+      console.error('API Error:', error.response?.data || error.message);
+
+      const apiMessage = error.response?.data?.error || 'Registration failed. Please try again.';
+
+      if (apiMessage.toLowerCase().includes('email')) {
+        setErrors(prev => ({ ...prev, email: apiMessage }));
+      } else {
+        console.log("Error Message:", apiMessage);
+      }
+
+      if (button) button.style.transform = 'scale(1)';
+    }
+  } else {
+    const card = document.querySelector('.register-card-reg');
+    if (card) card.style.animation = 'shake 0.5s ease-in-out';
+    setTimeout(() => {
+      if (card) card.style.animation = '';
+    }, 500);
+  }
+};
+
 
  
   const radioOptions = [

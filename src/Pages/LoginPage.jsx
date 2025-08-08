@@ -80,50 +80,56 @@ const LoginPage = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = async () => {
-    if (validateForm()) {
-      const button = document.querySelector('.submit-button-reg');
-      if (button) button.style.transform = 'scale(0.95)';
+ const handleSubmit = async () => {
+  if (validateForm()) {
+    const button = document.querySelector('.submit-button-reg');
+    if (button) button.style.transform = 'scale(0.95)';
 
-      try {
-        const response = await axios.post('http://localhost:5050/api/auth/login', formData, {
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        });
-        const { token, user } = response.data;
-          login(token, user);
+    try {
+      const response = await axios.post('http://localhost:5050/api/auth/login', formData, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      const { token, user } = response.data;
 
+      login(token, user);
 
-        console.log('Login successful:', response.data);
-         
-        if (button) button.style.transform = 'scale(1)';
-        const card = document.querySelector('.register-card-reg');
-        if (card) card.style.animation = 'successPulse 0.6s ease-out';
+      console.log('Login successful:', response.data);
 
-       setTimeout(() => {
-  if (card) card.style.animation = '';
-  setFormData({
-    email: '',
-    password: '',
-    rememberMe: false,
-  });
-  navigate('/');  
-}, 600);
-
-      } catch (error) {
-        console.error('Login failed:', error.response?.data || error.message);
-        alert('Login failed. Please check your credentials.');
-        if (button) button.style.transform = 'scale(1)';
-      }
-    } else {
+      if (button) button.style.transform = 'scale(1)';
       const card = document.querySelector('.register-card-reg');
-      if (card) card.style.animation = 'shake 0.5s ease-in-out';
+      if (card) card.style.animation = 'successPulse 0.6s ease-out';
+
       setTimeout(() => {
         if (card) card.style.animation = '';
-      }, 500);
+        setFormData({
+          email: '',
+          password: '',
+          rememberMe: false,
+        });
+
+        if (user.role === 'vendor') {
+          navigate('/vendors/Dashboard');    
+        } else {
+          navigate('/');    
+        }
+
+      }, 600);
+
+    } catch (error) {
+      console.error('Login failed:', error.response?.data || error.message);
+      alert('Login failed. Please check your credentials.');
+      if (button) button.style.transform = 'scale(1)';
     }
-  };
+  } else {
+    const card = document.querySelector('.register-card-reg');
+    if (card) card.style.animation = 'shake 0.5s ease-in-out';
+    setTimeout(() => {
+      if (card) card.style.animation = '';
+    }, 500);
+  }
+};
 
   return (
     <Shape>

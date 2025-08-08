@@ -12,8 +12,33 @@ const InputField = ({
   error,
   index,
   disabled = false,
-  options = [], 
+  options = [],
+  min,        
+  max        
 }) => {
+ 
+  if (type === 'checkbox') {
+    return (
+      <div className="form-group form-group-checkbox" style={{ animationDelay: `${200 + index * 100}ms` }}>
+        <label className="checkbox-label-reg">
+          <input
+            type="checkbox"
+            name={name}
+            checked={value} 
+            onChange={onChange}
+            disabled={disabled}
+            className={`checkbox-input-reg ${error ? 'error' : ''}`}
+          />
+          <span className="checkbox-text-reg">
+            <span className="label-icon-reg">{icon}</span> {label}
+          </span>
+        </label>
+        {error && <span className="error-text-reg">{error}</span>}
+      </div>
+    );
+  }
+
+
   const renderInput = () => {
     if (type === 'textarea') {
       return (
@@ -29,6 +54,7 @@ const InputField = ({
       );
     }
 
+    
     if (type === 'select') {
       return (
         <select
@@ -47,6 +73,7 @@ const InputField = ({
       );
     }
 
+   
     return (
       <input
         type={type}
@@ -56,9 +83,12 @@ const InputField = ({
         className={`input-reg ${error ? 'error' : ''}`}
         placeholder={placeholder}
         disabled={disabled}
+        min={min}        
+       max={max} 
       />
     );
   };
+
 
   return (
     <div className="form-group" style={{ animationDelay: `${200 + index * 100}ms` }}>
