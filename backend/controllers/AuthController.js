@@ -3,6 +3,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
 const User = require('../models/User');
+const Vendor = require('../models/Vendor');
 const nodemailer = require('nodemailer');
 
 const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret';
@@ -26,8 +27,15 @@ exports.register = async (req, res) => {
             is_active: true,
 
         });
+        if(user.role === "vendor") {
+            const vendor_ = await Vendor.create({
+                user_id: user.id,
+                phone: phone,
+                verified: false,
+                active: true
+            })
+        }
         const token = jwt.sign({ id: user.id, role: user.role }, JWT_SECRET, { expiresIn: '7d' });
-
 
         res.status(201).json({ message: 'User registered successfully', user ,token });
     } catch (err) {

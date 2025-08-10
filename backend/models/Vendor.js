@@ -15,7 +15,6 @@ const Vendor = sequelize.define('Vendor', {
     },
     name: {
         type: DataTypes.STRING,
-        allowNull: false,
     },
     phone: {
         type: DataTypes.STRING,

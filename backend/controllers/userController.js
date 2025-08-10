@@ -1,4 +1,5 @@
 const User = require('../models/User');
+const Vendor = require('../models/Vendor');
 const bcrypt = require('bcrypt');
 
 exports.getProfile = async (req, res) => {
@@ -13,7 +14,11 @@ exports.updateProfile = async (req, res) => {
     const { username, phone } = req.body;
     const photo = req.file; // comes from multer
 
-    const user = await User.findByPk(req.user.id);
+    const user = await User.findByPk(req.user.id,
+        {
+            include: [{ model: Vendor }]
+        }
+    );
     if (!user) return res.status(404).json({ error: 'User not found' });
 
     user.username = username?.trim() || user.username;
@@ -24,6 +29,15 @@ exports.updateProfile = async (req, res) => {
     }
 
     await user.save();
+
+    if(user.role === "vendor"){
+        user.Vendor.phone = phone?.trim() || user.phone;
+        if (photo) {
+            user.Vendor.photo = `/uploads/${photo.filename}`; // save relative path
+        }
+        user.Vendor.save();
+    }
+
     res.json({ message: 'Profile updated successfully', user });
     } catch (error) {
         console.error(error);
