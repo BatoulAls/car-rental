@@ -111,3 +111,108 @@ exports.updateMyProfile = async (req, res) => {
         return res.status(500).json({message: 'Failed to update profile', error: err.message});
     }
 }
+
+exports.updateWorkingHours = async (req, res) => {
+    const vendorId = req.user.id;
+
+    try {
+        const user = await User.findOne({
+            where: {id: vendorId},
+            include: [{model: Vendor, as: 'Vendor'}]
+        })
+
+        const vendorr = await Vendor.findOne({
+            where: {user_id: vendorId},
+        })
+        if (!user || !vendorr) {
+            return res.status(404).json({"Message": "User not found or not verified."});
+        }
+
+        const {shop_open_time, shop_close_time} = req.body;
+        const open24FieldPresent = Object.prototype.hasOwnProperty.call(req.body, 'open_24_7');
+        const open_24_7 = open24FieldPresent ? Boolean(req.body.open_24_7) : undefined;
+        // If not 24/7, ensure both times provided together (optional policy)
+        if (open24FieldPresent && open_24_7 === false) {
+            if (shop_open_time === undefined || shop_close_time === undefined) {
+                return res.status(400).json({
+                    message: 'When open_24_7 is false, provide both shop_open_time and shop_close_time.',
+                });
+            }
+        }
+
+        const updates = {};
+        if (shop_open_time !== undefined) updates.shop_open_time = shop_open_time;
+        if (shop_close_time !== undefined) updates.shop_close_time = shop_close_time;
+
+        if (open24FieldPresent) {
+            updates.open_24_7 = open_24_7;
+            if (open_24_7 === true) {
+                updates.shop_open_time = null;
+                updates.shop_close_time = null;
+            }
+        }
+
+        if (Object.keys(updates).length === 0) return res.status(400).json({message: 'No valid fields to update.'})
+
+
+        await vendorr.update(updates)
+
+        return res.status(200).json({"Message": "Working Hours Updated successfully.",})
+    } catch (err) {
+        console.error(err);
+        return res.status(500).json({message: 'Failed to update Working Hours', error: err.message});
+    }
+}
+
+exports.updateProfileImage = async (req, res) => {
+    const id = req.user.id;
+    const profileImage = req.file;
+
+    const user = await User.findOne({
+        where: {id: id},
+        include: [{model: Vendor}],
+    })
+
+    if (!user) {
+        return res.status(404).json({"Message": "User not found or not verified."});
+    }
+
+    if (profileImage) {
+        user.photo = `/uploads/${profileImage.filename}`;
+        await user.save();
+
+        if (user.Vendor) {
+            user.Vendor.photo = `/uploads/${profileImage.filename}`;
+            await user.Vendor.save();
+        }
+        return res.status(200).json({"Message": "Profile Image Updated.",})
+    } else {
+        return res.status(404).json({"Message": "New Profile Image Not Found",})
+    }
+
+}
+
+exports.updateVendorStatus = async (req, res) => {
+    const id = req.user.id;
+    const status = req.body.status;
+
+    const user = await User.findOne({
+        where: {id: id},
+        include: [{model: Vendor}],
+    })
+
+    if (!user) {
+        return res.status(404).json({"Message": "User not found or not verified."});
+    }
+    if (![0, 1].includes(status)) return res.status(400).json({"Message": "New Status is invalid."});
+
+    user.is_active = status
+    await user.save();
+
+    if (user.Vendor) {
+        user.Vendor.active = status
+        await user.Vendor.save();
+    }
+    return res.status(200).json({"Message": "Vendor Status Updated.",})
+
+}

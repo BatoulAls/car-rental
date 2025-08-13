@@ -44,6 +44,7 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use('/api/vendor', require('./routes/vendorCars'));
 app.use('/api/vendor/booking', require('./routes/vendorBooking'));
 app.use('/api/vendor/profile', require('./routes/vendorProfile'));
+app.use('/api/vendor/dashboard', require('./routes/vendorDashboard'));
 app.use('/api/meta', require('./routes/metaRoutes'));
 
 module.exports = app;
