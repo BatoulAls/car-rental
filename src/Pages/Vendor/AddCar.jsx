@@ -40,7 +40,6 @@ const CarManagementApp = () => {
     images: [] 
   });
 
-  // State for API data
   const [apiData, setApiData] = useState({
     categories: [],
     countries: [],
@@ -267,26 +266,12 @@ const CarManagementApp = () => {
   }
 
   return (
-    <div className="container">
+    <div className="container-vendor +">
      
 
    
       <div className="main-content">
-        {!showForm ? (
-          <div className="empty-state">
-            <Car size={64} color="#9ca3af" style={{ margin: '0 auto 1rem' }} />
-            <h3 className="empty-state-title">No cars yet</h3>
-            <p className="empty-state-text">Get started by adding your car.</p>
-            <button
-              onClick={() => setShowForm(true)}
-              className="primary-button"
-              style={{ margin: '0 auto' }}
-            >
-              <Plus size={20} style={{ marginRight: '0.5rem' }} />
-              Add New Car
-            </button>
-          </div>
-        ) : (
+        
           <div className="form-card">
             <div className="form-header">
               <h2 className="form-title">Add New Car</h2>
@@ -700,7 +685,7 @@ const CarManagementApp = () => {
               </div>
             </div>
           </div>
-        )}
+        
       </div>
     </div>
   );

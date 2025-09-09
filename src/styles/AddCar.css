@@ -2,10 +2,18 @@
 
 
 /* Global styles for the container */
-.container {
+.container-vendor {
   min-height: 100vh;
   background-color: #f9fafb;
   font-family: system-ui, -apple-system, sans-serif;
+}
+.existing-image {
+  width: 120px;   
+  height: auto;  
+  border-radius: 8px; 
+  margin: 5px;    
+  object-fit: cover; 
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
 }
 
 /* Header styles */

@@ -110,7 +110,7 @@ const LoginPage = () => {
         });
 
         if (user.role === 'vendor') {
-          navigate('/vendors/Dashboard');    
+          navigate('/vendors/MyCars');    
         } else {
           navigate('/');    
         }

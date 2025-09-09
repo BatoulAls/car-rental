@@ -7,6 +7,7 @@ const InputField = ({
   type,
   name,
   value,
+  checked,
   onChange,
   placeholder,
   error,
@@ -24,7 +25,7 @@ const InputField = ({
           <input
             type="checkbox"
             name={name}
-            checked={value} 
+            checked={checked} 
             onChange={onChange}
             disabled={disabled}
             className={`checkbox-input-reg ${error ? 'error' : ''}`}

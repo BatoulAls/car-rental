@@ -1,6 +1,7 @@
-
 import React, { useState, useEffect } from 'react';
 import defaultimg from '../images/cars-big/default-car.png';
+
+const API_BASE_URL = 'http://localhost:5050';
 
 const CarImageGallery = ({ images, carBrand, carModel }) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -9,9 +10,11 @@ const CarImageGallery = ({ images, carBrand, carModel }) => {
   useEffect(() => {
     setCurrentImageIndex(0);
     setIsImageLoading(true);
-  }, [images]); 
+  }, [images]);
 
-  const photos = (images && images.length > 0) ? images : [defaultimg];
+  const photos = (images && images.length > 0)
+    ? images.map(img => `${API_BASE_URL}${img.image_url}`)
+    : [defaultimg];
 
   const nextImage = () => {
     setCurrentImageIndex((prev) =>
@@ -45,18 +48,8 @@ const CarImageGallery = ({ images, carBrand, carModel }) => {
 
       {photos.length > 1 || (photos.length === 1 && photos[0] !== defaultimg) ? (
         <>
-          <button
-            onClick={prevImage}
-            className="image-nav-btn1 image-nav-prev1"
-          >
-            ←
-          </button>
-          <button
-            onClick={nextImage}
-            className="image-nav-btn1 image-nav-next1"
-          >
-            →
-          </button>
+          <button onClick={prevImage} className="image-nav-btn1 image-nav-prev1">←</button>
+          <button onClick={nextImage} className="image-nav-btn1 image-nav-next1">→</button>
 
           <div className="image-indicators1">
             {photos.map((_, index) => (

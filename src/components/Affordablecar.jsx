@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useMemo, useCallback } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -7,7 +7,6 @@ import { useAuth } from "../context/AuthContext";
 import "../styles/PickCar.css";
 
 const API_BASE_URL = "http://localhost:5050/api";
-
 
 const fetchCarsByType = async (type) => {
   const res = await axios.get(`${API_BASE_URL}/home`);
@@ -18,16 +17,12 @@ const fetchCarsByType = async (type) => {
   return { cars };
 };
 
-
 const fetchFavoriteCars = async (token) => {
   if (!token) return [];
   try {
     const res = await axios.get(`${API_BASE_URL}/favorites`, {
       headers: { Authorization: `Bearer ${token}` },
     });
-    if (process.env.NODE_ENV === "development") {
-      console.debug("Fetched favorites:", res.data);
-    }
     return res.data;
   } catch (error) {
     console.error("Error fetching favorites:", error);
@@ -36,65 +31,40 @@ const fetchFavoriteCars = async (token) => {
 };
 
 function Affordablecar() {
-  const [cars, setCars] = useState([]);
   const [carLoading, setCarLoading] = useState({});
   const [hoveredIndex, setHoveredIndex] = useState(null);
   const { token } = useAuth();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
-  const {
-    data: allCarsData = { cars: [] },
-    isLoading: allCarsLoading,
-    error: allCarsError,
-  } = useQuery({
+  const { data: allCarsData = { cars: [] }, isLoading: allCarsLoading, error: allCarsError } = useQuery({
     queryKey: ["cars", "affordable"],
     queryFn: () => fetchCarsByType("affordable"),
   });
 
-  const {
-    data: favoriteCarsData = [],
-    isLoading: favoritesLoading,
-    error: favoritesError,
-  } = useQuery({
+  const { data: favoriteCarsData = [], isLoading: favoritesLoading, error: favoritesError } = useQuery({
     queryKey: ["favorites"],
     queryFn: () => fetchFavoriteCars(token),
     enabled: !!token,
   });
 
-  useEffect(() => {
-    if (allCarsData.cars.length === 0) return;
+  const cars = useMemo(() => {
+    if (!allCarsData.cars.length) return [];
 
-    const favoritedCarIds = new Set(favoriteCarsData.map((favCar) => favCar.id));
-    const updatedCars = allCarsData.cars.map((car) => ({
+    const favoritedCarIds = new Set(favoriteCarsData.map(favCar => favCar.id));
+    return allCarsData.cars.map(car => ({
       ...car,
       isFavorite: favoritedCarIds.has(car.id),
       favoriteId: favoritedCarIds.has(car.id) ? car.id : null,
     }));
-
-    setCars(updatedCars);
-
-
-    updatedCars.slice(0, 6).forEach((car) => {
-      if (car.photo) {
-        const img = new Image();
-        img.src = car.photo;
-      }
-    });
-
-    if (process.env.NODE_ENV === "development") {
-      console.debug("Updated cars with favorites:", updatedCars);
-    }
   }, [allCarsData.cars, favoriteCarsData]);
 
   const handleImageLoad = useCallback((carId) => {
-    setCarLoading((prev) => ({ ...prev, [carId]: false }));
+    setCarLoading(prev => ({ ...prev, [carId]: false }));
   }, []);
 
   const onNavigateToDetails = useCallback(
-    (carId) => {
-      navigate(`/car-details/${carId}`);
-    },
+    (carId) => navigate(`/car-details/${carId}`),
     [navigate]
   );
 
@@ -110,23 +80,12 @@ function Affordablecar() {
           await axios.delete(`${API_BASE_URL}/favorites/${car.id}`, {
             headers: { Authorization: `Bearer ${token}` },
           });
-          if (process.env.NODE_ENV === "development") {
-            console.debug(`Removed favorite for car ID: ${car.id}`);
-          }
         } else {
-          const response = await axios.post(
+          await axios.post(
             `${API_BASE_URL}/favorites`,
             { car_id: car.id },
-            {
-              headers: {
-                Authorization: `Bearer ${token}`,
-                "Content-Type": "application/json",
-              },
-            }
+            { headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" } }
           );
-          if (process.env.NODE_ENV === "development") {
-            console.debug("Added favorite response:", response.data);
-          }
         }
       } catch (error) {
         console.error("Failed to toggle favorite:", error);
@@ -154,10 +113,7 @@ function Affordablecar() {
           </p>
         </div>
 
-        <div
-          className="car-row"
-          style={cars.length < 4 ? { justifyContent: "left" } : {}}
-        >
+        <div className="car-row" style={cars.length < 4 ? { justifyContent: "left" } : {}}>
           {cars.slice(0, 4).map((car, index) => {
             const carId = car.id;
             const isHovered = hoveredIndex === index;

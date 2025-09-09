@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useMemo, useCallback } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import CarCard from "./CarCard";
 import axios from "axios";
@@ -31,9 +31,6 @@ const fetchFavoriteCars = async (token) => {
     const res = await axios.get(`${API_BASE_URL}/favorites`, {
       headers: { Authorization: `Bearer ${token}` },
     });
-    if (process.env.NODE_ENV === "development") {
-      console.debug("Fetch favorites API response:", res.data);
-    }
     return res.data;
   } catch (error) {
     console.error("Error fetching favorite cars:", error);
@@ -44,51 +41,30 @@ const fetchFavoriteCars = async (token) => {
 function Luxurycars() {
   const [carLoading, setCarLoading] = useState({});
   const [hoveredIndex, setHoveredIndex] = useState(null);
-  const [cars, setCars] = useState([]);
   const { token } = useAuth();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
-  const {
-    data = { cars: [] },
-    isLoading,
-    error,
-  } = useQuery({
+  const { data = { cars: [] }, isLoading, error } = useQuery({
     queryKey: ["cars", "luxury"],
     queryFn: () => fetchCarsByType("luxury"),
   });
 
-  const {
-    data: favoriteCarsData = [],
-    isLoading: favoritesLoading,
-    error: favoritesError,
-  } = useQuery({
+  const { data: favoriteCarsData = [], isLoading: favoritesLoading, error: favoritesError } = useQuery({
     queryKey: ["favorites"],
     queryFn: () => fetchFavoriteCars(token),
     enabled: !!token,
   });
 
- 
-  useEffect(() => {
-    if (!data || !favoriteCarsData) return;
+  const cars = useMemo(() => {
+    if (!data || !data.cars.length) return [];
 
     const favoritedCarIds = new Set(favoriteCarsData.map((fav) => fav.id));
-
-    const updatedCars = data.cars.map((car) => ({
+    return data.cars.map((car) => ({
       ...car,
       isFavorite: favoritedCarIds.has(car.id),
       favoriteId: favoritedCarIds.has(car.id) ? car.id : null,
     }));
-
-    setCars(updatedCars);
-
-  
-    updatedCars.slice(0, 6).forEach((car) => {
-      if (car.photo) {
-        const img = new Image();
-        img.src = car.photo;
-      }
-    });
   }, [data, favoriteCarsData]);
 
   const handleImageLoad = useCallback((carId) => {
@@ -96,9 +72,7 @@ function Luxurycars() {
   }, []);
 
   const onNavigateToDetails = useCallback(
-    (carId) => {
-      navigate(`/car-details/${carId}`);
-    },
+    (carId) => navigate(`/car-details/${carId}`),
     [navigate]
   );
 
@@ -116,9 +90,6 @@ function Luxurycars() {
           });
           queryClient.invalidateQueries(["cars", "luxury"]);
           queryClient.invalidateQueries(["favorites"]);
-          if (process.env.NODE_ENV === "development") {
-            console.debug(`Removed favorite for car ID: ${car.id}`);
-          }
         } else {
           const response = await axios.post(
             `${API_BASE_URL}/favorites`,
@@ -142,14 +113,7 @@ function Luxurycars() {
               ),
             };
           });
-
           queryClient.invalidateQueries(["favorites"]);
-
-          if (process.env.NODE_ENV === "development") {
-            console.debug(
-              `Added favorite for car ID: ${car.id}, new favorite ID: ${newFavoriteId}`
-            );
-          }
         }
       } catch (error) {
         console.error("Failed to toggle favorite status:", error);
@@ -176,10 +140,7 @@ function Luxurycars() {
           </p>
         </div>
 
-        <div
-          className="car-row"
-          style={cars.length < 4 ? { justifyContent: "left" } : {}}
-        >
+        <div className="car-row" style={cars.length < 4 ? { justifyContent: "left" } : {}}>
           {cars.slice(0, 4).map((car, index) => {
             const carId = car.id;
             const isHovered = hoveredIndex === index;

@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo, useCallback } from "react";
+import { useState, useMemo, useCallback, useEffect } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { useAuth } from "../context/AuthContext"; 
@@ -44,10 +44,7 @@ const fetchCarsWithFiltersAndSort = async (
   }
 
   for (const key in searchParams) {
-    if (key === "make" && brandFromUrl) {
-      continue;
-    }
-
+    if (key === "make" && brandFromUrl) continue;
     if (searchParams[key] && searchParams[key] !== "") {
       switch (key) {
         case "make":
@@ -58,9 +55,7 @@ const fetchCarsWithFiltersAndSort = async (
           const selectedRegion = regions.find(
             (region) => region.id === parseInt(selectedRegionId)
           );
-          if (selectedRegion) {
-            params.append("location", selectedRegion.name_en);
-          }
+          if (selectedRegion) params.append("location", selectedRegion.name_en);
           break;
         case "minPrice":
           params.append("minPrice", searchParams[key]);
@@ -87,9 +82,7 @@ const fetchCarsWithFiltersAndSort = async (
           params.append("min_review", searchParams[key]);
           break;
         case "vendor":
-          if (!vendorIdFromUrl) {
-            params.append("vendor_id", searchParams[key]);
-          }
+          if (!vendorIdFromUrl) params.append("vendor_id", searchParams[key]);
           break;
         case "pickup_date":
           params.append("pickup_date", searchParams[key]);
@@ -99,7 +92,6 @@ const fetchCarsWithFiltersAndSort = async (
           break;
         default:
           params.append(key, searchParams[key]);
-          break;
       }
     }
   }
@@ -129,21 +121,15 @@ const fetchCarsWithFiltersAndSort = async (
     }
   }
 
-  if (params.toString()) {
-    url += `&${params.toString()}`;
-  }
+  if (params.toString()) url += `&${params.toString()}`;
 
-  console.log("Final API URL:", url);
+  if (process.env.NODE_ENV === "development") console.log("Final API URL:", url);
+
   const res = await fetch(url);
   if (!res.ok) throw new Error("Failed to load cars with filters and sort");
   const resultData = await res.json();
 
-  if (Array.isArray(resultData)) {
-    return {
-      data: resultData,
-      totalPages: 1,
-    };
-  }
+  if (Array.isArray(resultData)) return { data: resultData, totalPages: 1 };
   return resultData;
 };
 
@@ -153,9 +139,7 @@ const fetchFavoriteCars = async (token) => {
     const res = await axios.get(`${API_BASE_URL}/api/favorites`, {
       headers: { Authorization: `Bearer ${token}` },
     });
-    if (process.env.NODE_ENV === "development") {
-      console.debug("Fetched favorites:", res.data);
-    }
+    if (process.env.NODE_ENV === "development") console.debug("Fetched favorites:", res.data);
     return res.data;
   } catch (error) {
     console.error("Error fetching favorites:", error);
@@ -167,18 +151,12 @@ function AllCars() {
   const location = useLocation();
   const navigateToDetails = useNavigate();
   const { vendorId: vendorIdFromUrl } = useParams();
-
   const queryClient = useQueryClient();
-
   const { token } = useAuth();
 
-  const [cars, setCars] = useState([]);
-
   const vendorNameFromState = location.state?.vendorName || null;
-
   const queryParams = new URLSearchParams(location.search);
   const brandFromUrl = queryParams.get("brand");
-
   const searchedResultData = location.state?.resultData || null;
   const carType = location.state?.carType || null;
 
@@ -206,23 +184,14 @@ function AllCars() {
 
   const carsPerPage = 10;
 
-  const {
-    data: searchOptions,
-    isLoading: loadingSearchOptions,
-    error: searchOptionsError,
-  } = useQuery({
+  const { data: searchOptions, isLoading: loadingSearchOptions, error: searchOptionsError } = useQuery({
     queryKey: ["advancedSearchOptions"],
     queryFn: fetchAdvancedSearchOptions,
     staleTime: Infinity,
     cacheTime: Infinity,
   });
 
-  const {
-    data: carsData,
-    isLoading: isLoadingCars,
-    error: carsError,
-    refetch: refetchCars,
-  } = useQuery({
+  const { data: carsData, isLoading: isLoadingCars, error: carsError } = useQuery({
     queryKey: [
       "allCars",
       currentPage,
@@ -248,33 +217,22 @@ function AllCars() {
     enabled: !!searchOptions,
   });
 
-  const {
-    data: favoriteCarsData = [],
-    isLoading: favoritesLoading,
-    error: favoritesError,
-  } = useQuery({
+  const { data: favoriteCarsData = [], isLoading: favoritesLoading, error: favoritesError } = useQuery({
     queryKey: ["favorites"],
     queryFn: () => fetchFavoriteCars(token),
     enabled: !!token,
   });
 
-  
-  useEffect(() => {
-     
-  
-    if (!carsData?.data || carsData.data.length === 0) return;
+  const cars = useMemo(() => {
+    if (!carsData?.data || carsData.data.length === 0) return [];
 
-    
-      const favoritedCarIds = new Set(favoriteCarsData.map((favCar) => favCar.id));
-      const updatedCars = carsData.data.map((car) => ({
+    const favoritedCarIds = new Set(favoriteCarsData.map((favCar) => favCar.id));
+    const updatedCars = carsData.data.map((car) => ({
       ...car,
       isFavorite: favoritedCarIds.has(car.id),
       favoriteId: favoritedCarIds.has(car.id) ? car.id : null,
     }));
 
-    setCars(updatedCars);
-
-   
     updatedCars.slice(0, 6).forEach((car) => {
       if (car.photo) {
         const img = new Image();
@@ -282,27 +240,13 @@ function AllCars() {
       }
     });
 
-    if (process.env.NODE_ENV === "development") {
-      console.debug("Updated cars with favorites:", updatedCars);
-    }
+    if (process.env.NODE_ENV === "development") console.debug("Updated cars with favorites:", updatedCars);
+
+    return updatedCars;
   }, [carsData?.data, favoriteCarsData]);
 
   useEffect(() => {
-    let initialSearchParams = {
-      make: "",
-      Location: "",
-      minPrice: "",
-      maxPrice: "",
-      transmission: "",
-      fuelType: "",
-      color: "",
-      year: "",
-      seats: "",
-      review: "",
-      vendor: "",
-      pickup_date: "",
-      dropoff_date: "",
-    };
+    let initialSearchParams = { ...searchParams };
 
     if (vendorIdFromUrl) {
       initialSearchParams.vendor = vendorIdFromUrl;
@@ -311,57 +255,20 @@ function AllCars() {
       const matchedBrand = searchOptions.brands.find(
         (brand) => brand.toLowerCase() === brandFromUrl.toLowerCase()
       );
-      if (matchedBrand) {
-        initialSearchParams.make = matchedBrand;
-      } else {
-        const variations = [
-          brandFromUrl.toUpperCase(),
-          brandFromUrl.charAt(0).toUpperCase() + brandFromUrl.slice(1).toLowerCase(),
-          brandFromUrl.toLowerCase(),
-          brandFromUrl,
-        ];
-        for (const variation of variations) {
-          const found = searchOptions.brands.find((brand) => brand === variation);
-          if (found) {
-            initialSearchParams.make = found;
-            break;
-          }
-        }
-        if (!initialSearchParams.make) {
-          console.warn(
-            "No exact brand match found in options for:",
-            brandFromUrl,
-            "Setting dropdown to exact URL value."
-          );
-          initialSearchParams.make = brandFromUrl;
-        }
-      }
-    } else if (searchedResultData && searchedResultData.searchFilters) {
+      initialSearchParams.make = matchedBrand || brandFromUrl;
+    } else if (searchedResultData?.searchFilters) {
       const filters = searchedResultData.searchFilters;
-      if (filters.brand) {
-        initialSearchParams.make = filters.brand;
+      if (filters.brand) initialSearchParams.make = filters.brand;
+      if (filters.location && searchOptions?.regions) {
+        const region = searchOptions.regions.find((r) => r.name_en === filters.location);
+        if (region) initialSearchParams.Location = region.id.toString();
       }
-      if (filters.location) {
-        if (searchOptions && searchOptions.regions) {
-          const region = searchOptions.regions.find((r) => r.name_en === filters.location);
-          if (region) {
-            initialSearchParams.Location = region.id.toString();
-          }
-        }
-      }
-      if (filters.pickTime) {
-        initialSearchParams.pickup_date = filters.pickTime;
-      }
-      if (filters.dropTime) {
-        initialSearchParams.dropoff_date = filters.dropTime;
-      }
+      if (filters.pickTime) initialSearchParams.pickup_date = filters.pickTime;
+      if (filters.dropTime) initialSearchParams.dropoff_date = filters.dropTime;
     }
 
-    if (carType === "affordable") {
-      initialSearchParams.maxPrice = "500";
-    } else if (carType === "luxury") {
-      initialSearchParams.minPrice = "500";
-    }
+    if (carType === "affordable") initialSearchParams.maxPrice = "500";
+    if (carType === "luxury") initialSearchParams.minPrice = "500";
 
     setSearchParams(initialSearchParams);
     setCurrentPage(1);
@@ -369,41 +276,23 @@ function AllCars() {
   }, [carType, searchedResultData, searchOptions, brandFromUrl, vendorIdFromUrl]);
 
   const handleImageLoad = (carId) => {
-    setCarLoading((prev) => ({
-      ...prev,
-      [carId]: false,
-    }));
+    setCarLoading((prev) => ({ ...prev, [carId]: false }));
   };
 
   const handleToggleFavorite = useCallback(
     async (car) => {
-      if (!token) {
-        alert("Please log in to manage favorites.");
-        return;
-      }
-
+      if (!token) return alert("Please log in to manage favorites.");
       try {
         if (car.isFavorite) {
           await axios.delete(`${API_BASE_URL}/api/favorites/${car.id}`, {
             headers: { Authorization: `Bearer ${token}` },
           });
-          if (process.env.NODE_ENV === "development") {
-            console.debug(`Removed favorite for car ID: ${car.id}`);
-          }
         } else {
-          const response = await axios.post(
+          await axios.post(
             `${API_BASE_URL}/api/favorites`,
             { car_id: car.id },
-            {
-              headers: {
-                Authorization: `Bearer ${token}`,
-                "Content-Type": "application/json",
-              },
-            }
+            { headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" } }
           );
-          if (process.env.NODE_ENV === "development") {
-            console.debug("Added favorite response:", response.data);
-          }
         }
       } catch (error) {
         console.error("Failed to toggle favorite:", error);
@@ -418,48 +307,27 @@ function AllCars() {
 
   const handleSearchParamChange = (e) => {
     const { name, value } = e.target;
-    setSearchParams((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    setSearchParams((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleApplyFilters = () => {
-    setCurrentPage(1);
-  };
+  const handleApplyFilters = () => setCurrentPage(1);
 
   const handleResetSearch = () => {
-    let resetToParams = {
-      make: "",
+    setSearchParams({
+      make: brandFromUrl || "",
       Location: "",
       minPrice: "",
-      maxPrice: "",
+      maxPrice: carType === "affordable" ? "500" : "",
       transmission: "",
       fuelType: "",
       color: "",
       year: "",
       seats: "",
       review: "",
-      vendor: "",
+      vendor: vendorIdFromUrl || "",
       pickup_date: "",
       dropoff_date: "",
-    };
-
-    if (vendorIdFromUrl) {
-      resetToParams.vendor = vendorIdFromUrl;
-    } else if (brandFromUrl) {
-      resetToParams.make = brandFromUrl;
-    } else if (searchedResultData && searchedResultData.searchFilters && searchedResultData.searchFilters.brand) {
-      resetToParams.make = searchedResultData.searchFilters.brand;
-    }
-
-    if (carType === "affordable") {
-      resetToParams.maxPrice = "500";
-    } else if (carType === "luxury") {
-      resetToParams.minPrice = "500";
-    }
-
-    setSearchParams(resetToParams);
+    });
     setSortBy("");
     setCurrentPage(1);
   };
@@ -481,12 +349,9 @@ function AllCars() {
   }, []);
 
   useEffect(() => {
-    if (windowWidth > 768) {
-      setShowSearch(true);
-    }
+    if (windowWidth > 768) setShowSearch(true);
   }, [windowWidth]);
 
-  const currentCars = cars; 
   const currentTotalPages = carsData?.totalPages || 1;
   const currentIsLoading = isLoadingCars || favoritesLoading;
   const currentError = carsError || favoritesError;
@@ -508,7 +373,6 @@ function AllCars() {
         description: `Browse all available cars from the ${brandName} brand.`,
       };
     }
-
     switch (carType) {
       case "affordable":
         return {
@@ -537,9 +401,7 @@ function AllCars() {
     }
   }, [brandFromUrl, carType, vendorIdFromUrl, vendorNameFromState]);
 
-  const onNavigateToDetails = (carId) => {
-    navigateToDetails(`/car-details/${carId}`);
-  };
+  const onNavigateToDetails = (carId) => navigateToDetails(`/car-details/${carId}`);
 
   return (
     <section className="pickcar1-section">
@@ -551,15 +413,8 @@ function AllCars() {
         </div>
 
         <div className="sort-by-container">
-          <label htmlFor="sortBy" className="sort-label">
-            Sort by:
-          </label>
-          <select
-            id="sortBy"
-            value={sortBy}
-            onChange={handleSortChange}
-            className="sort-select"
-          >
+          <label htmlFor="sortBy" className="sort-label">Sort by:</label>
+          <select id="sortBy" value={sortBy} onChange={handleSortChange} className="sort-select">
             <option value="">Default</option>
             <option value="priceLowToHigh">Price: Low to High</option>
             <option value="priceHighToLow">Price: High to Low</option>
@@ -582,9 +437,7 @@ function AllCars() {
               {loadingSearchOptions ? (
                 <p>Loading search options...</p>
               ) : searchOptionsError ? (
-                <p style={{ color: "red" }}>
-                  Error loading search options: {searchOptionsError.message}
-                </p>
+                <p style={{ color: "red" }}>Error loading search options: {searchOptionsError.message}</p>
               ) : (
                 <AdvancedSearch
                   searchParams={searchParams}
@@ -602,10 +455,10 @@ function AllCars() {
               <p>Loading cars...</p>
             ) : currentError ? (
               <p style={{ color: "red" }}>Error loading cars: {currentError.message}</p>
-            ) : currentCars.length === 0 ? (
+            ) : cars.length === 0 ? (
               <p>No cars found matching your criteria.</p>
             ) : (
-              currentCars.map((car, index) => (
+              cars.map((car, index) => (
                 <CarCard
                   key={car.id}
                   car={car}
@@ -623,11 +476,7 @@ function AllCars() {
           </div>
         </div>
 
-        <Pagination
-          currentPage={currentPage}
-          totalPages={currentTotalPages}
-          onPageChange={handlePageChange}
-        />
+        <Pagination currentPage={currentPage} totalPages={currentTotalPages} onPageChange={handlePageChange} />
       </div>
     </section>
   );

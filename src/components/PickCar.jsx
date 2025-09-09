@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useMemo, useCallback } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -31,9 +31,6 @@ const fetchFavoriteCars = async (token) => {
     const res = await axios.get(`${API_BASE_URL}/favorites`, {
       headers: { Authorization: `Bearer ${token}` },
     });
-    if (process.env.NODE_ENV === "development") {
-      console.debug("Fetched favorites:", res.data);
-    }
     return res.data;
   } catch (error) {
     console.error("Error fetching favorites:", error);
@@ -44,64 +41,37 @@ const fetchFavoriteCars = async (token) => {
 function PickCar() {
   const [carLoading, setCarLoading] = useState({});
   const [hoveredIndex, setHoveredIndex] = useState(null);
-  const [cars, setCars] = useState([]);
   const { token } = useAuth();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
-  const {
-    data = { cars: [] },
-    isLoading,
-    error,
-  } = useQuery({
+  const { data = { cars: [] }, isLoading, error } = useQuery({
     queryKey: ["cars", "recent"],
     queryFn: () => fetchCarsByType("recent"),
   });
 
-  const {
-    data: favoriteCarsData = [],
-    isLoading: favoritesLoading,
-    error: favoritesError,
-  } = useQuery({
+  const { data: favoriteCarsData = [], isLoading: favoritesLoading, error: favoritesError } = useQuery({
     queryKey: ["favorites"],
     queryFn: () => fetchFavoriteCars(token),
     enabled: !!token,
   });
 
-  useEffect(() => {
-    if (data.cars.length === 0) return;
-
+  const cars = useMemo(() => {
+    if (!data || !data.cars.length) return [];
     const favoritedCarIds = new Set(favoriteCarsData.map((favCar) => favCar.id));
-
-    const updatedCars = data.cars.map((car) => ({
+    return data.cars.map((car) => ({
       ...car,
       isFavorite: favoritedCarIds.has(car.id),
       favoriteId: favoritedCarIds.has(car.id) ? car.id : null,
     }));
-
-    setCars(updatedCars);
-
-  
-    updatedCars.slice(0, 6).forEach((car) => {
-      if (car.photo) {
-        const img = new Image();
-        img.src = car.photo;
-      }
-    });
-
-    if (process.env.NODE_ENV === "development") {
-      console.debug("Updated cars with favorites:", updatedCars);
-    }
-  }, [data.cars, favoriteCarsData]);
+  }, [data, favoriteCarsData]);
 
   const handleImageLoad = useCallback((carId) => {
     setCarLoading((prev) => ({ ...prev, [carId]: false }));
   }, []);
 
   const onNavigateToDetails = useCallback(
-    (carId) => {
-      navigate(`/car-details/${carId}`);
-    },
+    (carId) => navigate(`/car-details/${carId}`),
     [navigate]
   );
 
@@ -117,11 +87,8 @@ function PickCar() {
           await axios.delete(`${API_BASE_URL}/favorites/${car.id}`, {
             headers: { Authorization: `Bearer ${token}` },
           });
-          if (process.env.NODE_ENV === "development") {
-            console.debug(`Removed favorite for car ID: ${car.id}`);
-          }
         } else {
-          const response = await axios.post(
+          await axios.post(
             `${API_BASE_URL}/favorites`,
             { car_id: car.id },
             {
@@ -131,15 +98,11 @@ function PickCar() {
               },
             }
           );
-          if (process.env.NODE_ENV === "development") {
-            console.debug("Added favorite response:", response.data);
-          }
         }
       } catch (error) {
         console.error("Failed to toggle favorite:", error);
         alert("An error occurred while updating favorites. Please try again.");
       } finally {
-     
         queryClient.invalidateQueries(["cars", "recent"]);
         queryClient.invalidateQueries(["favorites"]);
       }
@@ -163,10 +126,7 @@ function PickCar() {
           </p>
         </div>
 
-        <div
-          className="car-row"
-          style={cars.length < 4 ? { justifyContent: "left" } : {}}
-        >
+        <div className="car-row" style={cars.length < 4 ? { justifyContent: "left" } : {}}>
           {cars.slice(0, 4).map((car, index) => {
             const carId = car.id;
             const isHovered = hoveredIndex === index;
