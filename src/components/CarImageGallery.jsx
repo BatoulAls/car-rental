@@ -3,29 +3,37 @@ import defaultimg from '../images/cars-big/default-car.png';
 
 const API_BASE_URL = 'http://localhost:5050';
 
-const CarImageGallery = ({ images, carBrand, carModel }) => {
+const CarImageGallery = ({ images, carBrand, carModel, mainPhoto }) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isImageLoading, setIsImageLoading] = useState(true);
 
   useEffect(() => {
     setCurrentImageIndex(0);
     setIsImageLoading(true);
-  }, [images]);
+  }, [images, mainPhoto]);
 
-  const photos = (images && images.length > 0)
-    ? images.map(img => `${API_BASE_URL}${img.image_url}`)
-    : [defaultimg];
+  const photos = [];
+
+  if (mainPhoto && mainPhoto.trim() !== '') {
+    photos.push(mainPhoto.startsWith('http') ? mainPhoto : `${API_BASE_URL}${mainPhoto}`);
+  }
+
+  if (images && images.length > 0) {
+    images.forEach(img => {
+      if (img.image_url && img.image_url.trim() !== '') {
+        photos.push(img.image_url.startsWith('http') ? img.image_url : `${API_BASE_URL}${img.image_url}`);
+      }
+    });
+  }
+
+  if (photos.length === 0) photos.push(defaultimg); 
 
   const nextImage = () => {
-    setCurrentImageIndex((prev) =>
-      prev === photos.length - 1 ? 0 : prev + 1
-    );
+    setCurrentImageIndex((prev) => (prev === photos.length - 1 ? 0 : prev + 1));
   };
 
   const prevImage = () => {
-    setCurrentImageIndex((prev) =>
-      prev === 0 ? photos.length - 1 : prev - 1
-    );
+    setCurrentImageIndex((prev) => (prev === 0 ? photos.length - 1 : prev - 1));
   };
 
   const displayImageSrc = photos[currentImageIndex];
@@ -46,7 +54,7 @@ const CarImageGallery = ({ images, carBrand, carModel }) => {
         onError={() => setIsImageLoading(false)}
       />
 
-      {photos.length > 1 || (photos.length === 1 && photos[0] !== defaultimg) ? (
+      {photos.length > 1 ? (
         <>
           <button onClick={prevImage} className="image-nav-btn1 image-nav-prev1">←</button>
           <button onClick={nextImage} className="image-nav-btn1 image-nav-next1">→</button>
@@ -64,7 +72,7 @@ const CarImageGallery = ({ images, carBrand, carModel }) => {
       ) : null}
 
       <div className="photo-count1">
-        📷 {images?.length ?? 0}
+        📷 {photos.length}
       </div>
     </div>
   );

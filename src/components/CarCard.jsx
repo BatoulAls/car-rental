@@ -53,7 +53,7 @@ function CarCard({
 
   const handleConfirmBooking = ({ startDate, endDate, available, bookedRange }) => {
     if (!available) {
-      const message = `❌ This car  is not available right now.}`;
+      const message = `❌ This car  is not available right now.`;
       setAvailabilityMessage(message);
     } else {
       setAvailabilityMessage("");
@@ -65,6 +65,13 @@ function CarCard({
     setShowBookingModal(false);
     setAvailabilityMessage("");
   };
+const API_BASE_URL = "http://localhost:5050"; 
+
+const carImageUrl = car.photo && car.photo.trim() !== ""
+  ? car.photo.startsWith("http") 
+    ? car.photo
+    : `${API_BASE_URL}${car.photo}`
+  : DEFAULT_CAR_IMAGE_PATH; 
 
   return (
     <div
@@ -80,13 +87,14 @@ function CarCard({
             <div className="spinner"></div>
           </div>
         )}
-        <img
-          src={car.img || car.photo || DEFAULT_CAR_IMAGE_PATH}
-          alt={car.name || `${car.company} ${car.model}` || "Default Car Image"}
-          className={`car-image ${isHovered ? "zoomed" : ""} ${isLoading ? "hidden" : "visible"}`}
-          onLoad={onImageLoad}
-          onError={onImageLoad}
-        />
+       
+       <img
+  src={carImageUrl}
+  alt={car.name || `${car.brand} ${car.model}` || "Default Car Image"}
+  className={`car-image ${isHovered ? "zoomed" : ""} ${isLoading ? "hidden" : "visible"}`}
+  onLoad={onImageLoad}
+  onError={onImageLoad}
+/>  
 
         <div className={`car-overlay ${isHovered ? "show" : ""}`}>
           <div className="car-overlay-content">

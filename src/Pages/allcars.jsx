@@ -459,18 +459,22 @@ function AllCars() {
               <p>No cars found matching your criteria.</p>
             ) : (
               cars.map((car, index) => (
+                
+
                 <CarCard
-                  key={car.id}
-                  car={car}
-                  index={index}
-                  carLoading={carLoading}
-                  handleImageLoad={handleImageLoad}
-                  onClick={() => onNavigateToDetails(car.id)}
-                  onToggleFavorite={() => handleToggleFavorite(car)}
-                  hoveredIndex={hoveredIndex}
-                  isFavorite={car.isFavorite}
-                  setHoveredIndex={setHoveredIndex}
-                />
+  key={car.id}
+  car={car}
+  carId={car.id}
+  cardIndex={index}
+  isHovered={hoveredIndex === index}
+  isLoading={!!carLoading[car.id]}
+  onHoverEnter={() => setHoveredIndex(index)}
+  onHoverLeave={() => setHoveredIndex(null)}
+  onImageLoad={() => handleImageLoad(car.id)}
+  onNavigateToDetails={onNavigateToDetails}
+  onToggleFavorite={() => handleToggleFavorite(car)}
+  isFavorite={car.isFavorite}
+/>
               ))
             )}
           </div>
