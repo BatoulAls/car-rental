@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
-import Logo from "../images/logo/logo.png";
+import Logo from "../images/logo/logo2.png";
 import { useState } from "react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars, faXmark, faUser, faRightFromBracket, faCar } from '@fortawesome/free-solid-svg-icons';
@@ -78,7 +78,22 @@ function Navbar({ role = "customer" }) {
       <div className="navbar">
         <div className="navbar__img">
           <Link to={role === "vendor" ? "/vendors/MyCars" : "/"}>
-            <img src={Logo} alt="logo-img" />
+            <img
+  src={Logo}
+  alt="logo-img"
+  style={{
+    maxWidth: "300px",
+    maxHeight: "90px",
+    width: "auto",
+    height: "auto",
+    display: "inline-block",
+    verticalAlign: "middle",
+    marginRight: "20px"
+  }}
+/>
+
+            
+            
           </Link>
         </div>
 

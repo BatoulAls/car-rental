@@ -97,11 +97,16 @@ const VendorCarComponent = () => {
           <div>
             <h1 className="main-heading">My Car Listings</h1>
             <p className="sub-heading">Manage your rental fleet and track performance</p>
+           
           </div>
-          <button onClick={handleAddNewCar} className="add-car-button">
+          
+         
+<button onClick={handleAddNewCar} className="add-car-button">
             <Plus size={20} /> Add New Car
           </button>
+          
         </div>
+         
 
         {cars.length === 0 ? (
           <div className="no-cars-added-container">

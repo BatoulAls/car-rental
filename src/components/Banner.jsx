@@ -1,21 +1,24 @@
+import React from 'react';
+import '../styles/BannerStyles/Banner.css';
+
+
 function Banner() {
-    return (
-      <>
-        <section className="banner-section">
-          <div className="container">
-            <div className="banner-content">
-              <div className="banner-content__text">
-                <h2>Save a lot with our cheap car rental!</h2>
-                <p>
-                  Top Airports. Local Suppliers. <span>24/7</span> Support.
-                </p>
-              </div>
-            </div>
+  return (
+    <section className="hero-banner1">
+      <div className="hero-container-banner1">
+        <div className="hero-content-banner1">
+          <div className="hero-text-banner1">
+            <h2 className="hero-title-banner1">Save a lot with our cheap car rental!</h2>
+            <p className="hero-subtitle-banner1">
+              Book a car by getting in touch with us
+              (963) 456-7869 <span className="highlight-banner1">24/7</span> Support.
+            </p>
           </div>
-        </section>
-      </>
-    );
-  }
-  
-  export default Banner;
-  
+        </div>
+      </div>
+      <div className="hero-decoration-banner1"></div>
+    </section>
+  );
+}
+
+export default Banner;
