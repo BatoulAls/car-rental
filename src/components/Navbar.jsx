@@ -2,7 +2,7 @@ import { Link, useNavigate } from "react-router-dom";
 import Logo from "../images/logo/logo2.png";
 import { useState } from "react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBars, faXmark, faUser, faRightFromBracket, faCar } from '@fortawesome/free-solid-svg-icons';
+import { faBars, faXmark, faUser, faRightFromBracket, faCar,faCalendarCheck } from '@fortawesome/free-solid-svg-icons';
 import { useAuth } from "../context/AuthContext";
 
 function Navbar({ role = "customer" }) {
@@ -28,6 +28,7 @@ function Navbar({ role = "customer" }) {
 
   const vendorLinks = [
     { to: "/vendors/MyCars", label: "My Cars", icon: faCar },
+     { to: "/vendors/VendorBookings", label: "Bookings", icon: faCalendarCheck },
   ];
 
   const navLinks = role === "vendor" ? vendorLinks : customerLinks;
@@ -36,7 +37,6 @@ function Navbar({ role = "customer" }) {
 
   return (
     <nav>
-      {/* Mobile Navbar */}
       <div className={`mobile-navbar ${nav ? "open-nav" : ""}`}>
         <div onClick={openNav} className="mobile-navbar__close">
           <FontAwesomeIcon icon={faXmark} />
@@ -74,7 +74,6 @@ function Navbar({ role = "customer" }) {
         </ul>
       </div>
 
-      {/* Desktop Navbar */}
       <div className="navbar">
         <div className="navbar__img">
           <Link to={role === "vendor" ? "/vendors/MyCars" : "/"}>

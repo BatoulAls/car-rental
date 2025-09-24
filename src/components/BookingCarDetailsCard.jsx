@@ -23,7 +23,6 @@ export const BookingCarDetailsCard = ({ car }) => {
 
   return (
     <>
-
       {(car.name || car.brand || car.model || car.year) && (
         <div className="preview-car-header">
           {car.name && <h1 className="preview-car-title">{car.name}</h1>}
@@ -47,14 +46,13 @@ export const BookingCarDetailsCard = ({ car }) => {
         </div>
       )}
 
-     
       {(car.seats || car.no_of_doors || car.bags || car.transmission || car.fuel_type || car.regional_spec || car.color) && (
         <div className="preview-specs-grid">
           {car.seats && (
             <div className="preview-spec-item">
               <Users className="preview-spec-icon" size={20} />
               <div className="preview-spec-text">
-                <div>{car.seats} seats</div>
+                <strong>Seats:</strong> {car.seats}
               </div>
             </div>
           )}
@@ -62,7 +60,7 @@ export const BookingCarDetailsCard = ({ car }) => {
             <div className="preview-spec-item">
               <Car className="preview-spec-icon" size={20} />
               <div className="preview-spec-text">
-                <div>{car.no_of_doors} doors</div>
+                <strong>Doors:</strong> {car.no_of_doors}
               </div>
             </div>
           )}
@@ -70,7 +68,7 @@ export const BookingCarDetailsCard = ({ car }) => {
             <div className="preview-spec-item">
               <Briefcase className="preview-spec-icon" size={20} />
               <div className="preview-spec-text">
-                <div>{car.bags} bags</div>
+                <strong>Bags:</strong> {car.bags}
               </div>
             </div>
           )}
@@ -78,7 +76,7 @@ export const BookingCarDetailsCard = ({ car }) => {
             <div className="preview-spec-item">
               <Settings className="preview-spec-icon" size={20} />
               <div className="preview-spec-text">
-                <div>{car.transmission}</div>
+                <strong>Transmission:</strong> {car.transmission}
               </div>
             </div>
           )}
@@ -86,7 +84,7 @@ export const BookingCarDetailsCard = ({ car }) => {
             <div className="preview-spec-item">
               <Fuel className="preview-spec-icon" size={20} />
               <div className="preview-spec-text">
-                <div>{car.fuel_type}</div>
+                <strong>Fuel:</strong> {car.fuel_type}
               </div>
             </div>
           )}
@@ -94,7 +92,7 @@ export const BookingCarDetailsCard = ({ car }) => {
             <div className="preview-spec-item">
               <Award className="preview-spec-icon" size={20} />
               <div className="preview-spec-text">
-                <div>{car.regional_spec}</div>
+                <strong>Spec:</strong> {car.regional_spec}
               </div>
             </div>
           )}
@@ -102,7 +100,7 @@ export const BookingCarDetailsCard = ({ car }) => {
             <div className="preview-spec-item">
               <Paintbrush className="preview-spec-icon" size={20} />
               <div className="preview-spec-text">
-                <div>{car.color}</div>
+                <strong>Color:</strong> {car.color}
               </div>
             </div>
           )}
@@ -134,7 +132,6 @@ export const BookingCarDetailsCard = ({ car }) => {
         </div>
       )}
 
-     
       {(car.Vendor && (car.Vendor.name || car.Vendor.phone)) && (
         <div className="preview-vendor-info">
           {car.Vendor.name && <div className="preview-vendor-name">{car.Vendor.name}</div>}
@@ -151,4 +148,5 @@ export const BookingCarDetailsCard = ({ car }) => {
     </>
   );
 };
-export default BookingCarDetailsCard
+
+export default BookingCarDetailsCard;

@@ -1,22 +1,26 @@
-/* You've already provided this CSS, just ensure it's in a file named BookingDetails.css */
-
 :root {
-    --primary-color: #ff4d30; /* Example: Define a primary color variable */
-    --secondary-color: #2c3e50; /* Example: Define a secondary color variable */
+    --primary-color: #ff4d30;
+    --secondary-color: #2c3e50;
     --text-color-light: #6c757d;
     --border-color: #e9ecef;
 }
 
+/* Global font improvement */
+body {
+    font-family: 'Poppins', 'Arial', sans-serif;
+    background-color: #f8f9fa;
+    margin: 0;
+    padding: 0;
+}
+
 .Booking-container {
     max-width: 1100px;
-    /* Adjust as needed, was very large */
     margin: 0 auto;
     padding-top: 100px;
-    font-family: 'Arial', sans-serif;
     background-color: #f8f9fa;
-    padding-left: 20px; /* Added for better mobile padding */
-    padding-right: 20px; /* Added for better mobile padding */
-    padding-bottom: 50px; /* Added some bottom padding */
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-bottom: 50px;
 }
 
 .Booking-availability-badge {
@@ -50,6 +54,12 @@
     border-radius: 12px;
     padding: 30px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease;
+}
+
+.Booking-left-section:hover,
+.Booking-right-section:hover {
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.12);
 }
 
 .Booking-right-section {
@@ -96,7 +106,7 @@
 
 .Booking-star-empty {
     color: #e4e5e9;
-    fill: none; /* Ensure no fill for empty stars */
+    fill: none;
 }
 
 .Booking-location-info {
@@ -121,19 +131,31 @@
     background: #f8f9fa;
     border-radius: 8px;
     border-left: 4px solid var(--primary-color);
+    transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.Booking-spec-item:hover {
+    background: #fff;
+    transform: translateY(-2px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
 .Booking-spec-icon {
     color: var(--primary-color);
+    font-size: 20px;
+    min-width: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-.Booking-spec-text { /* Corrected typo from Bookingspec-text */
+.Booking-spec-text {
     font-size: 14px;
     color: var(--secondary-color);
 }
 
 .Booking-features-section,
-.Booking-tags-section, /* Corrected typo from Bookingtags-section */
+.Booking-tags-section,
 .Booking-vendor-info,
 .Booking-description-section,
 .Booking-booking-section,
@@ -164,6 +186,13 @@
     font-size: 14px;
     color: var(--secondary-color);
     border-left: 3px solid var(--primary-color);
+    transition: all 0.2s ease;
+}
+
+.Booking-feature-item:hover {
+    background: #fff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    transform: translateY(-2px);
 }
 
 .Booking-feature-type {
@@ -186,6 +215,11 @@
     font-size: 12px;
     font-weight: bold;
     text-transform: uppercase;
+    transition: transform 0.2s ease;
+}
+
+.Booking-tag-item:hover {
+    transform: scale(1.05);
 }
 
 .Booking-vendor-info {
@@ -193,6 +227,7 @@
     padding: 20px;
     border-radius: 8px;
     margin: 25px 0;
+    border-left: 4px solid var(--primary-color);
 }
 
 .Booking-vendor-name {
@@ -236,6 +271,13 @@
 .Booking-date-value {
     color: var(--secondary-color);
     font-weight: bold;
+}
+
+.Booking-pricing-section {
+    background: #fff5f3;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
 }
 
 .Booking-price-row {
@@ -381,7 +423,7 @@
     font-size: 16px;
     font-weight: bold;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    transition: background-color 0.3s ease, transform 0.2s ease;
     opacity: 0.5;
     pointer-events: none;
     margin-top: 25px;
@@ -392,8 +434,9 @@
     pointer-events: auto;
 }
 
-.Booking-book-button.enabled:hover { /* Corrected typo from Bookingbook-button */
+.Booking-book-button.enabled:hover {
     background: #e43e29;
+    transform: scale(1.03);
 }
 
 .Booking-description-content {
@@ -439,7 +482,6 @@
 .Booking-booking-message.error .message-icon.error-icon {
     color: #dc3545;
 }
-/* In BookingDetails.css */
 
 .Booking-payment-display-section {
     margin-top: 20px;
@@ -456,9 +498,122 @@
     color: #333;
 }
 
+/* Customer card */
+.customer-info-card {
+  margin-top: 20px;
+  padding: 20px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.customer-info-card .Booking-info-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+  font-size: 16px;
+}
+
+.customer-info-card .info-icon {
+  color: #6c757d;
+  margin-right: 10px;
+}
+
+.customer-info-card .info-label {
+  font-weight: 600;
+  color: #333;
+  margin-right: 5px;
+}
+
 .Booking-payment-label-display {
     font-weight: 600;
 }
+
+/*booking butto*/
+/* General container for the buttons */
+.Booking-actions {
+  margin-top: 25px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Base style for all buttons */
+.Booking-actions button {
+  padding: 14px 24px;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  flex-grow: 1;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+/* Style for the 'Accept' button */
+.Booking-actions .btn-accept {
+  background-color: #4CAF50; /* A fresh green */
+  color: #fff;
+  border: none;
+}
+
+.Booking-actions .btn-accept:hover {
+  background-color: #43A047;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+}
+
+/* Style for the 'Reject' button */
+.Booking-actions .btn-reject {
+  background-color: #fff;
+  color: #F44336; /* A bold red */
+  border: 2px solid #F44336;
+}
+
+.Booking-actions .btn-reject:hover {
+  background-color: #F44336;
+  color: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+}
+
+/* Style for the 'Mark as Complete' button */
+.Booking-actions .btn-complete {
+  background-color: #2196F3; /* A vibrant blue */
+  color: #fff;
+  border: none;
+}
+
+.Booking-actions .btn-complete:hover {
+  background-color: #1E88E5;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+}
+
+/* Style for the 'Cancel' button */
+.Booking-actions .btn-cancel {
+  background-color: #fff;
+  color: #9E9E9E; /* A neutral gray */
+  border: 2px solid #9E9E9E;
+}
+
+.Booking-actions .btn-cancel:hover {
+  background-color: #9E9E9E;
+  color: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+}
+
+/* Style for disabled buttons */
+.Booking-actions button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+  transform: none;
+  box-shadow: none;
+}
+/**/
 @keyframes fadeIn {
     from {
         opacity: 0;
@@ -471,10 +626,12 @@
 }
 
 @media (max-width: 768px) {
+    .Booking-container {
+        padding-top: 20px;
+        padding-left: 15px;
+        padding-right: 15px;
+    }
 
-
-    .Booking-container {padding-top: 500px;}
-    
     .Booking-main-content {
         grid-template-columns: 1fr;
     }
@@ -483,21 +640,20 @@
     .Booking-features-grid {
         grid-template-columns: 1fr;
     }
-    
-    .Booking-container {
-        padding-top: 20px; /* Adjust padding for smaller screens */
-        padding-left: 15px;
-        padding-right: 15px;
-    }
 
     .Booking-car-title {
-        font-size: 2rem; /* Adjust font size for smaller screens */
+        font-size: 2rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .Booking-car-title {
+        font-size: 1.6rem;
     }
 }
 
 @media (max-width: 896px) {
-.Booking-container{
-    padding-top: 120px;
-}
-
+    .Booking-container {
+        padding-top: 120px;
+    }
 }

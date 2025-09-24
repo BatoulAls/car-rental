@@ -35,6 +35,8 @@ import AddCar from './Pages/Vendor/AddCar';
 import MyCars from './Pages/Vendor/MyCars';
 import VendorsCarDetails from './Pages/Vendor/VendorsCarDetails';
 import EditCar from './Pages/Vendor/EditCar';
+import VendorBookings from "./Pages/Vendor/VendorBookings";
+import VendorBookingDetails from "./Pages/Vendor/VendorBookingDetails";
 
 const queryClient = new QueryClient();
 
@@ -106,6 +108,14 @@ function App() {
                 </PrivateRoute>
               }
             />
+             <Route
+    path="/vendorsbooking-details/:bookingId"
+    element={
+      <PrivateRoute allowedRoles={['vendor']}>
+        <VendorBookingDetails />
+      </PrivateRoute>
+    }
+  />
             <Route
               path="/vendors/add-car"
               element={
@@ -130,7 +140,17 @@ function App() {
                 </PrivateRoute>
               }
             />
+
+            <Route
+              path="/vendors/VendorBookings"
+              element={
+                <PrivateRoute allowedRoles={['vendor']}>
+                  <VendorBookings/>
+                </PrivateRoute>
+              }
+            />
           </Route>
+          
 
           <Route element={<AuthLayout />}>
             <Route
