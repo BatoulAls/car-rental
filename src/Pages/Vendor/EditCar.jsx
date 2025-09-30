@@ -5,6 +5,7 @@ import SubmitButton from '../../components/SubmitButton';
 import { useAuth } from '../../context/AuthContext';
 import '../../styles/AddCar.css';
 import { useParams } from 'react-router-dom';
+import Message from '../../components/Message';
 
 const API_BASE_URL = 'http://localhost:5050';
 
@@ -18,6 +19,14 @@ const staticData = {
 };
 
 const EditCar = ({ onCancel, onUpdateSuccess }) => {
+  // for message 
+  const [message,setMessage] = useState('');
+  const[messageStatus,setMessageStatus] = useState('');
+  const showMessage=(msg,type='success')=>{
+    setMessage(msg);
+    setMessageStatus(type);
+    setTimeout(()=>setMessage(''),3000)
+  }
   const { carId } = useParams();
 
   const [formData, setFormData] = useState({
@@ -161,8 +170,8 @@ const EditCar = ({ onCancel, onUpdateSuccess }) => {
           regional_spec,
           custom_regional_spec: regional_spec === 'other' ? carData.regional_spec : '',
           tags: carData.Tags?.map(t => t.id) ?? [],
-  features: carData.Features?.map(f => f.CarFeature?.feature_id || f.id) ?? [],
-  insurance_included: carData.insurance_included || false,
+          features: carData.Features?.map(f => f.CarFeature?.feature_id || f.id) ?? [],
+         insurance_included: carData.insurance_included || false,
   
         
           
@@ -242,7 +251,7 @@ const EditCar = ({ onCancel, onUpdateSuccess }) => {
 
   const handleSubmit = async () => {
     if (!formData.name || !formData.price_per_day || !formData.year || (!formData.brand && !formData.custom_brand) || !formData.model) {
-      alert('Please fill in all required fields (Name, Model, Price, Year, Brand)');
+      showMessage('Please fill in all required fields (Name, Model, Price, Year, Brand)','error')
       return;
     }
 
@@ -295,11 +304,11 @@ const EditCar = ({ onCancel, onUpdateSuccess }) => {
 
       const result = await response.json();
       console.log('Car updated successfully!', result);
-      alert('Car updated successfully!');
+      showMessage('Car updated successfully!','success')
       onUpdateSuccess();
     } catch (error) {
       console.error('Error updating car:', error);
-      alert(`Error updating car: ${error.message}`);
+      showMessage(`Error updating car: ${error.message}`,'error')
     } finally {
       setIsSubmitting(false);
     }
@@ -319,6 +328,7 @@ const EditCar = ({ onCancel, onUpdateSuccess }) => {
   return (
     <div className="container-vendor">
       <div className="main-content">
+          {message && <Message message={message} status={messageStatus} />}
         <div className="form-card">
           <div className="form-header">
             <h2 className="form-title">Edit Car</h2>

@@ -3,9 +3,19 @@ import { Plus, Car, Save, X } from 'lucide-react';
 import InputField from '../../components/InputField';
 import SubmitButton from '../../components/SubmitButton';
 import { useAuth } from '../../context/AuthContext';
+import Message from '../../components/Message';
 import '../../styles/AddCar.css'
 
 const CarManagementApp = () => {
+  // for message 
+  const [message,setMessage] = useState('');
+  const [messageStatus,setMessageStatus]= useState('');
+  const showMessage = (msg,type='success')=>{
+    setMessage(msg);
+    setMessageStatus(type);
+    setTimeout(() => {setMessage('')  
+    }, 3000);
+  }
   const [formData, setFormData] = useState({
     name: '',
     description: '',
@@ -154,7 +164,7 @@ const CarManagementApp = () => {
 
   const handleSubmit = async () => {
     if (!formData.name || !formData.price_per_day || !formData.year || (!formData.brand && !formData.custom_brand) || !formData.model) {
-      alert('Please fill in all required fields (Name, Model, Price, Year, Brand)');
+      showMessage ('Please fill in all required fields (Name, Model, Price, Year, Brand)','error')
       return;
     }
 
@@ -207,12 +217,12 @@ const CarManagementApp = () => {
 
       const result = await response.json();
       console.log('Car created successfully!', result);
-      alert('Car created successfully!');
+      showMessage('Car created successfully!','success')
       setShowForm(false);
       resetForm();
     } catch (error) {
       console.error('Error creating car:', error);
-      alert(`Error creating car: ${error.message}`);
+      showMessage(`Error creating car: ${error.message}`,'error')
     } finally {
       setLoading(false);
     }
@@ -266,11 +276,13 @@ const CarManagementApp = () => {
   }
 
   return (
-    <div className="container-vendor +">
+    
+    <div className="container-vendor">
      
 
    
       <div className="main-content">
+        {message && <Message message={message} status={messageStatus} />}
         
           <div className="form-card">
             <div className="form-header">
@@ -424,7 +436,7 @@ const CarManagementApp = () => {
                   name="location"
                   value={formData.location}
                   onChange={handleInputChange}
-                  placeholder="e.g., Dubai Marina"
+                  placeholder="Enter Location"
                 />
 
                

@@ -1,4 +1,3 @@
-
 import "../src/dist/styles.css";
 import { Routes, Route } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
@@ -37,6 +36,7 @@ import VendorsCarDetails from './Pages/Vendor/VendorsCarDetails';
 import EditCar from './Pages/Vendor/EditCar';
 import VendorBookings from "./Pages/Vendor/VendorBookings";
 import VendorBookingDetails from "./Pages/Vendor/VendorBookingDetails";
+import VendorProfile from "./Pages/Vendor/VendorProfile"; 
 
 const queryClient = new QueryClient();
 
@@ -50,7 +50,6 @@ function App() {
           <Route element={<MainLayout />}>
 
             <Route path="/" element={<RoleBasedHome />} />
-
             <Route path="/about" element={<About />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/team" element={<Team />} />
@@ -100,6 +99,15 @@ function App() {
           </Route>
 
           <Route element={<VendorLayout />}>
+            {/* ✅ NEW ROUTE: Vendor Profile */}
+            <Route
+              path="/vendors/Profile"
+              element={
+                <PrivateRoute allowedRoles={['vendor']}>
+                  <VendorProfile />
+                </PrivateRoute>
+              }
+            />
             <Route
               path="/vendors/MyCars"
               element={
@@ -108,14 +116,14 @@ function App() {
                 </PrivateRoute>
               }
             />
-             <Route
-    path="/vendorsbooking-details/:bookingId"
-    element={
-      <PrivateRoute allowedRoles={['vendor']}>
-        <VendorBookingDetails />
-      </PrivateRoute>
-    }
-  />
+              <Route
+                path="/vendorsbooking-details/:bookingId"
+                element={
+                  <PrivateRoute allowedRoles={['vendor']}>
+                    <VendorBookingDetails />
+                  </PrivateRoute>
+                }
+              />
             <Route
               path="/vendors/add-car"
               element={
@@ -140,7 +148,6 @@ function App() {
                 </PrivateRoute>
               }
             />
-
             <Route
               path="/vendors/VendorBookings"
               element={
@@ -151,7 +158,6 @@ function App() {
             />
           </Route>
           
-
           <Route element={<AuthLayout />}>
             <Route
               path="/login"

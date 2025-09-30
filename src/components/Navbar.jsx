@@ -2,7 +2,7 @@ import { Link, useNavigate } from "react-router-dom";
 import Logo from "../images/logo/logo2.png";
 import { useState } from "react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBars, faXmark, faUser, faRightFromBracket, faCar,faCalendarCheck } from '@fortawesome/free-solid-svg-icons';
+import { faBars, faXmark, faUser, faRightFromBracket, faCar, faCalendarCheck } from '@fortawesome/free-solid-svg-icons';
 import { useAuth } from "../context/AuthContext";
 
 function Navbar({ role = "customer" }) {
@@ -27,16 +27,26 @@ function Navbar({ role = "customer" }) {
   ];
 
   const vendorLinks = [
+    
+    { to: "/vendors/Profile", label: "My Profile", icon: faUser },
     { to: "/vendors/MyCars", label: "My Cars", icon: faCar },
-     { to: "/vendors/VendorBookings", label: "Bookings", icon: faCalendarCheck },
+    { to: "/vendors/VendorBookings", label: "Bookings", icon: faCalendarCheck },
   ];
 
   const navLinks = role === "vendor" ? vendorLinks : customerLinks;
 
   if (loading) return null; 
 
+ 
+  const getProfileLink = () => {
+    return role === "vendor" ? "/vendors/Profile" : "/UserProfile";
+  };
+ 
+  const showProfileLink = isAuthenticated && (role === "customer" || role === "vendor");
+
   return (
     <nav>
+      
       <div className={`mobile-navbar ${nav ? "open-nav" : ""}`}>
         <div onClick={openNav} className="mobile-navbar__close">
           <FontAwesomeIcon icon={faXmark} />
@@ -52,11 +62,14 @@ function Navbar({ role = "customer" }) {
 
           {isAuthenticated && (
             <>
-              {role === "customer" && (
+             
+              {role === "customer" && !navLinks.some(link => link.to === "/UserProfile") && (
                 <li>
                   <Link onClick={openNav} to="/UserProfile" className="mobile-profile-link">Profile</Link>
                 </li>
               )}
+
+            
               <li>
                 <button onClick={() => { handleLogout(); openNav(); }}>
                   <FontAwesomeIcon icon={faRightFromBracket} /> Logout
@@ -65,6 +78,7 @@ function Navbar({ role = "customer" }) {
             </>
           )}
 
+          
           {!isAuthenticated && role === "customer" && (
             <>
               <li><Link onClick={openNav} to="/login">Sign In</Link></li>
@@ -74,28 +88,27 @@ function Navbar({ role = "customer" }) {
         </ul>
       </div>
 
+      
       <div className="navbar">
         <div className="navbar__img">
           <Link to={role === "vendor" ? "/vendors/MyCars" : "/"}>
             <img
-  src={Logo}
-  alt="logo-img"
-  style={{
-    maxWidth: "300px",
-    maxHeight: "90px",
-    width: "auto",
-    height: "auto",
-    display: "inline-block",
-    verticalAlign: "middle",
-    marginRight: "20px"
-  }}
-/>
-
-            
-            
+              src={Logo}
+              alt="logo-img"
+              style={{
+                maxWidth: "300px",
+                maxHeight: "90px",
+                width: "auto",
+                height: "auto",
+                display: "inline-block",
+                verticalAlign: "middle",
+                marginRight: "20px"
+              }}
+            />
           </Link>
         </div>
 
+     
         <ul className="navbar__links">
           {navLinks.map((link, index) => (
             <li key={index}>
@@ -104,19 +117,24 @@ function Navbar({ role = "customer" }) {
           ))}
         </ul>
 
+     
         <div className="navbar__buttons">
           {!isAuthenticated ? (
             <>
+              
               <Link className="navbar__buttons__sign-in" to="/login">Sign In</Link>
               <Link className="navbar__buttons__register" to="/register">Register</Link>
             </>
           ) : (
             <>
-              {role === "customer" && (
-                <Link className="navbar__buttons__profile" to="/UserProfile">
+             
+              {showProfileLink && (
+                <Link className="navbar__buttons__profile" to={getProfileLink()}>
                   <FontAwesomeIcon icon={faUser} />
                 </Link>
               )}
+              
+              
               <button className="navbar__buttons__logout" onClick={handleLogout}>
                 <FontAwesomeIcon icon={faRightFromBracket} />
               </button>

@@ -5,7 +5,32 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+/*status*/
+.status-badge {
+  display: inline-block;
+  margin-left: 10px;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: bold;
+  text-transform: uppercase;
+}
 
+/* Green background when active */
+.status-badge.active {
+  background-color: #d4f5e4;
+  color: #0a7a3c;
+  border: 1px solid #0a7a3c;
+}
+
+/* Gray/Red background when inactive */
+.status-badge.inactive {
+  background-color: #f5d4d4;
+  color: #b50000;
+  border: 1px solid #b50000;
+}
+
+/**/
 .user-profile-container {
   min-height: 100vh;
   background-color: white;

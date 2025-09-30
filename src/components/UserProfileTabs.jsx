@@ -1,51 +1,57 @@
 import React, { useState, useEffect, useCallback } from 'react'; 
 import axios from 'axios';
-import ProfileDetails from './ProfileDetails';
-import RentalHistory from './RentalHistory';
-import AccountSettings from './AccountSettings';
-import ChangePasswordTab from './ChangePasswordTab';
-import Favorites from './Favorites';
+import { useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import '../styles/UserProfile.css';
 
-import { useLocation } from 'react-router-dom';
+import ProfileDetails from './ProfileDetails';
+import RentalHistory from './RentalHistory'; 
+import AccountSettings from './AccountSettings';
+import ChangePasswordTab from './ChangePasswordTab';
+import Favorites from './Favorites';
 
-const UserProfileTabs = ({ profileData, setProfileData, loading, error, defaultAvatar }) => {
+const RENTAL_HISTORY_API_ENDPOINT = 'http://localhost:5050/api/bookings/my-bookings/';
+const FAVORITES_API_ENDPOINT = 'http://localhost:5050/api/favorites/'; 
+
+const ProfileTabs = ({ profileData, setProfileData, loading, error, defaultAvatar }) => {
+    
+    const role = profileData?.role;
+    const isVendor = role === 'vendor';
+
     const location = useLocation();
-
     const queryParams = new URLSearchParams(location.search);
     const initialTab = queryParams.get('tab') || 'profile';
 
     const [activeTab, setActiveTab] = useState(initialTab);
     const { token } = useAuth();
 
-
     const [rentalHistoryData, setRentalHistoryData] = useState({
-        total: 0,
-        page: 1,
-        limit: 10,
-        totalPages: 1,
-        history: []
+        total: 0, history: [], totalPages: 1, limit: 10, page: 1,
     });
-    const [rentalHistoryLoading, setRentalHistoryLoading] = useState(true);
+    const [rentalHistoryLoading, setRentalHistoryLoading] = useState(false);
     const [rentalHistoryError, setRentalHistoryError] = useState(null);
     const [currentPage, setCurrentPage] = useState(1);
     const [statusFilter, setStatusFilter] = useState('all');
-    const RENTAL_HISTORY_API_ENDPOINT = 'http://localhost:5050/api/bookings/my-bookings/';
 
     const [favoriteCars, setFavoriteCars] = useState([]);
-    const [favoritesLoading, setFavoritesLoading] = useState(true);
+    const [favoritesLoading, setFavoritesLoading] = useState(false);
     const [favoritesError, setFavoritesError] = useState(null);
-    const FAVORITES_API_ENDPOINT = 'http://localhost:5050/api/favorites/'; 
+
+    const allTabs = {
+        profile: { label: isVendor ? 'Vendor Profile' : 'User Profile', component: ProfileDetails },
+        history: { label: 'Rental History', component: RentalHistory },
+        favorites: { label: 'Favorites', component: Favorites },
+        'change-password': { label: 'Change Password', component: ChangePasswordTab },
+    };
+
+    const visibleTabs = isVendor
+        ? ['profile', 'change-password']
+        : ['profile', 'history', 'favorites', 'change-password']; 
 
    
-    const fetchRentalHistory = useCallback(async () => {
-        if (!token) {
-            setRentalHistoryLoading(false);
-            setRentalHistoryError("Authentication token not found. Please log in.");
-            return;
-        }
 
+    const fetchRentalHistory = useCallback(async () => {
+        if (!token || isVendor) return; 
         setRentalHistoryLoading(true);
         setRentalHistoryError(null);
 
@@ -54,67 +60,51 @@ const UserProfileTabs = ({ profileData, setProfileData, loading, error, defaultA
                 page: currentPage,
                 limit: rentalHistoryData.limit,
             };
-
             if (statusFilter !== 'all') {
                 params.status = statusFilter;
             }
 
             const response = await axios.get(RENTAL_HISTORY_API_ENDPOINT, {
                 params: params,
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                }
+                headers: { 'Authorization': `Bearer ${token}` }
             });
-
             setRentalHistoryData(response.data);
-
         } catch (err) {
-            setRentalHistoryError(err.response?.data?.message || err.message || 'Failed to fetch rental history');
-            console.error("Error fetching rental history:", err);
+            setRentalHistoryError(err.response?.data?.message || 'Failed to fetch rental history');
         } finally {
             setRentalHistoryLoading(false);
         }
-    }, [currentPage, statusFilter, token, rentalHistoryData.limit, RENTAL_HISTORY_API_ENDPOINT]);
+    }, [currentPage, statusFilter, token, rentalHistoryData.limit, isVendor]);
 
-   
     const fetchFavoriteCars = useCallback(async () => {
-        if (!token) {
-            setFavoritesLoading(false);
-            setFavoritesError("Authentication token not found. Please log in to view favorites.");
-            return;
-        }
-
+        if (!token || isVendor) return; 
         setFavoritesLoading(true);
         setFavoritesError(null);
 
         try {
+          
             const response = await axios.get(FAVORITES_API_ENDPOINT, {
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                }
+                headers: { 'Authorization': `Bearer ${token}` }
             });
-           
             setFavoriteCars(response.data.data || response.data); 
         } catch (err) {
-            setFavoritesError(err.response?.data?.message || err.message || 'Failed to fetch favorite cars');
-            console.error("Error fetching favorite cars:", err);
+            setFavoritesError(err.response?.data?.message || 'Failed to fetch favorite cars');
         } finally {
             setFavoritesLoading(false);
         }
-    }, [token, FAVORITES_API_ENDPOINT]); 
+    }, [token, isVendor]); 
 
     useEffect(() => {
-        if (activeTab === 'history') {
+        if (!isVendor && activeTab === 'history') {
             fetchRentalHistory();
         }
-    }, [activeTab, fetchRentalHistory]);
+    }, [activeTab, fetchRentalHistory, isVendor]);
 
-    
     useEffect(() => {
-        if (activeTab === 'favorites') {
+        if (!isVendor && activeTab === 'favorites') {
             fetchFavoriteCars();
         }
-    }, [activeTab, fetchFavoriteCars]);
+    }, [activeTab, fetchFavoriteCars, isVendor]);
 
     const handleStatusFilterChange = (status) => {
         setStatusFilter(status);
@@ -125,53 +115,38 @@ const UserProfileTabs = ({ profileData, setProfileData, loading, error, defaultA
         fetchRentalHistory();
     };
 
-    
     const handleRemoveFavoriteFromList = (carId) => {
         setFavoriteCars(prevFavorites => prevFavorites.filter(car => car.id !== carId));
-     
     };
 
     const availableStatuses = ['all', 'completed', 'pending', 'cancelled'];
+    
+
+    if (loading) return <div className="profile-card">Loading profile structure...</div>;
 
     return (
         <div className="profile-card">
             <div className="inner-card">
                 <div className="profile-header-section">
-                    <h2 className="profile-title">My Profile</h2>
-                    <p className="profile-subtitle">Manage your account and rental preferences</p>
+                    <h2 className="profile-title">{isVendor ? 'Vendor Profile Management' : 'My Profile'}</h2>
+                    <p className="profile-subtitle">
+                        {isVendor ? 'Update your business and login details.' : 'Manage your account and rental preferences.'}
+                    </p>
                 </div>
 
                 <div className="tab-navigation">
-                    <button
-                        onClick={() => setActiveTab('profile')}
-                        className={`tab-button ${activeTab === 'profile' ? 'active' : ''}`}
-                    >
-                        Profile
-                    </button>
-                    <button
-                        onClick={() => setActiveTab('history')}
-                        className={`tab-button ${activeTab === 'history' ? 'active' : ''}`}
-                    >
-                        Rental History
-                    </button>
-                    <button
-                        onClick={() => setActiveTab('favorites')}
-                        className={`tab-button ${activeTab === 'favorites' ? 'active' : ''}`}
-                    >
-                        Favorites
-                    </button>
-                    <button
-                        onClick={() => setActiveTab('settings')}
-                        className={`tab-button ${activeTab === 'settings' ? 'active' : ''}`}
-                    >
-                        Settings
-                    </button>
-                    <button
-                        onClick={() => setActiveTab('change-password')}
-                        className={`tab-button ${activeTab === 'change-password' ? 'active' : ''}`}
-                    >
-                        Change Password
-                    </button>
+                    {visibleTabs.map((key) => {
+                        const tab = allTabs[key];
+                        return (
+                            <button
+                                key={key}
+                                onClick={() => setActiveTab(key)}
+                                className={`tab-button ${activeTab === key ? 'active' : ''}`}
+                            >
+                                {tab.label}
+                            </button>
+                        );
+                    })}
                 </div>
 
                 {activeTab === 'profile' && (
@@ -184,7 +159,10 @@ const UserProfileTabs = ({ profileData, setProfileData, loading, error, defaultA
                         defaultAvatar={defaultAvatar}
                     />
                 )}
-                {activeTab === 'history' && (
+                
+                {activeTab === 'change-password' && <ChangePasswordTab token={token} />}
+
+                {activeTab === 'history' && !isVendor && (
                     <RentalHistory
                         rentalHistory={rentalHistoryData.history}
                         total={rentalHistoryData.total}
@@ -200,7 +178,8 @@ const UserProfileTabs = ({ profileData, setProfileData, loading, error, defaultA
                         onBookingActionSuccess={handleBookingActionSuccess}
                     />
                 )}
-                {activeTab === 'favorites' && (
+
+                {activeTab === 'favorites' && !isVendor && (
                     <Favorites
                         favorites={favoriteCars} 
                         loading={favoritesLoading} 
@@ -209,11 +188,10 @@ const UserProfileTabs = ({ profileData, setProfileData, loading, error, defaultA
                         setFavorites={setFavoriteCars} 
                     />
                 )}
-                {activeTab === 'settings' && <AccountSettings />}
-                {activeTab === 'change-password' && <ChangePasswordTab token={token} />}
+                
             </div>
         </div>
     );
 };
 
-export default UserProfileTabs;
+export default ProfileTabs;
