@@ -1,14 +1,16 @@
 /* CarManagementApp.css */
 
-
 /* Global styles for the container */
 .container-vendor {
   min-height: 100vh;
   background-color: #f9fafb;
   font-family: system-ui, -apple-system, sans-serif;
+  padding: 0 1rem; /* Small padding for mobile */
 }
+
 .existing-image {
-  width: 120px;   
+  width: 100%;
+  max-width: 120px;   
   height: auto;  
   border-radius: 8px; 
   margin: 5px;    
@@ -33,19 +35,22 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1.5rem 0;
+  flex-wrap: wrap; /* Allow wrapping on small screens */
+  padding: 1rem 0;
 }
 
 .header-left {
   display: flex;
   align-items: center;
+  flex: 1;
+  min-width: 150px; /* Prevent shrinking too much */
 }
 
 .header-title {
-  font-size: 1.5rem;
+  font-size: 1.25rem;
   font-weight: bold;
   color: #111827;
-  margin-left: 0.75rem;
+  margin-left: 0.5rem;
 }
 
 /* Primary Button */
@@ -61,6 +66,7 @@
   font-size: 0.875rem;
   font-weight: 500;
   transition: background-color 0.2s;
+  margin-top: 0.5rem; /* Add spacing for small screens */
 }
 .primary-button:hover {
   background-color: #ff4d30;
@@ -72,6 +78,7 @@
   margin: 0 auto;
   padding: 2rem 1rem;
   padding-top: 100px;
+  box-sizing: border-box;
 }
 
 /* Loading state */
@@ -129,6 +136,7 @@
   border-radius: 0.5rem;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   border: 1px solid #e5e7eb;
+  margin-bottom: 1.5rem; /* spacing for mobile */
 }
 
 .form-header {
@@ -137,12 +145,14 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-wrap: wrap; /* Responsive */
 }
 
 .form-title {
   font-size: 1.25rem;
   font-weight: 600;
   color: #111827;
+  margin-bottom: 0.5rem;
 }
 
 .close-button {
@@ -154,17 +164,22 @@
 }
 
 .form-content {
-  padding: 1.5rem;
+  padding: 1rem; /* Reduce padding for smaller screens */
 }
 
 /* Grid & Layout */
 .grid {
   display: grid;
-  gap: 1.5rem;
+  gap: 1rem;
+  grid-template-columns: 1fr; /* Mobile first */
 }
-.grid-cols-1 {
-  grid-template-columns: 1fr;
+
+@media (min-width: 640px) {
+  .grid-sm-2 {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
+
 @media (min-width: 768px) {
   .grid-md-2 {
     grid-template-columns: repeat(2, 1fr);
@@ -173,6 +188,7 @@
     grid-template-columns: repeat(3, 1fr);
   }
 }
+
 @media (min-width: 1024px) {
   .grid-lg-3 {
     grid-template-columns: repeat(3, 1fr);
@@ -183,10 +199,10 @@
 }
 
 .section-title {
-  font-size: 1.5rem;
+  font-size: 1.25rem;
   font-weight: 600;
   color: #111827;
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
   grid-column: 1 / -1;
 }
 
@@ -213,8 +229,9 @@
   font-size: 0.875rem;
   outline: none;
   transition: border-color 0.2s, box-shadow 0.2s;
-  background-color: white; /* Ensure consistent background */
+  background-color: white;
 }
+
 .input:focus,
 .select:focus,
 .textarea:focus {
@@ -235,8 +252,8 @@
 /* Checkboxes */
 .checkbox-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 0.75rem;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 0.5rem;
   margin-top: 1rem;
 }
 
@@ -260,10 +277,20 @@
 
 /* Form actions */
 .form-actions {
-  margin-top: 2rem;
+  margin-top: 1.5rem;
   display: flex;
-  justify-content: flex-end;
-  gap: 1rem;
+  flex-direction: column; /* Stack buttons on mobile */
+  gap: 0.75rem;
+}
+
+@media (min-width: 640px) {
+  .container-vendor {
+padding-top: 100px;
+}
+  .form-actions {
+    flex-direction: row; /* Row on larger screens */
+    justify-content: flex-end;
+  }
 }
 
 .secondary-button {
@@ -276,6 +303,7 @@
   font-size: 0.875rem;
   transition: background-color 0.2s;
 }
+
 .secondary-button:hover {
   background-color: #f9fafb;
 }

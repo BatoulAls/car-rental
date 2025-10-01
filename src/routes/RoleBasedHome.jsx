@@ -33,7 +33,7 @@ const RoleBasedHome = () => {
 
   if (user.role === 'vendor') {
     console.log('🏢 RoleBasedHome: Redirecting vendor to MyCars');
-    return <Navigate to="/vendors/MyCars" replace />;
+    return <Navigate to="/vendors/VendorDashboard" replace />;
   }
   
   if (user.role === 'customer') {

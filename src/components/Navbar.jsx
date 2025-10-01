@@ -31,6 +31,7 @@ function Navbar({ role = "customer" }) {
     { to: "/vendors/Profile", label: "My Profile", icon: faUser },
     { to: "/vendors/MyCars", label: "My Cars", icon: faCar },
     { to: "/vendors/VendorBookings", label: "Bookings", icon: faCalendarCheck },
+    { to: "/vendors/VendorDashboard", label: "Dashboard", icon: faBars },
   ];
 
   const navLinks = role === "vendor" ? vendorLinks : customerLinks;

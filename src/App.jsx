@@ -37,6 +37,7 @@ import EditCar from './Pages/Vendor/EditCar';
 import VendorBookings from "./Pages/Vendor/VendorBookings";
 import VendorBookingDetails from "./Pages/Vendor/VendorBookingDetails";
 import VendorProfile from "./Pages/Vendor/VendorProfile"; 
+import VendorDashboard from "./Pages/Vendor/VendorDashboard";
 
 const queryClient = new QueryClient();
 
@@ -105,6 +106,14 @@ function App() {
               element={
                 <PrivateRoute allowedRoles={['vendor']}>
                   <VendorProfile />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/vendors/VendorDashboard"
+              element={
+                <PrivateRoute allowedRoles={['vendor']}>
+                  <VendorDashboard />
                 </PrivateRoute>
               }
             />

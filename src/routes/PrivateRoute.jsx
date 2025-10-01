@@ -7,7 +7,7 @@ const PrivateRoute = ({ children, allowedRoles }) => {
   if (!user) return <Navigate to="/" replace />; 
 
   if (allowedRoles && !allowedRoles.includes(user.role)) {
-    if (user.role === 'vendor') return <Navigate to="/vendors/MyCars" replace />;
+    if (user.role === 'vendor') return <Navigate to="/vendors/VendorDashboard" replace />;
     if (user.role === 'customer') return <Navigate to="/" replace />;
   }
 

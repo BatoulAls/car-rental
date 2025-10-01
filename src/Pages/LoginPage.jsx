@@ -110,13 +110,14 @@ const LoginPage = () => {
         });
 
         if (user.role === 'vendor') {
-          navigate('/vendors/MyCars');    
+          navigate('/vendors/VendorDashboard');    
         } else {
           navigate('/');    
         }
 
-      }, 600);
+      },600);
 
+      
     } catch (error) {
       console.error('Login failed:', error.response?.data || error.message);
       alert('Login failed. Please check your credentials.');

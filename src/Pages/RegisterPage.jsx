@@ -104,7 +104,7 @@ const RegisterPage = () => {
         });
 
         if (formData.role === 'vendor') {
-          navigate('/vendors/MyCars');
+          navigate('/vendors/VendorDashboard');
         } else {
           navigate('/');
         }
