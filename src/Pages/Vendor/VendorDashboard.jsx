@@ -58,42 +58,42 @@ const VendorDashboard = () => {
 if (error) return <div>{error}</div>;
 
   return (
-    <div className="vendor-dashboard">
+    <div className="vendor1-dashboard">
     
-      <div className="vendor-header">
+      <div className="vendor1-header">
         <div>
-          <h1 className="vendor-title">Vendor Dashboard</h1>
-          <p className="vendor-subtitle">Track your business performance in real-time</p>
+          <h1 className="vendor1-title">Vendor Dashboard</h1>
+          <p className="vendor1-subtitle">Track your business performance in real-time</p>
         </div>
-        <div className="vendor-date-box">
-          <span className="vendor-date-text">📅 {new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</span>
+        <div className="vendor1-date-box">
+          <span className="vendor1-date-text">📅 {new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</span>
         </div>
       </div>
 
-      <div className="vendor-grid">
+      <div className="vendor1-grid">
         {cards.map((card, index) => (
-          <div key={index} className="card-hover">
-            <div className="card" style={{ background: card.gradient }}>
-              <div className="card-content">
-                <div className="card-top">
-                  <div className="icon-circle">
-                    <span className="icon">{card.icon}</span>
+          <div key={index} className="card1-hover">
+            <div className="card1" style={{ background: card.gradient }}>
+              <div className="card1-content">
+                <div className="card1-top">
+                  <div className="icon1-circle">
+                    <span className="icon1">{card.icon}</span>
                   </div>
                   
                 </div>
-                <div className="card-bottom">
-                  <h2 className="value">{card.value.toLocaleString()}</h2>
-                  <p className="card-title">{card.title}</p>
+                <div className="card1-bottom">
+                  <h2 className="value1">{card.value.toLocaleString()}</h2>
+                  <p className="card1-title">{card.title}</p>
                 </div>
               </div>
-              <div className="card-glow"></div>
+              <div className="card1-glow"></div>
             </div>
           </div>
         ))}
       </div>
 
       
-      <div className="charts-grid">
+      <div className="charts1-grid">
         {/*<div className="chart-card">
           <h3 className="chart-title">📊 Monthly Bookings Trend</h3>
           <ResponsiveContainer width="100%" height={300}>
@@ -108,8 +108,8 @@ if (error) return <div>{error}</div>;
           </ResponsiveContainer>
         </div>*/}
 
-        <div className="chart-card">
-          <h3 className="chart-title">🚗 Car Status Distribution</h3>
+        <div className="chart1-card">
+          <h3 className="chart1-title">🚗 Car Status Distribution</h3>
           <ResponsiveContainer width="100%" height={300}>
             <PieChart>
               <Pie data={carStatusData} cx="50%" cy="50%" labelLine={false} label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`} outerRadius={100} fill="#8884d8" dataKey="value">

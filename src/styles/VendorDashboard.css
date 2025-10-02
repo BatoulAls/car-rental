@@ -1,4 +1,4 @@
-.vendor-dashboard {
+.vendor1-dashboard {
   padding: 100px 24px;
   max-width: 1400px;
   margin: 0 auto;
@@ -7,7 +7,7 @@
   min-height: 100vh;
 }
 
-.vendor-header {
+.vendor1-header {
   margin-bottom: 40px;
   display: flex;
   justify-content: space-between;
@@ -16,7 +16,7 @@
   gap: 20px;
 }
 
-.vendor-title {
+.vendor1-title {
   font-size: 42px;
   font-weight: 800;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -26,38 +26,38 @@
   letter-spacing: -0.5px;
 }
 
-.vendor-subtitle {
+.vendor1-subtitle {
   font-size: 16px;
   color: #64748b;
   margin: 0;
   font-weight: 400;
 }
 
-.vendor-date-box {
+.vendor1-date-box {
   background-color: white;
   padding: 12px 20px;
   border-radius: 12px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
 }
 
-.vendor-date-text {
+.vendor1-date-text {
   font-size: 14px;
   color: #475569;
   font-weight: 500;
 }
 
-.vendor-grid {
+.vendor1-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 28px;
   margin-bottom: 40px;
 }
 
-.card-hover {
+.card1-hover {
   perspective: 1000px;
 }
 
-.card {
+.card1 {
   border-radius: 20px;
   padding: 28px;
   position: relative;
@@ -67,30 +67,30 @@
   cursor: pointer;
 }
 
-.card-hover:hover > .card {
+.card1-hover:hover > .card {
   transform: translateY(-8px) scale(1.02);
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
 }
 
 @media (max-width: 768px) {
-  .card-hover:hover > .card {
+  .card1-hover:hover > .card {
     transform: translateY(-4px) scale(1.01);
   }
 }
 
-.card-content {
+.card1-content {
   position: relative;
   z-index: 2;
 }
 
-.card-top {
+.card1-top {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
   margin-bottom: 24px;
 }
 
-.icon-circle {
+.icon1-circle {
   width: 60px;
   height: 60px;
   border-radius: 50%;
@@ -102,11 +102,11 @@
   border: 2px solid rgba(255, 255, 255, 0.3);
 }
 
-.icon {
+.icon1{
   font-size: 28px;
 }
 
-.trend-badge {
+.trend1-badge {
   background-color: rgba(255, 255, 255, 0.25);
   padding: 6px 12px;
   border-radius: 20px;
@@ -114,17 +114,17 @@
   border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
-.trend-text {
+.trend1-text {
   font-size: 13px;
   font-weight: 700;
   color: white;
 }
 
-.card-bottom {
+.card1-bottom {
   color: white;
 }
 
-.value {
+.value1 {
   font-size: 44px;
   font-weight: 800;
   margin: 0 0 8px 0;
@@ -133,7 +133,7 @@
   letter-spacing: -1px;
 }
 
-.card-title {
+.card1-title {
   font-size: 15px;
   font-weight: 500;
   margin: 0;
@@ -142,7 +142,7 @@
   letter-spacing: 0.5px;
 }
 
-.card-glow {
+.card1-glow {
   position: absolute;
   top: -50%;
   right: -50%;
@@ -152,14 +152,14 @@
   pointer-events: none;
 }
 
-.charts-grid {
+.charts1-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
   gap: 28px;
   margin-bottom: 40px;
 }
 
-.chart-card {
+.chart1-card {
   background-color: white;
   border-radius: 20px;
   padding: 28px;
@@ -167,7 +167,7 @@
   transition: all 0.3s ease;
 }
 
-.chart-title {
+.chart1-title {
   font-size: 20px;
   font-weight: 700;
   color: #1e293b;
