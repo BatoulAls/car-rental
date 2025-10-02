@@ -64,7 +64,8 @@ const Vendors = () => {
           vendors.map((vendor) => (
             <div key={vendor._id || vendor.id} className="vendor-card">
               <img
-                src={vendor.photo || defaultVendor}
+                
+                 src={vendor.photo ? `http://localhost:5050${vendor.photo}` : defaultVendor}
                 alt={vendor.name}
                 className="vendor-image"
               />

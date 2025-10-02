@@ -29,7 +29,9 @@ const VendorDetails = () => {
   if (error) return <p>Error: {error.message}</p>;
   if (!vendor) return <p>No vendor data found.</p>;
 
-  const photo = vendor.photo || defaultVendorImage;
+  
+  const photo = vendor.photo ? `http://localhost:5050${vendor.photo}` : defaultVendorImage;
+
 
   return (
     <div className="vendor-details-container">
