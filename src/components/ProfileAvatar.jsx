@@ -13,6 +13,7 @@ const ProfileAvatar = ({ profilePhoto, selectedFile, defaultAvatar }) => {
 
       
         imageUrl = `${baseUrl}?t=${new Date().getTime()}`;
+       
     }
 
     return (

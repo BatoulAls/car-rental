@@ -27,6 +27,7 @@ const VendorProfile = () => {
             phone: userData.phone,
             photo: userData.photo,
             role: userData.role,
+           is_active: userData.is_active,
             
             vendorId: vendorData.id,
             vendorName: vendorData.name,
@@ -34,9 +35,12 @@ const VendorProfile = () => {
             description: vendorData.description,
             shopOpenTime: vendorData.shop_open_time,
             shopCloseTime: vendorData.shop_close_time,
-            open247: vendorData.open_24_7,
-            region: vendorData.Region ? vendorData.Region.name_en : null,
-            backgroundImage: vendorData.background_image,
+            
+            open_24_7: vendorData.open_24_7,    
+      
+
+        background_image: vendorData.background_image, 
+        region: vendorData.Region ? vendorData.Region.name_en : null,
         };
     };
 
@@ -54,6 +58,9 @@ const VendorProfile = () => {
             if (transformedData && transformedData.photo && !transformedData.photo.startsWith('http')) {
                 transformedData.photo = `http://localhost:5050${transformedData.photo}`;
             }
+            if (transformedData.background_image && !transformedData.background_image.startsWith('http')) {
+                transformedData.background_image = `http://localhost:5050${transformedData.background_image}`;
+    }
 
             setProfileData(transformedData);
         } catch (err) {

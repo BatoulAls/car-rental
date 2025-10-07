@@ -15,7 +15,6 @@ const ProfileDetails = ({ profileData, setProfileData, loading, error, token, de
     const [isEditing, setIsEditing] = useState(false);
     const [selectedPhotoFile, setSelectedPhotoFile] = useState(null);
     const [selectedBackgroundFile, setSelectedBackgroundFile] = useState(null);
-    // for message 
     const[message,setMessage] = useState('');
     const[messageStatus,setMessageStatus] = useState('');
     const showMessage=(msg,type='success')=>{
@@ -24,13 +23,22 @@ const ProfileDetails = ({ profileData, setProfileData, loading, error, token, de
         setTimeout(()=>setMessage(''),3000);
     }
 
+    
 
-    const getVendorStatus = () => profileData?.is_active ?? profileData?.Vendor?.is_active ?? 0;
+const getVendorStatus = () => profileData?.is_active ?? 0;
+const getVendorTime = () => profileData?.open_24_7?? 0;
 
-    const [vendorStatus, setVendorStatus] = useState(getVendorStatus());
+
+   
+   const [vendorStatus, setVendorStatus] = useState(Boolean(getVendorStatus()));
+     const [vendorTime, setVendorTime] = useState(Boolean(getVendorTime()));
 
     useEffect(() => {
         setVendorStatus(getVendorStatus());
+    }, [profileData]);
+
+    useEffect(() => {
+        setVendorTime(Boolean(getVendorTime()));
     }, [profileData]);
 
     const [workingHours, setWorkingHours] = useState({
@@ -46,6 +54,7 @@ const ProfileDetails = ({ profileData, setProfileData, loading, error, token, de
             open_24_7: profileData?.open_24_7 || 0,
         });
     }, [profileData]);
+    
 
     const isVendor = profileData?.role === 'vendor';
 
@@ -53,7 +62,11 @@ const ProfileDetails = ({ profileData, setProfileData, loading, error, token, de
         const { name, value, type, checked } = e.target;
 
         if (name === 'open_24_7') {
-            setWorkingHours(prev => ({ ...prev, [name]: type === 'checkbox' ? (checked ? 1 : 0) : value }));
+                setWorkingHours(prev => ({ ...prev, open_24_7: checked ? 1 : 0,
+                    shopOpenTime: checked ? '' : prev.shopOpenTime,
+                    shopCloseTime: checked ? '' : prev.shopCloseTime, }));
+                
+            setVendorTime(checked);
         } else if (['shopOpenTime', 'shopCloseTime'].includes(name)) {
             setWorkingHours(prev => ({ ...prev, [name]: value }));
         } else {
@@ -67,35 +80,45 @@ const ProfileDetails = ({ profileData, setProfileData, loading, error, token, de
     const handlePhotoFileChange = (e) => setSelectedPhotoFile(e.target.files[0]);
     const handleBackgroundFileChange = (e) => setSelectedBackgroundFile(e.target.files[0]);
 
-    const handleToggleStatus = async (e) => {
-        if (!isVendor) return;
-        const newStatus = e.target.checked ? 1 : 0;
-        setVendorStatus(newStatus);
+ const handleToggleStatus = async (e) => {
+  if (!isVendor) return;
 
-        try {
-            const payload = { status: newStatus };
-            const response = await axios.patch(VENDOR_STATUS_URL, payload, {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: `Bearer ${token}`,
-                },
-            });
+  const newStatusBool = e.target.checked; 
+  const previousStatus = vendorStatus;
 
-            setProfileData(prev => ({
-                ...prev,
-                is_active: newStatus,
-            }));
+  setVendorStatus(newStatusBool);
 
-           
-            showMessage(response.data.Message || 'Vendor status update','success')
+  try {
+    const payload = { status: newStatusBool ? 1 : 0 };
 
-        } catch (err) {
-            console.error('Failed to update vendor status:', err.response?.data || err.message);
-            setVendorStatus(prev => prev === 1 ? 0 : 1);
-            
-           showMessage(err.response?.data?.Message || 'Failed to update vendor status.please try again','error')
-        }
-    };
+    const response = await axios.patch(VENDOR_STATUS_URL, payload, {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    const apiIsActive = response.data?.data?.is_active ?? response.data?.is_active ?? newStatusBool;
+
+    setProfileData(prev => {
+      const next = { ...prev };
+
+      next.is_active = Boolean(apiIsActive);
+
+      if (next.Vendor) {
+        next.Vendor = { ...next.Vendor, is_active: Boolean(apiIsActive) };
+      }
+
+      return next;
+    });
+
+    showMessage(response.data?.Message || 'Vendor status updated', 'success');
+  } catch (err) {
+    setVendorStatus(previousStatus);
+    console.error('Failed to update vendor status:', err.response?.data || err.message);
+    showMessage(err.response?.data?.Message || 'Failed to update vendor status. Please try again', 'error');
+  }
+};
 
     const handleSaveProfileImage = async () => {
         if (!selectedPhotoFile || !isVendor) return;
@@ -110,6 +133,14 @@ const ProfileDetails = ({ profileData, setProfileData, loading, error, token, de
                     Authorization: `Bearer ${token}`,
                 },
             });
+            
+            setProfileData(prev => ({
+  ...prev,
+  background_image: response.data?.Vendor?.background_image
+    ? `http://localhost:5050${response.data.Vendor.background_image}`
+    : prev.background_image
+    }));
+    setSelectedBackgroundFile(null); 
 
         
             showMessage(response.data.Message || 'profile image update','success')
@@ -157,6 +188,11 @@ const ProfileDetails = ({ profileData, setProfileData, loading, error, token, de
             
             if (profileData?.username) formData.append('username', profileData.username);
             if (profileData?.phone) formData.append('phone', profileData.phone);
+           
+            if (selectedPhotoFile) {
+  formData.append(isVendor ? 'profileImage' : 'photo', selectedPhotoFile, selectedPhotoFile.name);
+}
+         
 
             let apiURL = USER_UPDATE_URL;
             let responseKey = 'user';
@@ -239,10 +275,14 @@ const ProfileDetails = ({ profileData, setProfileData, loading, error, token, de
     return (
         <div className="tab-content">
             {isVendor && (
-                <div className="vendor-background" style={{ 
-                    backgroundImage: `url(${profileData?.background_image || ''})`, 
-                    minHeight: isEditing ? '150px' : '0' 
-                }}>
+               <div className="vendor-background" style={{ 
+    backgroundImage: selectedBackgroundFile
+        ? `url(${URL.createObjectURL(selectedBackgroundFile)})` 
+        : profileData?.background_image
+            ? `url(${profileData.background_image})` 
+            : '',
+    minHeight: isEditing ? '150px' : '0' 
+}}>
                     {isEditing && (
                         <>
                             <input type="file" id="background-upload" name="background" style={{ display: 'none' }} onChange={handleBackgroundFileChange} accept="image/*"/>
@@ -279,10 +319,10 @@ const ProfileDetails = ({ profileData, setProfileData, loading, error, token, de
                 <div className="profile-info">
                     <h3 className="profile-name">
                         {isVendor ? profileData?.vendorName || profileData?.username : profileData?.username}
-                        {isVendor && (
-                            <span className={`status-badge ${vendorStatus === 1 ? 'active' : 'inactive'}`}>
-                                {vendorStatus === 1 ? 'Active' : 'Inactive'}
-                            </span>
+                                            {isVendor && (
+                        <span className={`status-badge ${vendorStatus ? 'active' : 'inactive'}`}>
+                            {vendorStatus ? 'Active' : 'Inactive'}
+                        </span>
                         )}
                     </h3>
                     <p className="profile-email">{profileData?.email}</p>
@@ -347,12 +387,12 @@ const ProfileDetails = ({ profileData, setProfileData, loading, error, token, de
                 {isVendor && (
                     <>
                         <InputField
-                            label={vendorStatus === 1 ? 'Currently Active' : 'Currently Inactive'}
-                            type="checkbox" 
-                            name="is_active_toggle"
-                            checked={vendorStatus === 1}
-                            onChange={handleToggleStatus} 
-                            disabled={!isEditing}
+                        label={vendorStatus ? ' Active' : 'Inactive'}
+                        type="checkbox"
+                        name="is_active_toggle"
+                        checked={vendorStatus}    
+                        onChange={handleToggleStatus}
+                        disabled={!isEditing}
                         />
                         <InputField
                             label="Open 24/7"
@@ -360,23 +400,24 @@ const ProfileDetails = ({ profileData, setProfileData, loading, error, token, de
                             name="open_24_7"
                             onChange={handleInputChange}
                             disabled={!isEditing}
+                             checked={vendorTime}
                         />
-                        <InputField
-                            label="Shop Open Time"
-                            type="time"
-                            name="shopOpenTime"
-                            value={workingHours.shopOpenTime ? workingHours.shopOpenTime.substring(0, 5) : ''}
-                            onChange={handleInputChange}
-                            disabled={!isEditing}
+                       <InputField
+                        label="Shop Open Time"
+                        type="time"
+                        name="shopOpenTime"
+                        value={workingHours.shopOpenTime || ''}
+                        onChange={handleInputChange}
+                        disabled={!isEditing || workingHours.open_24_7 === 1}
                         />
-                        <InputField
-                            label="Shop Close Time"
-                            type="time"
-                            name="shopCloseTime"
-                            value={workingHours.shopCloseTime ? workingHours.shopCloseTime.substring(0, 5) : ''}
-                            onChange={handleInputChange}
-                            disabled={!isEditing}
-                        />
+                                <InputField
+                                label="Shop Close Time"
+                                type="time"
+                                name="shopCloseTime"
+                                value={workingHours.shopCloseTime || ''}
+                                onChange={handleInputChange}
+                                disabled={!isEditing || workingHours.open_24_7 === 1}
+                            />
 
                         {isEditing && isHoursDirty && (
                             <div className="form-group">
